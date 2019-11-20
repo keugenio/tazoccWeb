@@ -5,12 +5,27 @@
 .practiceText {
   color:$white;
   text-shadow: .25rem .25rem .5rem $dark;
-
   display: inline-block;
-  width: 100vw; 
   padding: 3rem;
   font-size: 2rem;
 }
-#practiceTimes {
+.practiceTimes {
   list-style-type: none;
+}
+
+#MapModal {
+  & .modal-dialog {
+    max-width:90%;
+    height: 90%;
+  }
+  & .modal-content {
+    max-width:100%;
+    max-height: 100%;
+  }  
+  & .modal-body {
+    & div div {
+      width:99%!important;
+      height: 99%!important;
+    }    
+  }
 }

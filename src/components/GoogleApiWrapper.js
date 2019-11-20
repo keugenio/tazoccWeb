@@ -1,24 +1,70 @@
+import React from 'react'
 import {Map, InfoWindow, Marker, GoogleApiWrapper} from 'google-maps-react';
+import GoogleApiKey from './keys/googleMapsKey';
+
+export class MapContainer extends React.Component {
+  state = {
+    showingInfoWindow: false,
+    activeMarker: {},
+    selectedPlace: {},
+  };  
+  onMarkerClick = (props, marker, e) => {
+    this.setState({
+      selectedPlace: props,
+      activeMarker: marker,
+      showingInfoWindow: true
+    });    
+  }
+
  
-export class MapContainer extends Component {
+  onMapClicked = (props) => {
+    alert('pepe')
+    if (this.state.showingInfoWindow) {
+      this.setState({
+        showingInfoWindow: false,
+        activeMarker: null
+      })
+    }
+  };  
   render() {
     return (
       <Map 
         google={this.props.google}
-        zoom={14}
+        zoom={17}
         style={style}
         initialCenter={{
-          lat: 40.854885,
-          lng: -88.081807
+          lat: 33.434595,
+          lng: -111.930066
         }}>
  
         <Marker onClick={this.onMarkerClick}
-                name={'Current location'} />
- 
-        <InfoWindow onClose={this.onInfoWindowClose}>
-            <div>
-              <h1>{this.state.selectedPlace.name}</h1>
-            </div>
+          name={'Team Arizona practice site. Meet inside the boatyard before practice to help setup canoes.'} 
+          icon={'/images/mapPushPin.png'}
+          position={{lat: 33.434595, lng: -111.931966
+          }}
+        />
+
+        <Marker
+          onClick={this.onMarkerClick}
+          name={'Carvana glass structure'}
+          position= {{lat: 33.436720, lng: -111.926640}}
+          icon={'/images/carvana.png'}
+        />
+        <Marker
+          onClick={this.onMarkerClick}
+          name={'If you come late, meet at the docks'}
+          position= {{lat: 33.433409, lng: -111.931396}}
+          icon={'/images/canoe_icon.png'}
+        />
+
+        <InfoWindow
+          marker={this.state.activeMarker}
+          visible={this.state.showingInfoWindow}
+          onClose={this.onClose}
+        >
+          <div>
+            <h4>{this.state.selectedPlace.name}</h4>
+          </div>
         </InfoWindow>
       </Map>
     );
@@ -26,7 +72,7 @@ export class MapContainer extends Component {
 }
  
 export default GoogleApiWrapper({
-  apiKey: (AIzaSyALHGylUkUBXQBqVrRGiS68NnCHcLFXRFc)
+  apiKey: (GoogleApiKey.key)
 })(MapContainer)
 
 const style = {
