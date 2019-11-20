@@ -1,0 +1,10 @@
+@import './base/settings';
+@import './base/base';
+@import './base/mixins';
+@import './base/my-bootstrap';
+@import './components/home.scss';
+@import './components/calendar.scss';
+@import './components/footer.scss';
+@import './components/navbar.scss';
+@import './components/navigation.scss';
+@import '../../node_modules/bootstrap/dist/css/bootstrap.css';
