@@ -1,0 +1,16 @@
+.bgPracticeOverlay {
+  background: rgba($primary, .5); 
+  min-height: 100vh; 
+}
+.practiceText {
+  color:$white;
+  text-shadow: .25rem .25rem .5rem $dark;
+
+  display: inline-block;
+  width: 100vw; 
+  padding: 3rem;
+  font-size: 2rem;
+}
+#practiceTimes {
+  list-style-type: none;
+}
