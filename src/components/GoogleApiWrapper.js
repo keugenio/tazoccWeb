@@ -33,14 +33,14 @@ export class MapContainer extends React.Component {
         zoom={17}
         style={style}
         initialCenter={{
-          lat: 33.434595,
-          lng: -111.930066
+          lat: 33.434428,
+          lng: -111.931940
         }}>
  
         <Marker onClick={this.onMarkerClick}
-          name={'Team Arizona practice site. Meet inside the boatyard before practice to help setup canoes.'} 
+          name={'Team Arizona practice site. Meet inside the boat yard before practice to help setup canoes.'} 
           icon={'/images/mapPushPin.png'}
-          position={{lat: 33.434595, lng: -111.931966
+          position={{lat: 33.434585, lng: -111.931789
           }}
         />
 
@@ -53,7 +53,7 @@ export class MapContainer extends React.Component {
         <Marker
           onClick={this.onMarkerClick}
           name={'If you come late, meet at the docks'}
-          position= {{lat: 33.433409, lng: -111.931396}}
+          position= {{lat: 33.433644, lng: -111.931278}}
           icon={'/images/canoe_icon.png'}
         />
 

@@ -7,7 +7,7 @@ import AboutUs from '../AboutUs';
 import Practices from '../Practices';
 import Tradition from '../Tradition';
 import News from '../News';
-import TAZCalendar from '../Calendar';
+import TAZCalendarOfEvents from '../CalendarOfEvents'
 import ShopTAZ from '../ShopTAZ';
 import NotFoundPage from '../NotFoundPage';
 import Footer from '../Footer';
@@ -19,7 +19,7 @@ const AppRouter = () => (
       <Switch>
         <Route path="/" component={Home} exact={true} />
         <Route path="/practices" component={Practices} />        
-        <Route path="/calendar" component={TAZCalendar} />     
+        <Route path="/calendar" component={TAZCalendarOfEvents} />     
         <Route path="/aboutUs" component={AboutUs} />
         <Route path="/tradition" component={Tradition} />        
         <Route path="/shopTAZ" component={ShopTAZ} /> 

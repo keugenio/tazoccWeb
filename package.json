@@ -34,6 +34,7 @@
     "randomatic": "^3.0.0",
     "react": "^16.11.0",
     "react-big-calendar": "^0.23.0",
+    "react-bootstrap": "^1.0.0-beta.16",
     "react-dom": "^16.11.0",
     "react-modal": "^3.11.1",
     "react-router-dom": "^5.1.2",

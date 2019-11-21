@@ -8,6 +8,7 @@
     position: fixed;
     top:6rem;
     right: 4rem;
+    border:thin solid $primary;
     border-radius:50%;
     z-index: 2000;
     box-shadow: .25rem .25rem .5rem rgba($dark, .75);

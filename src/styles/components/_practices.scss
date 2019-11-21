@@ -12,20 +12,44 @@
 .practiceTimes {
   list-style-type: none;
 }
-
-#MapModal {
-  & .modal-dialog {
-    max-width:90%;
-    height: 90%;
+.practiceTabs {
+  & .nav {
+    font-size: 2rem;
   }
-  & .modal-content {
-    max-width:100%;
-    max-height: 100%;
-  }  
-  & .modal-body {
-    & div div {
-      width:99%!important;
-      height: 99%!important;
-    }    
+}
+.alertText {
+  background: rgba(255,255,255, .75);
+  text-shadow:none;
+}
+#practiceTabInfo-tabpane-map{
+  & .alert {
+    position: absolute;
+    top: 25%;
+    left: 25%;
+    z-index: 200;
+    width: 50%;
+    border: thin solid;
+    box-shadow: .25rem .25rem .5rem #000;
+  }
+}
+#practiceTabInfo-tabpane-winter{
+  font-size: 1.75rem;
+  & img {
+    text-align: center;
+    width: 75%;
+  }
+  & .alert-heading {
+    font-size: 2rem;
+  }
+}
+
+#practiceTabInfo-tabpane-summer{
+  font-size: 1.75rem;
+  & img {
+    text-align: center;
+    width: 75%;
+  }
+  & .alert-heading {
+    font-size: 2rem;
   }
 }
