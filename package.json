@@ -47,7 +47,9 @@
   },
   "devDependencies": {
     "@fortawesome/fontawesome-free": "^5.11.2",
+    "file-loader": "^4.2.0",
     "superagent": "^5.1.0",
+    "url-loader": "^2.2.0",
     "webpack-cli": "^3.3.10"
   }
 }

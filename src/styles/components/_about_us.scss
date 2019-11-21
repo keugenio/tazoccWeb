@@ -31,11 +31,38 @@
   & .card{
     background: rgba($primary, .5);
     padding: 1rem;
-    width: 25%;
+    width: 23%;
+    margin-left: .5rem;
+    margin-top: .5rem;
+    @include boxShadow($primary);
+  }
+  & .card-text {
+    position: absolute;
+    top:75%;
   }
   & img {
     border: thin solid $primary;
     border-radius: 50%;
     box-shadow: .25rem .25rem .25rem rgba($taz-blue, .5);
+  }
+  & .boardName {
+    font-family: 'Alegreya';
+    margin-bottom: .75rem;
+    color: $white;
+    text-shadow: .25rem .25rem .25rem $primary;
+    width: 100%;
+  }
+  & .boardTitle {
+    font-size: 1.5rem;
+    text-shadow: .05rem .05rem $dark;
+    margin-top: -1rem;
+    line-height: 1.5rem;
+  }
+
+}
+
+#board {
+  & .btn {
+    @include boxShadow($success)
   }
 }

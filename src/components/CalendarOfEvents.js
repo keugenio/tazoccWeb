@@ -6,6 +6,7 @@ import EventInformation from './EventInformation';
 import ScoraRaces from '../data/scora_races';
 import Calendar from './Calendar';
 import {Tabs, Tab, Alert} from 'react-bootstrap';
+import bgImage from '../bgImages/bg_nightime.jpg';
 
 const handleOnSelect = (event) => {
   const start = moment(event.start);
@@ -46,7 +47,7 @@ class TAZCalendar extends React.Component{
   render(){
     return(
       <React.Fragment> 
-        <img src="/images/bg_home.jpg" className="fullsize-bg-image"></img>
+        <img src={bgImage} className="fullsize-bg-image"></img>
         <div><p className="text-center text-white pageTitle">Team Arizona Calendar of Events</p></div>
         <div className="d-flex">
           <div className="col-md-6">

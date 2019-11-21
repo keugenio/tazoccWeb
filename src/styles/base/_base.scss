@@ -64,3 +64,6 @@ button:disabled {
   background: rgba($primary, .5); 
   min-height: 100vh; 
 }
+.box-shadow-primary {
+  @include boxShadow($primary)
+}

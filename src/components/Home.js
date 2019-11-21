@@ -1,4 +1,5 @@
 import React from 'react'
+import bgImage from '../bgImages/bg_home.jpg';
 
 const Home = () => {
   return(
@@ -11,7 +12,7 @@ const Home = () => {
           <span>Outrigger Racers</span>
           <span>Lives Aloha</span>
       </div>    
-      <img src="/images/bg_home.jpg" className="fullsize-bg-image"></img>
+      <img src={bgImage} className="fullsize-bg-image"></img>
       <button className="join">join us</button>
     </div>
   )

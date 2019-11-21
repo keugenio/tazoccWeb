@@ -2,6 +2,7 @@ import React, {useState} from 'react'
 import GoogleApiWrapper from './GoogleApiWrapper';
 import {Tabs, Tab, Alert, Button} from 'react-bootstrap';
 import Calendar from './Calendar';
+import bgImage from '../bgImages/bg_sunset.jpg';
 
 const Practices = () => {
   const [show, setShow] = useState(true);
@@ -9,7 +10,7 @@ const Practices = () => {
   return(
     <React.Fragment> 
       <div className="bgOverlayColor">
-        <img src="/images/bg_nightime.jpg" className="fullsize-bg-image"></img>
+        <img src={bgImage} className="fullsize-bg-image"></img>
         <div><p className="text-center text-white pageTitle">Practices</p></div>
         <div className="d-flex container-fluid p-5">
           <div className="col-md-6">
