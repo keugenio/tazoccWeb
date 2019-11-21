@@ -8,7 +8,7 @@ const Practices = () => {
 
   return(
     <React.Fragment> 
-      <div className="bgPracticeOverlay">
+      <div className="bgOverlayColor">
         <img src="/images/bg_nightime.jpg" className="fullsize-bg-image"></img>
         <div><p className="text-center text-white pageTitle">Practices</p></div>
         <div className="d-flex container-fluid p-5">
