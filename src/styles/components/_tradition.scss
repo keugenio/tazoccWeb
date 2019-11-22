@@ -1,0 +1,82 @@
+.traditionContainer {
+  & .nav-tabs {
+    font-size: 2rem;
+    @include textShadow($dark);
+
+    & a {
+      color: $white;     
+      text-decoration: none;
+    }
+  }
+  & .nav-link.active {
+    background-color: rgba($white, .5)!important;
+    text-shadow: none;
+  }
+}
+.terms {
+  width: 90%;
+  margin-left:auto;
+  margin-right: auto;
+  font-size: 1.5rem;
+  color: $white;
+  & .card {
+    @include boxShadow($dark);
+    color:$dark;
+    background: rgba($warning, .75);
+  }
+  & .card-text{
+    font-size: 1.25rem;
+  }
+}
+#canoeTypes {
+  margin-top: 4rem;
+  height: 50vh;
+  & .carousel {
+    position: relative;
+  }
+  & .carousel-inner {
+    width: 75%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  & .card-body {
+    font-size: 2rem;
+  }
+  & .carousel-indicators {
+    top: 0;
+    bottom:unset;
+    position: relative;
+    & li {
+      background-color: $warning!important;
+      opacity:1;
+    }
+  }
+}
+.otherTerms{
+  & .card {
+    background: rgba($primary, .5);
+    color: white;
+    & .card-title {
+      text-transform: uppercase;
+    }
+  }
+}
+.positions{
+  color:$white;
+  padding: 2rem;
+  font-size: 1.5rem;
+  & .card {
+    width: 75%;
+    margin-left: auto;
+    margin-right: auto;
+    background: rgba($success, .5);
+    padding:2rem;
+    color: $white;
+    & .card-title {
+      font-size: 2rem;
+    }
+    & .card-text {
+      font-size: 1.5rem;
+    }
+  }
+}

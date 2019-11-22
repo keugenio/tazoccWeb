@@ -15,5 +15,5 @@
 	box-shadow: .25rem .25rem .25rem $color;
 }
 @mixin textShadow($color) {
-	box-shadow: .25rem .25rem .25rem $color;
+	text-shadow: .25rem .25rem .25rem $color;
 }
