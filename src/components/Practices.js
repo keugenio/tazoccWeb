@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 import GoogleApiWrapper from './GoogleApiWrapper';
-import {Tabs, Tab, Alert, Button} from 'react-bootstrap';
+import {Tabs, Tab, Alert, Button, Row, Col} from 'react-bootstrap';
 import Calendar from './Calendar';
 import bgImage from '../bgImages/bg_sunset.jpg';
 
@@ -12,36 +12,37 @@ const Practices = () => {
       <div className="bgOverlayColor">
         <img src={bgImage} className="fullsize-bg-image"></img>
         <div><p className="text-center text-white pageTitle">Practices</p></div>
-        <div className="d-flex container-fluid p-5">
-          <div className="col-md-6">
-            <div className="practiceText">
-              <h2>Team Arizona holds Open Practices</h2>
-              <ul className="practiceTimes">
-                <li>
-                  <strike>Tuesday Evenings 6:30pm  (Open Practice)</strike> Cancelled till January 2020
-                </li>
-                <li>
-                  Thursday Evenings 6:30pm (Open Practice)
-                </li>
-                <li>
-                  Saturday Mornings 7:00am (Open Practice)
-                </li>                        
-              </ul>
-              <p><strong>Practices are held on the north side of Tempe Town Lake at the marina.</strong></p>
-              <Alert variant="dark alertText">
-                <Alert.Heading>Directions to 550 East Tempe Town Lake, Tempe, AZ 85251</Alert.Heading>
-                <hr />
-                <ul className="mb-0">
-                  <li>From Loop 202 in Tempe, exit on Scottsdale Road and head <b>north</b> (towards Scottsdale, away from Tempe).  You must<strong> immediately</strong> get into the leftmost lane.  You&#8217;ll see the Carvana glass structure to your left.</li>
-                  <li>Turn at the first left on E. Gilbert Dr.</li>
-                  <li>Follow E. Gilbert Drive westward and the marina entrance is right after the overpass.</li>
-                  <li>Park anywhere in the parking lot and we gather on the west side of the boatyard.  Look for the blue and white canoes.</li>
+        <div className="container-fluid">
+          <Row>
+            <Col xl={6} xs={12}>
+              <div className="practiceText">
+                <h2>Team Arizona holds Open Practices</h2>
+                <ul className="practiceTimes">
+                  <li>
+                    <strike>Tuesday Evenings 6:30pm  (Open Practice)</strike> Cancelled till January 2020
+                  </li>
+                  <li>
+                    Thursday Evenings 6:30pm (Open Practice)
+                  </li>
+                  <li>
+                    Saturday Mornings 7:00am (Open Practice)
+                  </li>                        
                 </ul>
-              </Alert>
-            </div> 
-          </div>       
-          <div className="col-md-6 practiceInfo">
-          <div className="practiceTabs">
+                <p><strong>Practices are held on the north side of Tempe Town Lake at the marina.</strong></p>
+                <Alert variant="dark alertText">
+                  <Alert.Heading>Directions to 550 East Tempe Town Lake, Tempe, AZ 85251</Alert.Heading>
+                  <hr />
+                  <ul className="mb-0">
+                    <li>From Loop 202 in Tempe, exit on Scottsdale Road and head <b>north</b> (towards Scottsdale, away from Tempe).  You must<strong> immediately</strong> get into the leftmost lane.  You&#8217;ll see the Carvana glass structure to your left.</li>
+                    <li>Turn at the first left on E. Gilbert Dr.</li>
+                    <li>Follow E. Gilbert Drive westward and the marina entrance is right after the overpass.</li>
+                    <li>Park anywhere in the parking lot and we gather on the west side of the boatyard.  Look for the blue and white canoes.</li>
+                  </ul>
+                </Alert>
+              </div> 
+            </Col>       
+            <Col xl={5} xs={12} className="practiceInfo">
+            <div className="practiceTabs">
             <Tabs defaultActiveKey="map" id="practiceTabInfo">
               <Tab eventKey="map" title="Map">
               <Alert show={show} variant="success">
@@ -87,8 +88,9 @@ const Practices = () => {
               </Tab>              
             </Tabs> 
           </div>
+          </Col>
+          </Row>
           </div>
-        </div>
       </div>
 
       </React.Fragment>

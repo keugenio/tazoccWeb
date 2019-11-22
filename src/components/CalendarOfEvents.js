@@ -5,7 +5,7 @@ import Swal from 'sweetalert2';
 import EventInformation from './EventInformation';
 import ScoraRaces from '../data/scora_races';
 import Calendar from './Calendar';
-import {Tabs, Tab, Alert} from 'react-bootstrap';
+import {Tabs, Tab, Alert, Row, Col, Container} from 'react-bootstrap';
 import bgImage from '../bgImages/bg_nightime.jpg';
 
 const handleOnSelect = (event) => {
@@ -49,55 +49,57 @@ class TAZCalendar extends React.Component{
       <React.Fragment> 
         <img src={bgImage} className="fullsize-bg-image"></img>
         <div><p className="text-center text-white pageTitle">Team Arizona Calendar of Events</p></div>
-        <div className="d-flex">
-          <div className="col-md-6">
-              <div className="h-100">
-                <Calendar />             
-              </div>
-          </div>
-          <div className="col-md-5">
-          <div className="eventInfo">
-            <Tabs defaultActiveKey="events" id="practiceTabInfo">
-                <Tab eventKey="scora" title="SCORA Races">
-                  <Alert variant="success">
-                    <hr></hr>
-                    <div className="table-responsive scoraEvents">
-                      <table className="table table-striped table-danger">
-                        <thead>
-                          <tr>
-                            <td>Date</td>
-                            <td>Race</td>
-                            <td>Location</td>
-                            <td>Host</td>                                          
-                          </tr>
-                        </thead>
-                        <tbody>
-                        { this.state.ScoraRaces.map((race, i) => (
-                          <tr key={i}>
-                            <td>{race.date}</td>
-                            <td>{race.race}</td>
-                            <td>{race.location}</td>
-                            <td>{race.host}</td>                                           
-                          </tr>
-                          )
-                        )}                  
-                        </tbody>
-                      </table>
-                    </div>                 
-                  </Alert>               
-                </Tab>
-                <Tab eventKey="events" title="Events">
-                  <div className="p-4" style={containerStyle}>
-                    <div className="mt-4 containerTitle"><p className="text-dark">typical events and races we do throughout the year</p></div>
-                    <div className="events" style={cardDeckStyle}>
-                      <EventInformation/>
-                    </div>
-                  </div>            
-                </Tab>     
-              </Tabs> 
-            </div>     
-          </div>
-        </div>          
+        <Container fluid={true}>
+          <Row>
+            <Col xl={6} xs={12} className="my-auto">
+                <div className="h-100">
+                  <Calendar />             
+                </div>
+            </Col>
+            <Col xl={6} xs={12}>
+              <div className="eventInfo">
+                <Tabs defaultActiveKey="events" id="practiceTabInfo">
+                  <Tab eventKey="scora" title="SCORA Races">
+                    <Alert variant="success">
+                      <hr></hr>
+                      <div className="table-responsive scoraEvents">
+                        <table className="table table-striped table-danger">
+                          <thead>
+                            <tr>
+                              <td>Date</td>
+                              <td>Race</td>
+                              <td>Location</td>
+                              <td>Host</td>                                          
+                            </tr>
+                          </thead>
+                          <tbody>
+                          { this.state.ScoraRaces.map((race, i) => (
+                            <tr key={i}>
+                              <td>{race.date}</td>
+                              <td>{race.race}</td>
+                              <td>{race.location}</td>
+                              <td>{race.host}</td>                                           
+                            </tr>
+                            )
+                          )}                  
+                          </tbody>
+                        </table>
+                      </div>                 
+                    </Alert>               
+                  </Tab>
+                  <Tab eventKey="events" title="Events">
+                    <div className="p-4" style={containerStyle}>
+                      <div className="mt-4 containerTitle"><p className="text-dark">typical events and races we do throughout the year</p></div>
+                      <div className="events" style={cardDeckStyle}>
+                        <EventInformation/>
+                      </div>
+                    </div>            
+                  </Tab>     
+                </Tabs> 
+              </div>     
+            </Col>
+          </Row>          
+        </Container>
       </React.Fragment>
     )
   }

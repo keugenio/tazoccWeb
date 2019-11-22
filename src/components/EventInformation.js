@@ -1,6 +1,7 @@
 import React from 'react';
 import events from './eventDescriptions';
 import Modal from './Modal'
+import {CardColumns, Card} from 'react-bootstrap';
 
 class EventInformation extends React.Component  {
   constructor () {
@@ -35,7 +36,7 @@ class EventInformation extends React.Component  {
   render () {
     return (
       <React.Fragment>
-      <Modal title={this.state.currentTitle}>
+        <Modal title={this.state.currentTitle}>
         <table style={tableStyle}>
           <tbody>
             <tr>
@@ -63,17 +64,19 @@ class EventInformation extends React.Component  {
           </tbody>
         </table>
       </Modal>      
-        {this.state.events.map((event, i)=>(
-          <button key={i} type="button" className="btn" data-toggle="modal" data-target="#theModal" onClick={() => this.openModal(event.title)} style={buttonStyle}>
-            <div className="card bg-primary text-white">
-              <img className="card-img-top img-fluid" src={event.img} alt="event image"></img>
-              <div className="card-body">
-                <div className="card-title">{event.title}</div>
-              </div> 
-            </div>
-          </button>
-        ))}       
-      </React.Fragment>
+        <CardColumns>
+          {this.state.events.map((event, i)=>(
+            <button key={i} type="button" className="btn" data-toggle="modal" data-target="#theModal" onClick={() => this.openModal(event.title)} style={buttonStyle}>
+              <Card className="bg-primary text-white">
+                <Card.Img variant="top" src={event.img} alt="event image" />
+                <Card.Body>
+                  <Card.Title>{event.title}</Card.Title>
+                </Card.Body> 
+              </Card>
+            </button>
+            ))}       
+        </CardColumns>
+        </React.Fragment>
 
     )
   }      
@@ -90,8 +93,7 @@ const labelStyle = {
   fontWeight:600
 }
 const buttonStyle = {
-  maxWidth:'33%',
-  height:'100%'
+  maxWidth:'90%'
 }
 const tableStyle = {
   fontSize:'1.5rem'
