@@ -1,0 +1,55 @@
+.slant-down-right {
+    -webkit-clip-path: polygon(0% 0%, 0% 100%, 100% 100%, 95% 0%);
+    clip-path: polygon(0% 0%, 0% 100%, 100% 100%, 95% 0%);
+}
+.slant-down-left {
+  -webkit-clip-path: polygon(0% 0%, 0% 100%, 100% 100%, 95% 0%);
+  clip-path: polygon(5% 0%, 0% 100%, 100% 100%, 100% 0%);
+}
+.bg-Tribal {
+  background-image: url('/images/bg_join.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+.bg-join_1 {
+  background-image: url('/images/join_1.jpg');
+  background-position: center right;
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 75vh;
+}
+.bg-join_3 {
+  background-image: url('/images/join_3.jpg');
+  background-size: contain;
+  background-position-x: 5%;
+  background-repeat: no-repeat;
+  height: 50vh;
+
+}
+
+.bg-white-fade {
+  background: rgba($white, .75);
+}
+.bg-primary-fade {
+  background: rgba($primary, .75);
+}
+.bgAIconLeft {
+  @include aTribal;
+  background-position-x: -150px;
+}
+.bgAIconRight {
+  @include aTribal;
+  background-position-x: 150px
+}
+.bgAIcon {
+  @include aTribal;
+}
+.joinUsText {
+  font-size: 2.5rem;
+    line-height: 2.75rem;
+}
+.joinUsContainer {
+  & .row {
+    margin-top:5rem!important;
+  } 
+}

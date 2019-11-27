@@ -1,6 +1,7 @@
 @import './base/settings';
 @import './base/mixins';
 @import './base/base';
+@import './base/typography';
 @import './base/my-bootstrap';
 @import './components/home.scss';
 @import './components/calendar.scss';
@@ -12,4 +13,5 @@
 @import './components/tradition';
 @import './components/shopTAZ';
 @import './components/news.scss';
+@import './components/joinUs';
 @import '../../node_modules/bootstrap/dist/css/bootstrap.css';

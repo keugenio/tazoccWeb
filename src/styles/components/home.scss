@@ -1,5 +1,4 @@
 .homepage {
-  position: fixed;
   margin: 0;
   padding: 0;
   display: flex;
@@ -15,9 +14,7 @@
     border: thin $info;
     font-weight: 200;
     box-shadow: .5rem .5rem 1rem rgba($color:$dark, $alpha: .75);
-    position: absolute;
-    bottom: 25%;
-    left: 45%;
+
     padding: 5px 20px;
     transition-duration: 0.1s;
     &:hover {
@@ -59,7 +56,13 @@
   text-transform: lowercase;
   animation: moveInRight 2s ease-in-out;
 }
-
+.homepageButtons {
+  display: flex;
+  justify-content: space-around;
+  position: absolute;
+  bottom:10%;
+  width: 100%;
+}
 @keyframes moveInLeft {
   0% {
     opacity:0;

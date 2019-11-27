@@ -1,10 +1,9 @@
 import React, { useState, Suspense } from 'react';
-import { Card } from 'react-bootstrap';
+import { Card, Modal} from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import bgImage from '../bgImages/bg_high_five.jpg';
 
 const AboutUs = () => {
-  const [open, setOpen] = useState(false);
   const BoardMembers = [
     {title:'President',name:'Lisa Zanin', img:'/images/lisa.jpg'},
     {title:'Vice-President',name:'Jeff Leonard', img:'/images/jeff.jpg'},

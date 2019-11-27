@@ -1,0 +1,6 @@
+.text-shadow-white {
+  @include textShadow($white)
+}
+.text-shadow-primary {
+  @include textShadow($primary)
+}

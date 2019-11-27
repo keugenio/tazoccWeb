@@ -17,3 +17,8 @@
 @mixin textShadow($color) {
 	text-shadow: .25rem .25rem .25rem $color;
 }
+@mixin aTribal{
+  background-image: url('/images/A-with-tribal_300_fade.png');
+  background-repeat: no-repeat;
+  background-size: contain;	
+}
