@@ -16,15 +16,26 @@
   background-position: center right;
   background-size: cover;
   background-repeat: no-repeat;
-  height: 75vh;
+  height: 100vh;
+}
+.bg-join_2 {
+  background-image: url('/images/join_2.jpg');
+  background-position: bottom left;
+  background-size: cover;
+  height: 100vh;
 }
 .bg-join_3 {
   background-image: url('/images/join_3.jpg');
-  background-size: contain;
-  background-position-x: 5%;
-  background-repeat: no-repeat;
-  height: 50vh;
-
+  background-size: cover;
+  background-position: center;
+  height: 100vh;
+}
+.bg-join_4 {
+  background-image: url('/images/join_4.jpg');
+  background-size: cover;
+  background-position: center left;
+  background-position-x: 75%;
+  height: 100vh;
 }
 
 .bg-white-fade {
@@ -49,7 +60,22 @@
     line-height: 2.75rem;
 }
 .joinUsContainer {
-  & .row {
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+  .row:first-child {
     margin-top:5rem!important;
+    padding-top: 5rem;
+    padding-bottom: 5rem;
   } 
+  .row:not(:first-child) {
+    margin-top:10rem!important;
+    margin-bottom:5rem!important;
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+  } 
+  .btn {
+    font-size: 3rem;
+    padding: 2rem;
+    @include boxShadow($primary);
+  }
 }
