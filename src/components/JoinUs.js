@@ -27,7 +27,7 @@ const JoinUs = () => {
             <p className="joinUsText">Every practice starts with helping getting the canoes prepared at the boatyard, then a proper stretch and seat assignments.  A normal practice will usually last a little more than an hour. Sometimes we do drills to work on basics and cardio, sometimes we do long distance pieces to work on endurance and sometimes a combination.  It really depends on the what type of races we're getting prepared for.</p></div>       
           </Col>      
         </Row>
-        <Row className="bg-join_4s d-flex justify-content-end flex-column ">
+        <Row className="bg-join_4 d-flex justify-content-end flex-column ">
           <Col className="h-100 d-flex justify-content-end align-items-center flex-column"> 
               <img src="/images/hibiscus-white-icon.png" className="mb-4"/>
               <Button href="/practices" variant="primary" size="lg">Learn more</Button>       
