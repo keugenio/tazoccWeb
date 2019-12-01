@@ -1,13 +1,18 @@
 import React from 'react';
 import { Calendar, momentLocalizer } from "react-big-calendar";
+import { connect } from 'react-redux';
 import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { getEvents } from '../gcal';
 import Swal from 'sweetalert2';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import TAZStore, { setCalendarEvents } from '../store/store'
+import "babel-polyfill";
 
 moment.locale("en-US");
 const localizer = momentLocalizer(moment);
+const ls = require('local-storage');
+const store = TAZStore;
 
 const handleOnSelect = (event) => {
   const start = moment(event.start);
@@ -30,19 +35,51 @@ class TAZCalendar extends React.Component{
   constructor () {
     super()
     this.state = {
-      events: [],
       displayWaitingIcon:{display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', minHeight:'100vh', color:'#01579b'},
       displayEvents:{'display':'none'},
     }   
   }
-  componentDidMount () {
-    getEvents((events) => {
-      this.setState({events})
-      this.setState({displayWaitingIcon:{'display':'none'}})
-      this.setState({displayEvents:{'display':'block'}})
-    })
-  }
 
+  async componentDidMount (props) {
+    // add localStorage.events into store to view on <Calender/>
+    this.props.dispatch(setCalendarEvents(ls('events')));
+
+    // turn off watiing Icon
+    this.setState({displayWaitingIcon:{'display':'none'}})
+    this.setState({displayEvents:{'display':'block'}})
+
+    // download events from the Google Calendar and add any new events to the store and localStorage
+    await getEvents((events) => {
+
+      //load store
+      
+        // events.forEach(event => {
+        //   this.props.dispatch(addCalendarEvent({id:event.id, start:event.start, end:event.end, title:event.title}));
+        // });
+
+      // if new, load localStorage
+        const localStorageArray = ls('events') ? ls('events') : [];
+        let newEvents= [];
+
+        if (localStorageArray.length<=0){
+          newEvents = [...events];
+          console.log("loading all events for the first time");
+        } else {
+          newEvents = events.filter((event)=>(
+            !localStorageArray.find(ls => ls.id=== event.id)
+          ))
+        }
+        // if there are any new Events to add, add them to local storage and store
+        if (newEvents.length>0) {
+          ls.set('events', [...localStorageArray, ...newEvents]);
+          this.props.dispatch(setCalendarEvents([...localStorageArray, ...newEvents]))
+          console.log('bubba');
+          
+        }
+    })
+    
+  }
+  
   render(){
     return(
       <React.Fragment> 
@@ -54,7 +91,7 @@ class TAZCalendar extends React.Component{
               <Calendar
               style={calendarStyle}
               localizer={localizer}
-              events={this.state.events}
+              events={this.props.storeEvents}
               onSelectEvent={event => handleOnSelect(event)}
               />              
             </div>
@@ -64,7 +101,14 @@ class TAZCalendar extends React.Component{
   }
 }
 
-export default TAZCalendar
+const mapStateToProps = (state) => {
+  return {
+    storeEvents:state.events
+  }
+}
+
+//export default TAZCalendar
+export default connect(mapStateToProps)(TAZCalendar)
 
 const calendarStyle = {
   height:'50vh',

@@ -3,8 +3,8 @@ import moment from 'moment';
 import GoogleCalendarAPIKey from './components/keys/googleCalendarKey'
 const CALENDAR_ID = 'teamazoutrigger@gmail.com'
 const API_KEY = GoogleCalendarAPIKey.key
-let url = `https://www.googleapis.com/calendar/v3/calendars/${CALENDAR_ID}/events?key=${API_KEY}&maxResults=1000&singleEvents=true`
-console.log(url);
+const time_min = moment().subtract(9, "months").format("YYYY-MM-DDTHH:mm:ssZ");
+let url = `https://www.googleapis.com/calendar/v3/calendars/${CALENDAR_ID}/events?key=${API_KEY}&singleEvents=true&timeMin=${time_min}`
 
 export function getEvents (callback) {
   request
@@ -16,7 +16,6 @@ export function getEvents (callback) {
         let eDate = null        
 
         JSON.parse(resp.text).items.map((event) => {
-          console.log(event);
           
           if (event.start && event.start.date){
             sDate = new Date(event.start.date)
@@ -35,12 +34,9 @@ export function getEvents (callback) {
             start: sDate,
             end: eDate,
             title: event.summary,
-          })     
-          // if (moment(sDate).isAfter('2019-9-1')){
-          //   console.log(event,event.summary);
-            
-          // }     
-        })        
+          })   
+        }) 
+               
         callback(events)
       }
     })
