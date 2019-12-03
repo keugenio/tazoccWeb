@@ -4,13 +4,13 @@ import { Provider } from 'react-redux';
 import 'normalize.css/normalize.css';
 import './styles/styles.scss';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { fab} from '@fortawesome/free-brands-svg-icons';
-import { faSync, faQuoteLeft, faQuoteRight } from '@fortawesome/free-solid-svg-icons';
+import { fab } from '@fortawesome/free-brands-svg-icons';
+import { faSync, faQuoteLeft, faQuoteRight, faStar } from '@fortawesome/free-solid-svg-icons';
 import tazStore, {addCalendarEvent, addNewsItem,setReadNews, addReadArticle, resetReadArticles } from './store/store';
 
 import AppRouter from './components/routers/AppRouter'
 
-library.add(fab, faSync, faQuoteLeft, faQuoteRight)
+library.add(fab, faSync, faQuoteLeft, faQuoteRight, faStar)
 const store = tazStore();
 
 const jsx = (

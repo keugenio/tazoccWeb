@@ -45,19 +45,26 @@ export const addNewsItem = ( { id=uuid(), content={}, excerpt={}, date=0 , title
   }
 })
 
+export const setNewsArticles = ( articles ) => ({
+  type: 'SET_NEWS_ARTICLES',
+  articles
+})
+
 // create a news reducer
 const newsReducerDefault = []
 const newsReducer = (state = newsReducerDefault, action) => {
   switch (action.type) {
     case 'ADD_NEWS_ITEM':      
-      return [...state, action.article]
+      return [...state, action.article];
+    case 'SET_NEWS_ARTICLES':
+      return [...action.articles];
     default:
       return state;
   }
 }
 
-/********* LocalStorage Actions and Reducer ************* */
-// localStorage actions
+/********* read articles Actions and Reducer ************* */
+// read Articles actions
 export const setReadNews = (localNewsStorage) => ({
   type:'SET_READ_NEWS',
   localNewsStorage
@@ -70,19 +77,17 @@ export const resetReadArticles = () => ({
   type:'RESET_READ_ARTICLES'
 })
 // create a locaStorage reducer
-const localNewsStorageReducer = (state = {localNewsStorage:[]}, action) => {
+const readNewsArticlesReducer = (state = {ls_read_articles:[]}, action) => {
   switch (action.type) {
     case 'SET_READ_NEWS':
-      // add all article IDs to local storage
-      ls('readNews', action.localNewsStorage);
-      return {localNewsStorage:action.localNewsStorage};
+      return [...action.localNewsStorage]
     case 'ADD_READ_ARTICLE':
       // "append" read articleID to localstorage. don't mutate
-      ls('readNews', [...state.localNewsStorage, action.articleID]);
-      return {localNewsStorage:[...state.localNewsStorage, action.articleID]};
+      ls.set('readNews', [...state, action.articleID]);
+      return [...state, action.articleID];
     case 'RESET_READ_ARTICLES':
       ls('readNews', []);
-      return {localNewsStorage:[]};
+      return [];
     default:
       return state;
   }
@@ -90,13 +95,13 @@ const localNewsStorageReducer = (state = {localNewsStorage:[]}, action) => {
 
 /********* create a store by combining reducers ********************** */
 //create store by assigning expenses reducer to expenses property using combineReducer
-const tazStore = createStore(
-  combineReducers(
-    { events:eventsReducer,
-      news:newsReducer,
-      localStorage:localNewsStorageReducer
-    }
-  ));
+// const tazStore = createStore(
+//   combineReducers(
+//     { events:eventsReducer,
+//       news:newsReducer,
+//       readNewsArticles:readNewsArticlesReducer
+//     }
+//   ));
 // const unsubscribe = store.subscribe (()=>{
 //   console.log(store.getState())
 // })
@@ -118,9 +123,11 @@ export default () => {
     combineReducers(
       { events:eventsReducer,
         news:newsReducer,
-        localStorage:localNewsStorageReducer
+        readNewsArticles:readNewsArticlesReducer
       }
-    ));
+    ),
+    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+    );
     return tazStore
 }
 
