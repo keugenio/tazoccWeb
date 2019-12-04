@@ -4,3 +4,6 @@
 .text-shadow-primary {
   @include textShadow($primary)
 }
+.text-dark {
+  color: $dark;
+}

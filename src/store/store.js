@@ -77,17 +77,19 @@ export const resetReadArticles = () => ({
   type:'RESET_READ_ARTICLES'
 })
 // create a locaStorage reducer
-const readNewsArticlesReducer = (state = ls('readNews') || [], action) => {
+const readNewsDefault = (ls('readNews')? ls('readNews'): []);
+const amountUnreadDefault = ls('news').length-(ls('readNews')? ls('readNews').length:0);
+const readNewsArticlesReducer = (state = {readNews:readNewsDefault, amountUnread:amountUnreadDefault}, action) => {
   switch (action.type) {
     case 'SET_READ_NEWS':
-      return [...action.localNewsStorage]
+      return {readNews:[...action.localNewsStorage], amountUnread:action.localNewsStorage.length}
     case 'ADD_READ_ARTICLE':
       // "append" read articleID to localstorage. don't mutate
-      ls.set('readNews', [...state, action.articleID]);
-      return [...state, action.articleID];
+      ls.set('readNews', [...state.readNews, action.articleID]);
+      return {readNews:[...state.readNews, action.articleID], amountUnread: state.amountUnread-1};
     case 'RESET_READ_ARTICLES':
       ls('readNews', []);
-      return [];
+      return {readNews:[], amountUnread:0};
     default:
       return state;
   }
