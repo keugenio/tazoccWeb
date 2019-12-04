@@ -83,7 +83,6 @@ class News extends React.Component {
               filtered.push(res.data.posts.data[i]);
           }
       }
-
       this.setState({images:filtered})
     })
     

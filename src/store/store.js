@@ -51,7 +51,7 @@ export const setNewsArticles = ( articles ) => ({
 })
 
 // create a news reducer
-const newsReducerDefault = []
+const newsReducerDefault = ls('news') || []
 const newsReducer = (state = newsReducerDefault, action) => {
   switch (action.type) {
     case 'ADD_NEWS_ITEM':      
@@ -77,7 +77,7 @@ export const resetReadArticles = () => ({
   type:'RESET_READ_ARTICLES'
 })
 // create a locaStorage reducer
-const readNewsArticlesReducer = (state = {ls_read_articles:[]}, action) => {
+const readNewsArticlesReducer = (state = ls('readNews') || [], action) => {
   switch (action.type) {
     case 'SET_READ_NEWS':
       return [...action.localNewsStorage]
@@ -95,28 +95,6 @@ const readNewsArticlesReducer = (state = {ls_read_articles:[]}, action) => {
 
 /********* create a store by combining reducers ********************** */
 //create store by assigning expenses reducer to expenses property using combineReducer
-// const tazStore = createStore(
-//   combineReducers(
-//     { events:eventsReducer,
-//       news:newsReducer,
-//       readNewsArticles:readNewsArticlesReducer
-//     }
-//   ));
-// const unsubscribe = store.subscribe (()=>{
-//   console.log(store.getState())
-// })
-
-// store.dispatch(addCalendarEvent({start:23, title:'pepe title', start:123, end:456}))
-// store.dispatch(addNewsItem({
-//     date:132,
-//     content:{rendered:'pepe content'},
-//     excerpt:{rendered: 'pepe ...'},
-//     title:{rendered: 'Pepe title'}
-//   }
-// ))
-// store.dispatch(setReadNews([123,234,345,456]))
-// store.dispatch(addReadArticle(567))
-// store.dispatch(resetReadArticles())
 
 export default () => {
   const tazStore = createStore(

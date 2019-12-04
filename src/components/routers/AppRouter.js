@@ -2,6 +2,7 @@ import React from 'react'
 import {BrowserRouter, Route, Switch} from 'react-router-dom';
 
 import NavigationOverlay from '../Navigation_overlay';
+import Dashboard from '../Dashboard';
 import Home from '../Home';
 import AboutUs from '../AboutUs';
 import Practices from '../Practices';
@@ -15,7 +16,7 @@ import Footer from '../Footer';
 const AppRouter = () => (
   <BrowserRouter>
     <div>
-      <NavigationOverlay />
+      <Dashboard />
       <Switch>
         <Route path="/" component={Home} exact={true} />
         <Route path="/practices" component={Practices} />        
