@@ -34,28 +34,14 @@ const eventsReducer = (state = eventsReducerDefault, action) => {
 }
 
 /********* News Actions and Reducer ************* */
-export const addNewsItem = ( { id=uuid(), content={}, excerpt={}, date=0 , title={} } ) => ({
-  type: 'ADD_NEWS_ITEM',
-  article:{
-    id,
-    content,
-    excerpt,
-    date, 
-    title
-  }
-})
-
 export const setNewsArticles = ( articles ) => ({
   type: 'SET_NEWS_ARTICLES',
   articles
 })
-
 // create a news reducer
 const newsReducerDefault = ls('news') || []
 const newsReducer = (state = newsReducerDefault, action) => {
   switch (action.type) {
-    case 'ADD_NEWS_ITEM':      
-      return [...state, action.article];
     case 'SET_NEWS_ARTICLES':
       return [...action.articles];
     default:
@@ -63,7 +49,7 @@ const newsReducer = (state = newsReducerDefault, action) => {
   }
 }
 
-/********* read articles Actions and Reducer ************* */
+/********* Read Articles Actions and Reducer ************* */
 // read Articles actions
 export const setReadNews = (localNewsStorage) => ({
   type:'SET_READ_NEWS',
@@ -95,15 +81,36 @@ const readNewsArticlesReducer = (state = {readNews:readNewsDefault, amountUnread
   }
 }
 
+/***  Authenticated User Actions and Reducer  ****/
+export const setUserName = (userName) => ({
+  type: 'SET_USER_NAME',
+  userName
+})
+export const logUserOut = () => ({
+  type: 'LOG_USER_OUT'
+})
+const authenticatedUserReducerDefault = {}
+const authenticatedUserReducer = (state = {}, action) => {
+  switch (action.type) {
+    case 'SET_USER_NAME':
+      return {userName:action.userName }
+    case 'LOG_USER_OUT':
+      return {}
+    default:
+      return state;
+  }
+}
+
 /********* create a store by combining reducers ********************** */
 //create store by assigning expenses reducer to expenses property using combineReducer
 
 export default () => {
   const tazStore = createStore(
     combineReducers(
-      { events:eventsReducer,
-        news:newsReducer,
-        readNewsArticles:readNewsArticlesReducer
+      { user:authenticatedUserReducer,
+        events: eventsReducer,
+        news: newsReducer,
+        readNewsArticles: readNewsArticlesReducer
       }
     ),
     window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()

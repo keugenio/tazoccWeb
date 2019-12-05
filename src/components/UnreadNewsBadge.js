@@ -1,15 +1,14 @@
 import React from 'react'
 import {Button, Badge} from 'react-bootstrap';
 import { connect } from 'react-redux';
-import store from '../store/store';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-class UnreadNewsBadge extends React.Component {
-
-  render() {
+class UnreadNewsBadge extends React.Component {  
+  render() {   
     return (
-      <Button variant="primary" href="/news">
-        unread News 
-        <Badge className = "ml-2" variant="warning">{this.props.amountUnread}</Badge>
+      <Button variant="primary" href="/news" className="titleHoverMessage" title={`${this.props.amountUnread} unread articles`}>
+        <FontAwesomeIcon icon="newspaper" />
+        <Badge className = "ml-2" variant="warning" title="logout" >{this.props.amountUnread }</Badge>
       </Button>
     )  
     

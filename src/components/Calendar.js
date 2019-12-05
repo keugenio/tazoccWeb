@@ -6,13 +6,12 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { getEvents } from '../gcal';
 import Swal from 'sweetalert2';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import TAZStore, { setCalendarEvents } from '../store/store'
+import { setCalendarEvents } from '../store/store'
 import "babel-polyfill";
 
 moment.locale("en-US");
 const localizer = momentLocalizer(moment);
 const ls = require('local-storage');
-const store = TAZStore;
 
 const handleOnSelect = (event) => {
   const start = moment(event.start);
