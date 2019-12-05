@@ -86,6 +86,10 @@ export const setUserName = (userName) => ({
   type: 'SET_USER_NAME',
   userName
 })
+export const setUserID = (userID) => ({
+  type:'SET_USER_ID',
+  userID
+})
 export const logUserOut = () => ({
   type: 'LOG_USER_OUT'
 })
@@ -93,7 +97,9 @@ const authenticatedUserReducerDefault = {}
 const authenticatedUserReducer = (state = {}, action) => {
   switch (action.type) {
     case 'SET_USER_NAME':
-      return {userName:action.userName }
+      return {userName:action.userName, userID: state.userID}
+    case 'SET_USER_ID':
+        return {userName: state.userName, userID:action.userID }
     case 'LOG_USER_OUT':
       return {}
     default:

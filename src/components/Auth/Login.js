@@ -1,9 +1,7 @@
 
 import React, { Component } from 'react';
 import firebase from 'firebase';
-
-import { navigate } from '@reach/router';
-const FormError = require('form-error');
+import { navigate } from 'react-router-dom'
 
 class Login extends Component {
   constructor(props) {
@@ -11,6 +9,8 @@ class Login extends Component {
     this.state = {
       email: '',
       password: '',
+      passOne:'',
+      passTwo:'',
       errorMessage: null
     };
 

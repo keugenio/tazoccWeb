@@ -2,7 +2,7 @@ import React from 'react'
 import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import { connect } from 'react-redux';
 import firebase from '../Firebase';
-import Navigation from '../Navigation';
+import Navigation from '../NavMenu/Navigation';
 import Home from '../Home';
 import AboutUs from '../AboutUs';
 import Practices from '../Practices';
@@ -10,8 +10,9 @@ import Tradition from '../Tradition';
 import News from '../News';
 import TAZCalendarOfEvents from '../CalendarOfEvents'
 import ShopTAZ from '../ShopTAZ';
-import Login from '../Login';
+import Login from '../Auth/Login';
 import PaddlerStats from '../PaddlerStats';
+import Register from '../Auth/Register';
 import NotFoundPage from '../NotFoundPage';
 import Footer from '../Footer';
 import { setUserName } from '../../store/store';
@@ -45,6 +46,7 @@ class AppRouter extends React.Component {
             <Route path="/News" component={News} /> 
             <Route path="/paddlerstats" component={PaddlerStats} />
             <Route path="/login" component={Login} />
+            <Route path="/register" component={Register} />
             <Route component={NotFoundPage} />              
           </Switch>
           <Footer />
