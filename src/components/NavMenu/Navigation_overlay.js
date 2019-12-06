@@ -1,6 +1,5 @@
 import React from 'react'
-import { NavLink } from 'react-router-dom';
-
+import { Link } from '@reach/router';
 
 var $ = require('jquery');
 window.$ = $;
@@ -19,39 +18,39 @@ const  NavigationOverlay = () => {
       <nav className="navigation__nav">
         <ul className="navigation__list">
           <li className="navigation__item">
-            <NavLink activeClassName="is-active" className="navigation__link" to="/" onClick={closeNavOverlay}>
+            <Link className="navigation__link" to="/" onClick={closeNavOverlay}>
               <span>01</span>Home
-            </NavLink> 
+            </Link> 
           </li>
           <li className="navigation__item"> 
-            <NavLink activeClassName="is-active" className="navigation__link" to="/practices" onClick={closeNavOverlay}>
+            <Link className="navigation__link" to="/practices" onClick={closeNavOverlay}>
               <span>02</span>Practices
-            </NavLink> 
+            </Link> 
           </li>
           <li className="navigation__item">  
-            <NavLink activeClassName="is-active" className="navigation__link" to="/calendar" onClick={closeNavOverlay}>
+            <Link className="navigation__link" to="/calendar" onClick={closeNavOverlay}>
               <span>03</span>Calendar
-            </NavLink> 
+            </Link> 
           </li>
           <li className="navigation__item">   
-            <NavLink activeClassName="is-active" className="navigation__link" to="/aboutUs" onClick={closeNavOverlay}>
+            <Link className="navigation__link" to="/aboutUs" onClick={closeNavOverlay}>
               <span>04</span>About TAZ
-            </NavLink> 
+            </Link> 
           </li>
           <li className="navigation__item">  
-            <NavLink activeClassName="is-active" className="navigation__link" to="/tradition" onClick={closeNavOverlay}>
+            <Link className="navigation__link" to="/tradition" onClick={closeNavOverlay}>
               <span>05</span>Tradition          
-            </NavLink> 
+            </Link> 
           </li>
           <li className="navigation__item">   
-            <NavLink activeClassName="is-active" className="navigation__link" to="/shopTAZ" onClick={closeNavOverlay}>
+            <Link className="navigation__link" to="/shopTAZ" onClick={closeNavOverlay}>
               <span>06</span>Shop TAZ
-            </NavLink> 
+            </Link> 
           </li>
           <li className="navigation__item">  
-            <NavLink activeClassName="is-active" className="navigation__link" to="/news" onClick={closeNavOverlay}>
+            <Link className="navigation__link" to="/news" onClick={closeNavOverlay}>
               <span>07</span>News
-            </NavLink>
+            </Link>
           </li>
         </ul>
       </nav>

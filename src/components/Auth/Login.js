@@ -1,7 +1,10 @@
 
 import React, { Component } from 'react';
-import firebase from 'firebase';
-import { navigate } from 'react-router-dom'
+import firebase from '../Firebase';
+import { connect } from 'react-redux';
+import { setUserName, setUserID } from '../../store/store';
+import { navigate, Link } from '@reach/router';
+import Swal from 'sweetalert2';
 
 class Login extends Component {
   constructor(props) {
@@ -9,9 +12,9 @@ class Login extends Component {
     this.state = {
       email: '',
       password: '',
-      passOne:'',
-      passTwo:'',
-      errorMessage: null
+      errorMessage: null,
+      goToRegister: false,
+      goToDashboard: false
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -38,16 +41,38 @@ class Login extends Component {
         registrationInfo.email,
         registrationInfo.password
       )
-      .then(() => {
-        navigate('/paddlerstats');
+      .then((FBUser) => {
+        const {uid, displayName} = FBUser;
+
+        this.props.dispatch(setUserID(uid));
+        this.props.dispatch(setUserName(displayName));
+
+        navigate('/paddlerstats')
       })
       .catch(error => {
         if (error.message !== null) {
           this.setState({ errorMessage: error.message });
+          Swal.fire({
+            icon: 'error',
+            title: "Oops...",
+            text: this.state.errorMessage,
+            confirmButtonText: 'OK',
+            showClass: {
+              popup: 'animated fadeInDown faster'
+            },
+            hideClass: {
+              popup: 'animated fadeOutUp faster'
+            }
+                    
+          }) 
         } else {
           this.setState({ errorMessage: null });
         }
       });
+  }
+
+  handleGoToRegister = () => {
+    navigate('/register')
   }
 
   render() {
@@ -61,11 +86,6 @@ class Login extends Component {
                   <div className="card-body">
                     <h3 className="font-weight-light mb-3">Log in</h3>
                     <section className="form-group">
-                      {this.state.errorMessage !== null ? (
-                        <FormError
-                          theMessage={this.state.errorMessage}
-                        />
-                      ) : null}
                       <label
                         className="form-control-label sr-only"
                         htmlFor="Email"
@@ -94,11 +114,16 @@ class Login extends Component {
                         onChange={this.handleChange}
                       />
                     </section>
-                    <div className="form-group text-right mb-0">
-                      <button className="btn btn-primary" type="submit">
-                        Log in
-                      </button>
-                    </div>
+                    <section className="form-group">
+                      <div className="form-group text-center py-3">
+                        <button className="btn btn-primary" type="submit">
+                          Log in
+                        </button>
+                      </div>
+                    </section>
+                    <section className="form-group">
+                      <div className="text-right">no account? <Link to="/register">Register</Link> </div>
+                    </section>
                   </div>
                 </div>
               </div>
@@ -110,7 +135,7 @@ class Login extends Component {
   }
 }
 
-export default Login;
+export default connect ()(Login);
 const formStyle = {
   height: '100vh',
   display:'flex',

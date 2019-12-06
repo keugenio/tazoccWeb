@@ -89,7 +89,7 @@ class Register extends Component {
         displayName: userName
       }).then (()=>{
         const newUser = {displayName: FBUser.displayName,userID: FBUser.uid}
-        console.log('bgUser', FBUser);
+        console.log('bgUser', FBUser.displayName);
         
         this.props.dispatch(setUserName(newUser.displayName));
         this.props.dispatch(setUserID(newUser.userID));
