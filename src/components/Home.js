@@ -71,24 +71,7 @@ class Home extends React.Component {
         <img src={bgImage} className="fullsize-bg-image"></img>
         <div className="homepageButtons">
           <Button className="join" href="#joinUs">join us</Button>
-          <Button variant="primary" onClick={this.handleShow} className="join">
-            Contact TAZ
-          </Button>
         </div>
-  
-        <Modal show={this.state.show} onHide={this.handleClose}>
-          <Modal.Header closeButton>
-            <Modal.Title>Contact TAZ</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <EmailUs />
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={this.handleClose}>
-              Close
-            </Button>
-          </Modal.Footer>
-        </Modal>      
       </div>
       <div><JoinUs/></div>
       </React.Fragment>

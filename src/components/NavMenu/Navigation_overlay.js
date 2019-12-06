@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link } from '@reach/router';
+import { connect } from 'react-redux';
 
 var $ = require('jquery');
 window.$ = $;
@@ -7,7 +8,8 @@ require('bootstrap');
 function closeNavOverlay() {
   document.getElementById("navi-toggle").checked = false;
 }
-const  NavigationOverlay = () => {
+const  NavigationOverlay = (props) => {
+  const loggedIn = props.user || false;
   return (
     <div className="navigation">
       <input type="checkbox" className="navigation__checkbox" id="navi-toggle"></input>
@@ -52,9 +54,19 @@ const  NavigationOverlay = () => {
               <span>07</span>News
             </Link>
           </li>
+          {loggedIn && (
+            <li className="navigation__item">  
+            <Link className="navigation__link" to="/dashboard" onClick={closeNavOverlay}>
+              <span>08</span>Dashboard
+            </Link>
+          </li>
+          )}
         </ul>
       </nav>
     </div>
   )
 }
-export { NavigationOverlay as default}
+const MapStateToProps = ({ user }) => ({
+  user
+})
+export default connect(MapStateToProps)(NavigationOverlay)

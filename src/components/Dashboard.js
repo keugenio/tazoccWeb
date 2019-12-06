@@ -1,16 +1,34 @@
 import React from 'react';
-import UnreadNewsBadge from './UnreadNewsBadge';
-import NavigationOverlay from './Navigation_overlay';
-import Auth from './Auth';
+import { connect } from 'react-redux';
+import { Card } from 'react-bootstrap';
+import { navigate } from '@reach/router';
 
-const Dashboard = () => (
-  <React.Fragment>
-    <div className="dashboard d-flex flex-row-reverse align-items-center">
-      <UnreadNewsBadge />
-      <Auth />
-      <NavigationOverlay />
-    </div>
-  </React.Fragment>
-)
+class Dashboard extends React.Component {
 
-export default Dashboard
+  render () {
+    const {loggedIn, userName} = this.props
+    if (loggedIn)
+      return (
+        <React.Fragment>
+          <Card className="dashboard">
+            <Card.Title>Hello {userName}!</Card.Title>
+            
+          </Card>)
+        </React.Fragment>  
+      )  
+    else 
+        return (
+          <React.Fragment>
+          <Card className="dashboard">
+            <Card.Title>Please Login to view this page</Card.Title>            
+          </Card>)
+        </React.Fragment>            
+        )
+  }
+}
+
+const MapStateToProps = ({user})=>({
+  loggedIn: user.userID || false,
+  userName: user.userName || ''
+})
+export default connect(MapStateToProps)(Dashboard)

@@ -13,6 +13,7 @@ import TAZCalendarOfEvents from '../CalendarOfEvents'
 import ShopTAZ from '../ShopTAZ';
 import Login from '../Auth/Login';
 import PaddlerStats from '../PaddlerStats';
+import Dashboard from '../Dashboard';
 import Register from '../Auth/Register';
 import NotFoundPage from '../NotFoundPage';
 import Footer from '../Footer';
@@ -61,7 +62,8 @@ class AppRouter extends React.Component {
           <Tradition path="tradition" />
           <ShopTAZ path="/shopTAZ" />
           <News path="/news" />
-          <PaddlerStats path="paddlerstats" />
+          <PaddlerStats path="/paddlerstats" />
+          <Dashboard path="/dashboard" />
           <Login path="/login" />
           <Register path="/register" />
           <NotFoundPage default />

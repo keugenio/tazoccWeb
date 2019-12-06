@@ -22,13 +22,13 @@
   background-image: url('/images/join_2.jpg');
   background-position: bottom left;
   background-size: cover;
-  height: 100vh;
+  min-height: 100vh;
 }
 .bg-join_3 {
   background-image: url('/images/join_3.jpg');
   background-size: cover;
   background-position: center;
-  height: 100vh;
+  min-height: 100vh;
 }
 .bg-join_4 {
   background-image: url('/images/join_4.jpg');
@@ -56,8 +56,16 @@
   @include aTribal;
 }
 .joinUsText {
-  font-size: 2.5rem;
+  font-size: 2.25rem;
     line-height: 2.75rem;
+    & ul {
+      line-height: 1.8rem;
+    }
+    & li {
+      margin-bottom:2rem;
+      color: $white;
+      text-shadow: (.15rem .15rem rgba($dark, .75));
+    }
 }
 .joinUsContainer {
   padding-top: 5rem;

@@ -1,7 +1,14 @@
 .dashboard {
-  background: rgba($white, .25);
-  width: 100vw;
   position: absolute;
-  top: 0;
-  left: 0;
+  top:5rem;
+  left:5rem;
+  background: rgba($white, .95);
+  display: flex;
+  width: 85vw;
+  min-height: 85vh;
+  & .card-title {
+    background-color: $primary;
+    padding:1rem;
+    color: $white;
+  }
 }

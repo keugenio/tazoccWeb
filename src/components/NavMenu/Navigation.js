@@ -6,55 +6,75 @@ import NavigationOverlay from './Navigation_overlay';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { logUserOut } from '../../store/store';
 import { navigate, Link } from '@reach/router';
+import { Modal, Button } from 'react-bootstrap'
+import EmailUs from '../EmailUs';
 
 class Navigation extends Component {
-  state= {
-    goToLogin: false
+  constructor() {
+    super();
+    this.state = {
+      show:false
+    }
   }
-
+  handleClose = () => {this.setState({show: false})};
+  handleShow = () => {this.setState({show: true})};
+  
   logOutUser = (e) => {
     e.preventDefault ();
     this.props.dispatch(logUserOut())
     firebase.auth().signOut().then(() =>{
-      navigate('/');
+      navigate('/')
     });
   }
 
   render() {
-    const { user } = this.props;
-    const { userName } = user
+    const { loggedIn, userName } = this.props;
     
-    if (this.state.goToLogin)
-      return <Redirect to="/" />
-    else 
-      return (
-        <nav className="site-nav family-sans navbar navbar-expand higher">
-          <div className="container-fluid navigatorMenu">
-            <Link to="/" className="navbar-brand">
-              Team Arizona Outrigger Canoe Club
+    return (
+      <nav className="site-nav family-sans navbar navbar-expand higher">
+        <div className="container-fluid navigatorMenu">
+          <Link to="/" className="navbar-brand">
+            Team Arizona Outrigger Canoe Club
+          </Link>
+          <div className="navbar-nav ml-auto">
+            { (loggedIn) && (<div className="welcomeUser">Welcome {userName}</div>) }
+            {!loggedIn && (
+              <Link className="nav_link" to="/login" title="Login to see your stats">
+                Login <FontAwesomeIcon icon="sign-in-alt"/>
+              </Link>
+            )}
+            {loggedIn && <UnreadNewsBadge />}
+            <Link className="nav_link" to="#" onClick={this.handleShow}>
+              Contact us
             </Link>
-            <div className="navbar-nav ml-auto">
-              { (userName) && (<div className="welcomeUser">Welcome {userName}</div>) }
-              {!userName && (
-                <Link className="nav_link" to="/login" title="Login to see your stats">
-                  Login <FontAwesomeIcon icon="sign-in-alt"/>
-                </Link>
-              )}
-              <UnreadNewsBadge />
-              {userName && (
-                <Link className="nav_link titleHoverMessage" to="/login" onClick={e => this.logOutUser(e)} title="Logout">
-                <FontAwesomeIcon icon="sign-out-alt"/>
-                </Link>
-              )}
-            </div>
+            {loggedIn && (
+              <Link className="nav_link titleHoverMessage" to="/login" onClick={e => this.logOutUser(e)} title="Logout">
+              <FontAwesomeIcon icon="sign-out-alt"/>
+              </Link>
+            )}
           </div>
-          <NavigationOverlay />
-        </nav>
-      );
+        </div>
+        <NavigationOverlay />
+        <Modal show={this.state.show} onHide={this.handleClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>Contact TAZ</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <EmailUs />
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={this.handleClose}>
+              Close
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      </nav>
+    );
   }
 }
 const MapStateToProps = ({user})=>({
-  user
+  loggedIn: user.userID || false,
+  userName: user.userName || ''
 })
 
 export default connect(MapStateToProps)(Navigation);

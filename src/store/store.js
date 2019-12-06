@@ -100,7 +100,7 @@ const authenticatedUserReducer = (state = {}, action) => {
     case 'SET_USER_ID':
       return {userName: state.userName, userID:action.userID }
     case 'LOG_USER_OUT':  
-      return {userName:null, userID:null}
+      return {}
     default:
       return state;
   }

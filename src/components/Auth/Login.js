@@ -35,6 +35,7 @@ class Login extends Component {
     };
     e.preventDefault();
 
+    // login, set the store with the user info and navigate to the dashboard page
     firebase
       .auth()
       .signInWithEmailAndPassword(
@@ -47,7 +48,7 @@ class Login extends Component {
         this.props.dispatch(setUserID(uid));
         this.props.dispatch(setUserName(displayName));
 
-        navigate('/paddlerstats')
+        navigate('/dashboard')
       })
       .catch(error => {
         if (error.message !== null) {

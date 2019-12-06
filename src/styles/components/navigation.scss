@@ -6,7 +6,7 @@
     height: 6rem;
     width: 5.5rem;
     position: fixed;
-    top:3.75rem;
+    top:5rem;
     right: 4rem;
     border:thin solid $primary;
     border-radius:50%;
@@ -165,5 +165,7 @@
 }
 .navbar {
   padding: 0!important;
-  
+  & .navbar-brand {
+    padding-left:2rem;
+  }
 }
