@@ -109,7 +109,7 @@ class News extends React.Component {
           </CardColumns>
           <Modal  show={this.state.showModal} onHide={this.handleClose}>
             <Modal.Header closeButton>
-                <Modal.Title>{this.state.currNewsTitle}</Modal.Title>
+                <Modal.Title>{this.convertTitle(this.state.currNewsTitle)}</Modal.Title>
               </Modal.Header>
 
               <Modal.Body dangerouslySetInnerHTML={{__html:this.state.currNewsBody}}>

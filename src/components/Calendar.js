@@ -18,7 +18,6 @@ const handleOnSelect = (event) => {
   const end = moment(event.end)
   let text = null
   if (end.diff(start, 'days') < 1){
-    console.log(start, end, end.diff(start, 'days'));
     text = moment(event.start).format("LLLL") + ' to ' + moment(event.end).format("h:mm A")
   }
   else 
@@ -50,19 +49,12 @@ class TAZCalendar extends React.Component{
     // download events from the Google Calendar and add any new events to the store and localStorage
     await getEvents((events) => {
 
-      //load store
-      
-        // events.forEach(event => {
-        //   this.props.dispatch(addCalendarEvent({id:event.id, start:event.start, end:event.end, title:event.title}));
-        // });
-
       // if new, load localStorage
         const localStorageArray = ls('events') ? ls('events') : [];
         let newEvents= [];
 
         if (localStorageArray.length<=0){
           newEvents = [...events];
-          console.log("loading all events for the first time");
         } else {
           newEvents = events.filter((event)=>(
             !localStorageArray.find(ls => ls.id=== event.id)
@@ -71,9 +63,7 @@ class TAZCalendar extends React.Component{
         // if there are any new Events to add, add them to local storage and store
         if (newEvents.length>0) {
           ls.set('events', [...localStorageArray, ...newEvents]);
-          this.props.dispatch(setCalendarEvents([...localStorageArray, ...newEvents]))
-          console.log('bubba');
-          
+          this.props.dispatch(setCalendarEvents([...localStorageArray, ...newEvents]))          
         }
     })
     
