@@ -1,8 +1,8 @@
 
 import React, { Component } from 'react';
-import firebase from '../Firebase';
+import firebase, { GoogleProvider } from '../Firebase';
 import { connect } from 'react-redux';
-import { setUserName, setUserID } from '../../store/store';
+import { setUserName, setUserID, setUserImage } from '../../store/store';
 import { navigate, Link } from '@reach/router';
 import Swal from 'sweetalert2';
 
@@ -28,6 +28,33 @@ class Login extends Component {
     this.setState({ [itemName]: itemValue });
   }
 
+  signInWithGoogle = () => {
+    firebase
+    .auth()
+    .signInWithPopup(GoogleProvider)
+    .then((res)=>{
+      navigate('/dashboard');
+    })
+    .catch(error => {
+      if (error.message !== null) {
+        this.setState({ errorMessage: error.message });
+        Swal.fire({
+          icon: 'error',
+          title: "Oops...",
+          text: this.state.errorMessage,
+          confirmButtonText: 'OK',
+          showClass: {
+            popup: 'animated fadeInDown faster'
+          },
+          hideClass: {
+            popup: 'animated fadeOutUp faster'
+          }                  
+        }) 
+      } else {
+        this.setState({ errorMessage: null });
+      }
+    });
+  }
   handleSubmit(e) {
     var registrationInfo = {
       email: this.state.email,
@@ -120,6 +147,7 @@ class Login extends Component {
                         <button className="btn btn-primary" type="submit">
                           Log in
                         </button>
+                        
                       </div>
                     </section>
                     <section className="form-group">
@@ -131,6 +159,7 @@ class Login extends Component {
             </div>
           </div>
         </form>
+        <button className="btn btn-success" onClick={this.signInWithGoogle} >Sign with Google</button>
       </div>
     );
   }

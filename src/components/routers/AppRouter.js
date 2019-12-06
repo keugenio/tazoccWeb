@@ -17,7 +17,7 @@ import Dashboard from '../Dashboard';
 import Register from '../Auth/Register';
 import NotFoundPage from '../NotFoundPage';
 import Footer from '../Footer';
-import { setUserName, setUserID } from '../../store/store';
+import { setUserName, setUserID, setUserImage } from '../../store/store';
 
 class AppRouter extends React.Component {
   componentDidMount() {
@@ -25,6 +25,7 @@ class AppRouter extends React.Component {
       if (FBUser) {
         this.props.dispatch(setUserName(FBUser.displayName));
         this.props.dispatch(setUserID(FBUser.uid))
+        this.props.dispatch(setUserImage(FBUser.photoURL))
       }
     })
     // make the hover message on the links viewable instantly suing jQuery

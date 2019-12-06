@@ -1,4 +1,4 @@
-import { createStore, combineReducers, bindActionCreators } from 'redux'
+import { createStore, combineReducers } from 'redux'
 import uuid from 'uuid';
 const ls=require('local-storage');
 
@@ -90,15 +90,21 @@ export const setUserID = (userID) => ({
   type:'SET_USER_ID',
   userID
 })
+export const setUserImage = (image) => ({
+  type:'SET_USER_IMAGE',
+  image
+})
 export const logUserOut = () => ({
   type: 'LOG_USER_OUT'
 })
 const authenticatedUserReducer = (state = {}, action) => {
   switch (action.type) {
     case 'SET_USER_NAME':
-      return {userName:action.userName, userID: state.userID}
+      return {...state, userName: action.userName}
     case 'SET_USER_ID':
-      return {userName: state.userName, userID:action.userID }
+      return {...state, userID:action.userID }
+    case 'SET_USER_IMAGE':      
+      return {...state, image:action.image}
     case 'LOG_USER_OUT':  
       return {}
     default:

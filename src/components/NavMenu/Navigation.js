@@ -28,7 +28,7 @@ class Navigation extends Component {
   }
 
   render() {
-    const { loggedIn, userName } = this.props;
+    const { loggedIn, userName, userImageURL} = this.props;
     
     return (
       <nav className="site-nav family-sans navbar navbar-expand higher">
@@ -37,21 +37,29 @@ class Navigation extends Component {
             Team Arizona Outrigger Canoe Club
           </Link>
           <div className="navbar-nav ml-auto">
-            { (loggedIn) && (<div className="welcomeUser">Welcome {userName}</div>) }
             {!loggedIn && (
-              <Link className="nav_link" to="/login" title="Login to see your stats">
-                Login <FontAwesomeIcon icon="sign-in-alt"/>
-              </Link>
+              <div className="nav-item">
+                <Link className="nav_link titleHoverMessage" to="/login" title="Login to see your stats">
+                  Login <FontAwesomeIcon icon="sign-in-alt"/>
+                </Link>
+              </div>
             )}
-            {loggedIn && <UnreadNewsBadge />}
-            <Link className="nav_link" to="#" onClick={this.handleShow}>
-              Contact us
-            </Link>
+            {loggedIn && (<div className="nav-item"><UnreadNewsBadge /></div>)}
+            
+            <div className="nav-item">
+              <Link className="nav_link titleHoverMessage" to="#" onClick={this.handleShow} title="Have a Question? Ask us!">
+                Contact us
+              </Link>
+            </div>
+            
             {loggedIn && (
-              <Link className="nav_link titleHoverMessage" to="/login" onClick={e => this.logOutUser(e)} title="Logout">
-              <FontAwesomeIcon icon="sign-out-alt"/>
-              </Link>
+              <div className="nav-item">
+                <Link className="nav_link titleHoverMessage" to="/login" onClick={this.logOutUser} title="Logout">
+                  <FontAwesomeIcon icon="sign-out-alt"/>
+                </Link>
+              </div>
             )}
+            { (loggedIn) && (<div className="nav-item"><img src={userImageURL} className="userProfileIcon" /></div>)}
           </div>
         </div>
         <NavigationOverlay />
@@ -74,7 +82,8 @@ class Navigation extends Component {
 }
 const MapStateToProps = ({user})=>({
   loggedIn: user.userID || false,
-  userName: user.userName || ''
+  userName: user.userName || '',
+  userImageURL: user.image || ''
 })
 
 export default connect(MapStateToProps)(Navigation);
