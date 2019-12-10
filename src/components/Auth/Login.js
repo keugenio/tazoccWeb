@@ -1,7 +1,8 @@
 
 import React, { Component } from 'react';
-import firebase, { GoogleProvider } from '../Firebase';
+import firebase, { GoogleProvider, FBProvider } from '../Firebase';
 import { connect } from 'react-redux';
+import {Row, Col} from 'react-bootstrap';
 import { setUserName, setUserID, setUserImage } from '../../store/store';
 import { navigate, Link } from '@reach/router';
 import Swal from 'sweetalert2';
@@ -28,11 +29,22 @@ class Login extends Component {
     this.setState({ [itemName]: itemValue });
   }
 
+  addUserToFirebaseUsersDb = (user) => {
+    console.log(user);
+    
+    const dbUsers = firebase.database().ref(`users/${user.uid}`);
+    dbUsers.set({
+      name:user.displayName,
+      loggedInWith:user.providerData[0].providerId,
+      email:user.providerData[0].email
+    })
+  }
   signInWithGoogle = () => {
     firebase
     .auth()
     .signInWithPopup(GoogleProvider)
-    .then((res)=>{
+    .then((FBUser)=>{
+      this.addUserToFirebaseUsersDb(FBUser.user)
       navigate('/dashboard');
     })
     .catch(error => {
@@ -55,6 +67,35 @@ class Login extends Component {
       }
     });
   }
+  signInWithFacebook = () => {
+    firebase
+    .auth()
+    .signInWithPopup(FBProvider)
+    .then((FBUser)=>{   
+      this.addUserToFirebaseUsersDb(FBUser.user)
+
+      navigate('/dashboard');
+    })
+    .catch(error => {
+      if (error.message !== null) {
+        this.setState({ errorMessage: error.message });
+        Swal.fire({
+          icon: 'error',
+          title: "Oops...",
+          text: this.state.errorMessage,
+          confirmButtonText: 'OK',
+          showClass: {
+            popup: 'animated fadeInDown faster'
+          },
+          hideClass: {
+            popup: 'animated fadeOutUp faster'
+          }                  
+        }) 
+      } else {
+        this.setState({ errorMessage: null });
+      }
+    });
+  }  
   handleSubmit(e) {
     var registrationInfo = {
       email: this.state.email,
@@ -70,10 +111,10 @@ class Login extends Component {
         registrationInfo.password
       )
       .then((FBUser) => {
-        const {uid, displayName} = FBUser;
-
-        this.props.dispatch(setUserID(uid));
-        this.props.dispatch(setUserName(displayName));
+        // const {uid, displayName} = FBUser;
+        this.addUserToFirebaseUsersDb(FBUser.user)
+        // this.props.dispatch(setUserID(uid));
+        // this.props.dispatch(setUserName(displayName));
 
         navigate('/dashboard')
       })
@@ -98,70 +139,73 @@ class Login extends Component {
         }
       });
   }
-
   handleGoToRegister = () => {
     navigate('/register')
   }
 
   render() {
     return (
-      <div style={formStyle}>
-        <form className="mt-3" onSubmit={this.handleSubmit} style={{width:'100%'}}>
-          <div className="container">
-            <div className="row justify-content-center w-100">
-              <div className="col-lg-6">
-                <div className="card bg-light">
-                  <div className="card-body">
-                    <h3 className="font-weight-light mb-3">Log in</h3>
-                    <section className="form-group">
-                      <label
-                        className="form-control-label sr-only"
-                        htmlFor="Email"
-                      >
-                        Email
-                      </label>
-                      <input
-                        required
-                        className="form-control"
-                        type="email"
-                        id="email"
-                        name="email"
-                        placeholder="Email"
-                        value={this.state.email}
-                        onChange={this.handleChange}
-                      />
-                    </section>
-                    <section className="form-group">
-                      <input
-                        required
-                        className="form-control"
-                        type="password"
-                        name="password"
-                        placeholder="Password"
-                        value={this.state.password}
-                        onChange={this.handleChange}
-                      />
-                    </section>
-                    <section className="form-group">
-                      <div className="form-group text-center py-3">
-                        <button className="btn btn-primary" type="submit">
-                          Log in
-                        </button>
-                        
-                      </div>
-                    </section>
-                    <section className="form-group">
-                      <div className="text-right">no account? <Link to="/register">Register</Link> </div>
-                    </section>
+        <div style={formStyle}>
+          <form className="mt-3" onSubmit={this.handleSubmit} style={{width:'100%'}}>
+            <div className="container">
+              <div className="row justify-content-center w-100">
+                <div className="col-lg-12">
+                  <div className="card bg-light">
+                    <div className="card-body">
+                      <h3 className="font-weight-light mb-3">Log in</h3>
+                      <section className="form-group">
+                        <label
+                          className="form-control-label sr-only"
+                          htmlFor="Email"
+                        >
+                          Email
+                        </label>
+                        <input
+                          required
+                          className="form-control"
+                          type="email"
+                          id="email"
+                          name="email"
+                          placeholder="Email"
+                          value={this.state.email}
+                          onChange={this.handleChange}
+                        />
+                      </section>
+                      <section className="form-group">
+                        <input
+                          required
+                          className="form-control"
+                          type="password"
+                          name="password"
+                          placeholder="Password"
+                          value={this.state.password}
+                          onChange={this.handleChange}
+                        />
+                      </section>
+                      <section className="form-group">
+                        <div className="form-group text-center py-3">
+                          <button className="btn btn-primary" type="submit">
+                            Log in
+                          </button>
+                          
+                        </div>
+                      </section>
+                      <section className="form-group">
+                        <div className="text-right">no account? <Link to="/register">Register</Link> </div>
+                      </section>
+                    </div>
                   </div>
                 </div>
-              </div>
+                
+                </div>
             </div>
-          </div>
-        </form>
-        <button className="btn btn-success" onClick={this.signInWithGoogle} >Sign with Google</button>
-      </div>
-    );
+          </form>
+          <Row className="mt-4 p-4">
+            <button className="btn btn-success" onClick={this.signInWithGoogle} >Sign with Google</button>
+            <button className="btn btn-primary" onClick={this.signInWithFacebook} >Sign with Facebook</button>
+          </Row>
+        </div>
+      );
   }
 }
 
@@ -169,5 +213,7 @@ export default connect ()(Login);
 const formStyle = {
   height: '100vh',
   display:'flex',
-  alignItems:'center'
+  alignItems:'center',
+  flexDirection:'column',
+  justifyContent:'center'
 }

@@ -1,5 +1,4 @@
 import React from 'react'
-import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import { Router, navigate } from '@reach/router';
 import { connect } from 'react-redux';
 import firebase from '../Firebase';
@@ -13,8 +12,9 @@ import TAZCalendarOfEvents from '../CalendarOfEvents'
 import ShopTAZ from '../ShopTAZ';
 import Login from '../Auth/Login';
 import PaddlerStats from '../PaddlerStats';
-import Dashboard from '../Dashboard';
+import Dashboard from '../Dashboard/Dashboard';
 import Register from '../Auth/Register';
+import AdminControl from '../Dashboard/AdminControl';
 import NotFoundPage from '../NotFoundPage';
 import Footer from '../Footer';
 import { setUserName, setUserID, setUserImage } from '../../store/store';
@@ -33,26 +33,7 @@ class AppRouter extends React.Component {
   }
 
   render(){
-    return (
-      // <BrowserRouter>
-      //   <div>
-      //     <Navigation />
-      //     <Switch>
-      //       <Route path="/" component={Home} exact={true} />
-      //       <Route path="/practices" component={Practices} />        
-      //       <Route path="/calendar" component={TAZCalendarOfEvents} />     
-      //       <Route path="/aboutUs" component={AboutUs} />
-      //       <Route path="/tradition" component={Tradition} />        
-      //       <Route path="/shopTAZ" component={ShopTAZ} /> 
-      //       <Route path="/News" component={News} /> 
-      //       <Route path="/paddlerstats" component={PaddlerStats} />
-      //       <Route path="/login" component={Login} />
-      //       <Route path="/register" component={Register} />
-      //       <Route component={NotFoundPage} />              
-      //     </Switch>
-      //     <Footer />
-      //   </div>
-      // </BrowserRouter>   
+    return (   
       <div>
         <Navigation />
         <Router>
@@ -67,6 +48,7 @@ class AppRouter extends React.Component {
           <Dashboard path="/dashboard" />
           <Login path="/login" />
           <Register path="/register" />
+          <AdminControl path="/admin" />
           <NotFoundPage default />
         </Router>
         <Footer />

@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import firebase from '../Firebase';
-import UnreadNewsBadge from './UnreadNewsBadge';
 import NavigationOverlay from './Navigation_overlay';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { logUserOut } from '../../store/store';
 import { navigate, Link } from '@reach/router';
 import { Modal, Button } from 'react-bootstrap'
+import UnreadNewsBadge from './UnreadNewsBadge';
 import EmailUs from '../EmailUs';
 
 class Navigation extends Component {
@@ -28,7 +28,7 @@ class Navigation extends Component {
   }
 
   render() {
-    const { loggedIn, userName, userImageURL} = this.props;
+    const { loggedIn, userImageURL} = this.props;
     
     return (
       <nav className="site-nav family-sans navbar navbar-expand higher">
@@ -37,13 +37,6 @@ class Navigation extends Component {
             Team Arizona Outrigger Canoe Club
           </Link>
           <div className="navbar-nav ml-auto">
-            {!loggedIn && (
-              <div className="nav-item">
-                <Link className="nav_link titleHoverMessage" to="/login" title="Login to see your stats">
-                  Login <FontAwesomeIcon icon="sign-in-alt"/>
-                </Link>
-              </div>
-            )}
             {loggedIn && (<div className="nav-item"><UnreadNewsBadge /></div>)}
             
             <div className="nav-item">
@@ -51,7 +44,13 @@ class Navigation extends Component {
                 Contact us
               </Link>
             </div>
-            
+            {!loggedIn && (
+              <div className="nav-item">
+                <Link className="nav_link titleHoverMessage" to="/login" title="Login to see your stats">
+                  Login <FontAwesomeIcon icon="sign-in-alt"/>
+                </Link>
+              </div>
+            )}            
             {loggedIn && (
               <div className="nav-item">
                 <Link className="nav_link titleHoverMessage" to="/login" onClick={this.logOutUser} title="Logout">
@@ -59,10 +58,12 @@ class Navigation extends Component {
                 </Link>
               </div>
             )}
-            { (loggedIn) && (<div className="nav-item"><img src={userImageURL} className="userProfileIcon" /></div>)}
+            { (loggedIn) && (userImageURL) && (<div className="nav-item"><img src={userImageURL} className="userProfileIcon" /></div>)}
           </div>
         </div>
+
         <NavigationOverlay />
+        
         <Modal show={this.state.show} onHide={this.handleClose}>
           <Modal.Header closeButton>
             <Modal.Title>Contact TAZ</Modal.Title>
@@ -83,7 +84,7 @@ class Navigation extends Component {
 const MapStateToProps = ({user})=>({
   loggedIn: user.userID || false,
   userName: user.userName || '',
-  userImageURL: user.image || ''
+  userImageURL: user.image || false
 })
 
 export default connect(MapStateToProps)(Navigation);

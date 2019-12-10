@@ -112,6 +112,40 @@ const authenticatedUserReducer = (state = {}, action) => {
   }
 }
 
+/*******  All paddlers Action and Reducer ******/
+export const setAllPaddlers = (allPaddlersArray) => {
+  type:'SET_PADDLERS',
+  allPaddlersArray
+}
+export const addNewPaddler = (newPaddler) => {
+  type:'ADD_PADDLER',
+  newPaddler
+}
+const allPaddlersReducer = (state = [], action) => {
+  switch (action.type) {
+    case 'SET_PADDLERS':
+      return [action.allPaddlersArray]
+      case 'ADD_PADDLER':
+          return [...state, action.newPaddler]      
+    default:
+      return state;
+  }
+}
+
+/*******  selected Paddler Action and Reducer ******/
+export const setSelectedPaddler = (id) => {
+  type:'SET_SELECTED_PADDLER',
+  id
+}
+const selectedPaddlerReducer = ( state = '', action ) => {
+  switch (action.type) {
+    case 'SET_SELECTED_PADDLER':
+      return action.id;
+    default:
+      return state;
+  }
+}
+
 /********* create a store by combining reducers ********************** */
 //create store by assigning expenses reducer to expenses property using combineReducer
 
@@ -121,7 +155,9 @@ export default () => {
       { user:authenticatedUserReducer,
         events: eventsReducer,
         news: newsReducer,
-        readNewsArticles: readNewsArticlesReducer
+        readNewsArticles: readNewsArticlesReducer,
+        selectedPaddler: selectedPaddlerReducer,
+        paddlers: allPaddlersReducer
       }
     ),
     window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
