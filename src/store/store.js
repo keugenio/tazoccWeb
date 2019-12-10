@@ -113,18 +113,18 @@ const authenticatedUserReducer = (state = {}, action) => {
 }
 
 /*******  All paddlers Action and Reducer ******/
-export const setAllPaddlers = (allPaddlersArray) => {
+export const setAllPaddlers = (allPaddlersArray) => ({
   type:'SET_PADDLERS',
   allPaddlersArray
-}
-export const addNewPaddler = (newPaddler) => {
+})
+export const addNewPaddler = (newPaddler) => ({
   type:'ADD_PADDLER',
   newPaddler
-}
+})
 const allPaddlersReducer = (state = [], action) => {
   switch (action.type) {
     case 'SET_PADDLERS':
-      return [action.allPaddlersArray]
+      return [...action.allPaddlersArray]
       case 'ADD_PADDLER':
           return [...state, action.newPaddler]      
     default:

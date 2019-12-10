@@ -36,7 +36,8 @@ class Login extends Component {
     dbUsers.set({
       name:user.displayName,
       loggedInWith:user.providerData[0].providerId,
-      email:user.providerData[0].email
+      email:user.providerData[0].email,
+      uid:user.uid
     })
   }
   signInWithGoogle = () => {

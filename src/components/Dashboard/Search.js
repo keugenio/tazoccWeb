@@ -1,20 +1,23 @@
-import React, { useState } from 'react'
-import { connect } from 'react-redux'
+import React, { useState } from 'react';
+import { connect } from 'react-redux';
+import { setSelectedPaddler } from '../../store/store';
 
 const Search = (props) => {
-  const [paddler, setPaddler] = useState('')
+  const setPaddler = (e) => {
+    console.log(e.target.value);
+  }
 
   return (
-    <select onChange={setPaddler(value)}>
-      <option value="paddler1ID">paddler 1</option>
-      <option value="paddler2ID">paddler 2</option>
-      <option value="paddler3ID">paddler 3</option>
-      <option value="paddler4ID">paddler 4</option>
+    <select onChange={setPaddler}>
+    { props.paddlers.map((paddler)=>(
+        <option key={paddler.uid} value={paddler.uid}>{paddler.name}</option>
+      ))
+    }
     </select>
   )
 }
-const MapStateToProps = ({paddlers}) =>{
+const MapStateToProps = ({paddlers}) =>({
   paddlers
-}
+})
 
 export default connect(MapStateToProps)(Search)
