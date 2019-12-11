@@ -1,29 +1,33 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { Form, Row, Col } from 'react-bootstrap';
-import { setSelectedPaddler } from '../../store/store';
+import { setSelectedPaddler, editSelectedPaddler } from '../../store/store';
 import "babel-polyfill";
 
-const Search = (props) => {
-   const setPaddler = (e) => {
-     const selectedPaddler = props.paddlers.find(paddler => paddler.uid === e.target.value)
-    props.dispatch(setSelectedPaddler(selectedPaddler))
+class Search extends React.Component {
+  componentDidMount(props) {
+    this.props.dispatch(editSelectedPaddler(true))
+  }
+  setPaddler = (e) => {
+    const selectedPaddler = this.props.paddlers.find(paddler => paddler.uid === e.target.value)
+    this.props.dispatch(setSelectedPaddler(selectedPaddler))
   }
 
-  return (
+  render(){
+      return (
         <Form.Group controlId="exampleForm.ControlSelect2" >
-          <Form.Control as="select" multiple size="lg" onChange={setPaddler} style={formStyle}>
+          <Form.Control as="select" multiple size="lg" onChange={this.setPaddler} style={formStyle} disabled={!this.props.selectedPaddlerEditable}>
             <option disabled value='0'>-- select Paddler --</option>
-            { props.paddlers.map((paddler, i)=>(
+            { this.props.paddlers.map((paddler, i)=>(
                 <option key={i} value={paddler.uid}>{paddler.name}</option>
               ))
             }
           </Form.Control>
         </Form.Group>
-  )
+  )}
 }
-const MapStateToProps = ({paddlers}) =>({
-  paddlers
+const MapStateToProps = ({paddlers, selectedPaddlerEditable}) =>({
+  paddlers,selectedPaddlerEditable
 })
 
 export default connect(MapStateToProps)(Search)

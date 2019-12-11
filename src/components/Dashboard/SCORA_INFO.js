@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Card, Row, Col, Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import firebase from '../Firebase';
-import { setSelectedPaddler } from '../../store/store'
+import { setSelectedPaddler, editSelectedPaddler } from '../../store/store'
 
 class SCORA_INFO extends React.Component {
   constructor(props) {
@@ -55,6 +55,9 @@ class SCORA_INFO extends React.Component {
     dbUsers.once('value').then((snapshot) => {
       this.props.dispatch(setSelectedPaddler(snapshot.val()));      
     });
+
+    //enable the select paddler input in the Search Component
+    this.props.dispatch(editSelectedPaddler(true))    
   }
   toggleEdit = () => {
     //display the editable fields
@@ -65,13 +68,17 @@ class SCORA_INFO extends React.Component {
       scoraID:scoraID || 'SC', scoraWaiver: scoraWaiver || false, scoraSmartWaiver: scoraSmartWaiver || false, huliDrill: huliDrill | false,
       oldHuliDrill:huliDrill || false, oldScoraID:scoraID || false, oldScoraSmartWaiver:scoraSmartWaiver || false, oldScoraWaiver:scoraWaiver});
 
-    //this.setState({showSave:'d-inline', showCancel:'d-inline', showEdit:'d-none', readOnly:false})
+    //disable the select paddler input in the Search Component
+    this.props.dispatch(editSelectedPaddler(false))
   }
   toggleCancel = () => {
     // hide editable fields
     this.setState({showEditable:false})
     const {oldHuliDrill, oldScoraID, oldScoraSmartWaiver, oldScoraWaiver} = this.state;
     this.setState({scoraID:oldScoraID, scoraWaiver:oldScoraWaiver, scoraSmartWaiver:oldScoraSmartWaiver, huliDrill:oldHuliDrill});
+
+    //enable the select paddler input in the Search Component
+    this.props.dispatch(editSelectedPaddler(true))    
   }
   handleChange = (e) => {
     this.setState({[e.target.name]: e.target.checked})
@@ -170,8 +177,8 @@ class SCORA_INFO extends React.Component {
   }
 }
 
-const MapStateToProps = ({selectedPaddler})=> ({
-  selectedPaddler
+const MapStateToProps = ({selectedPaddler, selectedPaddlerEditable})=> ({
+  selectedPaddler, selectedPaddlerEditable
 })
 
 export default connect(MapStateToProps)(SCORA_INFO)

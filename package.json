@@ -37,7 +37,6 @@
     "jquery": "^3.4.1",
     "live-server": "^1.2.0",
     "local-storage": "^2.0.0",
-    "materialize-css": "^1.0.0",
     "moment": "^2.24.0",
     "node-sass": "^4.13.0",
     "normalize.css": "7.0.0",

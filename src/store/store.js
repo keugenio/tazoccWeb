@@ -147,6 +147,19 @@ const selectedPaddlerReducer = ( state = '', action ) => {
   }
 }
 
+/******* enable edit of selected Paddler  *******/
+export const editSelectedPaddler = (editState) => ({
+  type:'EDIT_SELECTED_PADDLER',
+  editState
+})
+const selectedPaddlerEditableReducer = ( state=true, action ) => {
+  switch (action.type) {
+    case 'EDIT_SELECTED_PADDLER':
+      return action.editState;
+    default:
+      return state;
+  }
+}
 /********* create a store by combining reducers ********************** */
 //create store by assigning expenses reducer to expenses property using combineReducer
 
@@ -158,7 +171,8 @@ export default () => {
         news: newsReducer,
         readNewsArticles: readNewsArticlesReducer,
         selectedPaddler: selectedPaddlerReducer,
-        paddlers: allPaddlersReducer
+        paddlers: allPaddlersReducer,
+        selectedPaddlerEditable: selectedPaddlerEditableReducer
       }
     ),
     window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
