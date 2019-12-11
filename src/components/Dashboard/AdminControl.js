@@ -34,7 +34,10 @@ class AdminControl extends React.Component{
             <Card.Title className="bg-warning text-white">Admin Dashboard</Card.Title>
             <Card.Body>
               <Row>
-                <Col>
+                <Col lg={8} xs={12}>
+                  <SCORA_INFO />
+                </Col>
+                <Col lg={4} xs={12}>
                   <Search />
                 </Col>
               </Row>

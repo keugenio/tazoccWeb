@@ -29,9 +29,7 @@ class Login extends Component {
     this.setState({ [itemName]: itemValue });
   }
 
-  addUserToFirebaseUsersDb = (user) => {
-    console.log(user);
-    
+  addUserToFirebaseUsersDb = (user) => {    
     const dbUsers = firebase.database().ref(`users/${user.uid}`);
     dbUsers.set({
       name:user.displayName,

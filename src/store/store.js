@@ -64,7 +64,8 @@ export const resetReadArticles = () => ({
 })
 // create a locaStorage reducer
 const readNewsDefault = (ls('readNews')? ls('readNews'): []);
-const amountUnreadDefault = ls('news').length-(ls('readNews')? ls('readNews').length:0);
+// const amountUnreadDefault = ls('news').length-(ls('readNews')? ls('readNews').length:0);
+const amountUnreadDefault = 0;
 const readNewsArticlesReducer = (state = {readNews:readNewsDefault, amountUnread:amountUnreadDefault}, action) => {
   switch (action.type) {
     case 'SET_READ_NEWS':
@@ -133,14 +134,14 @@ const allPaddlersReducer = (state = [], action) => {
 }
 
 /*******  selected Paddler Action and Reducer ******/
-export const setSelectedPaddler = (id) => {
+export const setSelectedPaddler = (paddler) => ({
   type:'SET_SELECTED_PADDLER',
-  id
-}
+  paddler
+})
 const selectedPaddlerReducer = ( state = '', action ) => {
   switch (action.type) {
     case 'SET_SELECTED_PADDLER':
-      return action.id;
+      return action.paddler;
     default:
       return state;
   }
