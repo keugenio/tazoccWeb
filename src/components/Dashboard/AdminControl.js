@@ -7,6 +7,7 @@ import "babel-polyfill";
 import SCORA_INFO from '../Dashboard/SCORA_INFO';
 import Search from './Search';
 import LoadingIcon from '../LoadingIcon';
+import PaddlerBio from './PaddlerBio';
 
 class AdminControl extends React.Component{
   constructor(){
@@ -35,25 +36,11 @@ class AdminControl extends React.Component{
             <Card.Body>
               <Row>
                 <Col lg={8} xs={12}>
+                  {this.props.selectedPaddler && (<PaddlerBio />)}
                   <SCORA_INFO />
                 </Col>
                 <Col lg={4} xs={12}>
                   <Search />
-                </Col>
-              </Row>
-              <Row>
-                <Col lg={6} xs={12}>
-
-                </Col>
-                <Col lg={6} xs={12}>
-                  <Row>
-                    <Col lg={6} xs={12}>
-                      bio component 
-                    </Col>
-                    <Col lg={6} xs={12}>
-                      bio image
-                    </Col>              
-                  </Row>
                 </Col>
               </Row>
               <Row>
@@ -66,7 +53,6 @@ class AdminControl extends React.Component{
 }
 
 const MapStateToProps = ({selectedPaddler, paddlers}) => ({
-  selectedPaddler,
-  paddlers
+  selectedPaddler,paddlers
 })
 export default connect(MapStateToProps)(AdminControl)

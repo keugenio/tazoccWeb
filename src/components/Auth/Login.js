@@ -35,7 +35,8 @@ class Login extends Component {
       name:user.displayName,
       loggedInWith:user.providerData[0].providerId,
       email:user.providerData[0].email,
-      uid:user.uid
+      uid:user.uid,
+      image:user.photoURL
     })
   }
   signInWithGoogle = () => {
@@ -110,10 +111,10 @@ class Login extends Component {
         registrationInfo.password
       )
       .then((FBUser) => {
-        // const {uid, displayName} = FBUser;
+        const {uid, displayName} = FBUser;
         this.addUserToFirebaseUsersDb(FBUser.user)
-        // this.props.dispatch(setUserID(uid));
-        // this.props.dispatch(setUserName(displayName));
+        this.props.dispatch(setUserID(uid));
+        this.props.dispatch(setUserName(displayName));
 
         navigate('/dashboard')
       })

@@ -8,6 +8,7 @@ import { navigate, Link } from '@reach/router';
 import { Modal, Button } from 'react-bootstrap'
 import UnreadNewsBadge from './UnreadNewsBadge';
 import EmailUs from '../EmailUs';
+import Monogram from '../Monogram';
 
 class Navigation extends Component {
   constructor() {
@@ -28,7 +29,7 @@ class Navigation extends Component {
   }
 
   render() {
-    const { loggedIn, userImageURL} = this.props;
+    const { loggedIn, userImageURL, userName} = this.props;
     
     return (
       <nav className="site-nav family-sans navbar navbar-expand higher">
@@ -54,11 +55,14 @@ class Navigation extends Component {
             {loggedIn && (
               <div className="nav-item">
                 <Link className="nav_link titleHoverMessage" to="/login" onClick={this.logOutUser} title="Logout">
-                  <FontAwesomeIcon icon="sign-out-alt"/>
+                  Logout
                 </Link>
               </div>
             )}
-            { (loggedIn) && (userImageURL) && (<div className="nav-item"><img src={userImageURL} className="userProfileIcon" /></div>)}
+            <div className="mx-3">
+              { (loggedIn) && (userImageURL) && (<div className="nav-item"><img src={userImageURL} className="userProfileIcon" /></div>)}
+              { (loggedIn) && (!userImageURL) && (<Monogram name= {userName}/>)}
+            </div>
           </div>
         </div>
 

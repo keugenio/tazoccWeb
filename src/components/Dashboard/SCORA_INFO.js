@@ -13,7 +13,6 @@ class SCORA_INFO extends React.Component {
       scoraWaiver:false,
       scoraSmartWaiver:false,
       huliDrill:false,
-      readOnly:true,
       oldScoraID:'',
       oldScoraWaiver:false,
       oldScoraSmartWaiver:false,
@@ -22,15 +21,10 @@ class SCORA_INFO extends React.Component {
     }
 
   }
-  toggleReadOnly = () => {
-    this.setState({
-      readOnly: !this.state.readOnly
-    })
-  }
   toggleSave = () => {
     //hide editable fields
     this.setState({showEditable:false})
-    //this.setState({showEdit:'d-inline', showSave:'d-none', showCancel:'d-none', readOnly:true})
+
     // write data to firebase and update store
     console.log(this.props.selectedPaddler);
     const updatedPaddler = {
@@ -144,7 +138,6 @@ class SCORA_INFO extends React.Component {
                         name="scoraID"
                         placeholder="SCORA ID"
                         onChange={this.handleChangeSCORAID}
-                        readOnly={this.state.readOnly}
                         value={this.state.scoraID}
                       />     
                     </div>     

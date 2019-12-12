@@ -61,7 +61,15 @@ class Register extends Component {
           )
           .then(() => {
             this.updateDisplayNameAndSetStore(registrationInfo.displayName);
-            navigate ('/dashboard');
+            // have user login again to update the users table
+            Swal.fire({
+              position: 'top-end',
+              icon: 'success',
+              title: 'Your account has been created! Please login now.',
+              showConfirmButton: false,
+              timer: 1500
+            }) 
+            navigate ('/login');
           })
           .catch(error => {
             if (error.message !== null) {

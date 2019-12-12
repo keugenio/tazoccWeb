@@ -160,6 +160,8 @@
     align-items: center;
     justify-content: center;
     padding-right: 1rem;
+    padding-left: 1rem;
+    border:thin solid rgba($white, .25);
   }
   & .userProfileIcon {
     height: 50px;
