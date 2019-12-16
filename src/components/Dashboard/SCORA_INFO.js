@@ -26,13 +26,6 @@ class SCORA_INFO extends React.Component {
     this.setState({showEditable:false})
 
     // write data to firebase and update store
-    console.log(this.props.selectedPaddler);
-    const updatedPaddler = {
-      ...this.props.selectedPaddler, 
-      scoraID:this.state.scoraID,
-      scoraWaiver:this.state.scoraWaiver,
-      scoraSmartWaiver:this.state.scoraSmartWaiver,
-      huliDrill:this.state.huliDrill}
       
     const dbUsers = firebase.database().ref(`users/${this.props.selectedPaddler.uid}`);    
     dbUsers.set({
@@ -87,13 +80,14 @@ class SCORA_INFO extends React.Component {
     return (
       <Card className="scoraInfo">  
         <Card.Title className="d-flex justify-content-between">
-        {this.props.selectedPaddler && (<div>SCORA Info for {this.props.selectedPaddler.name}</div>)}
-        {!this.props.selectedPaddler && (<div>Select a paddler to view SCORA Info</div>)}
-        <div>
-          {this.state.showEditable && (<Button onClick={this.toggleSave} className="btn-danger" ><FontAwesomeIcon icon="save" /></Button>)}
-          {this.props.selectedPaddler && !this.state.showEditable && (<Button onClick={this.toggleEdit} className={this.state.showEdit}><FontAwesomeIcon icon="edit"/></Button>) }
-          {this.state.showEditable && (<Button onClick={this.toggleCancel} className="btn-dark" >x</Button>)}          
-        </div></Card.Title>
+          {this.props.selectedPaddler && (<div>SCORA Info for {this.props.selectedPaddler.name}</div>)}
+          {!this.props.selectedPaddler && (<div>Select a paddler to view SCORA Info</div>)}
+          <div>
+            {this.state.showEditable && (<Button onClick={this.toggleSave} className="btn-danger" ><FontAwesomeIcon icon="save" /></Button>)}
+            {this.props.selectedPaddler && !this.state.showEditable && (<Button onClick={this.toggleEdit} className={this.state.showEdit}><FontAwesomeIcon icon="edit"/></Button>) }
+            {this.state.showEditable && (<Button onClick={this.toggleCancel} className="btn-dark" >x</Button>)}          
+          </div>
+        </Card.Title>
         <Card.Body>
           {!this.state.showEditable && (
             <div>

@@ -8,6 +8,7 @@ import SCORA_INFO from '../Dashboard/SCORA_INFO';
 import Search from './Search';
 import LoadingIcon from '../LoadingIcon';
 import PaddlerBio from './PaddlerBio';
+import RacesAdmin from './Races/RacesAdmin';
 
 class AdminControl extends React.Component{
   constructor(){
@@ -44,7 +45,9 @@ class AdminControl extends React.Component{
                 </Col>
               </Row>
               <Row>
-                races component       
+                <Col>
+                  <RacesAdmin />   
+                </Col>   
               </Row>
             </Card.Body>
           </Card>

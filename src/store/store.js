@@ -160,6 +160,32 @@ const selectedPaddlerEditableReducer = ( state=true, action ) => {
       return state;
   }
 }
+
+/****** races Action and Reducer ********** */
+export const addRace = (race) => ({
+  type: 'ADD_RACE',
+  race
+})
+export const updateRace = (race) => ({
+  type: 'UPDATE_RACE',
+  race
+})
+const racesReducer = ( state=[], action ) => {
+  switch (action.type) {
+    case 'ADD_RACE':
+        const sortedRaces = [...state, action.race];
+        sortedRaces.sort(function(a, b){return a.date - b.date});      
+      return sortedRaces ;
+    case 'UPDATE_RACE':
+      //filter out the previous race from state and add the updated race to the state
+      const filteredRaces = state.filter( race=> race.id !== action.race.id)
+      const updatedRaces = [...filteredRaces, action.race];
+      updatedRaces.sort(function(a, b){return a.date - b.date});
+      return updatedRaces 
+    default:
+      return state;
+  }
+}
 /********* create a store by combining reducers ********************** */
 //create store by assigning expenses reducer to expenses property using combineReducer
 
@@ -172,7 +198,8 @@ export default () => {
         readNewsArticles: readNewsArticlesReducer,
         selectedPaddler: selectedPaddlerReducer,
         paddlers: allPaddlersReducer,
-        selectedPaddlerEditable: selectedPaddlerEditableReducer
+        selectedPaddlerEditable: selectedPaddlerEditableReducer,
+        races: racesReducer
       }
     ),
     window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()

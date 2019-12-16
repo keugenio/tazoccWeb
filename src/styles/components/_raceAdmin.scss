@@ -1,0 +1,50 @@
+.raceAdmin {
+  & .card {
+    font-size: 1.5rem;
+    & .card-title {
+      font-size: 2rem;
+      font-weight: 600;
+    }
+  }
+}
+.addRaceModal {
+  background:orange ;
+  font-size: 2rem;
+  & .modal-title {
+    font-size: 3rem;
+  }
+  .modal-body {
+    padding:4rem!important;
+  }
+  & form {
+    & input {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+    & .form-group {
+      display: inline-flex;
+      & .form-label {
+
+        padding-right:2rem;
+      }
+    }
+    & .form-check-input {
+      position:initial;
+      margin: 0 1rem 0 0;
+      height: 25px;
+      width: 25px;
+    }
+  }
+  & .react-datepicker {
+    font-size: 1.25rem;
+    & .react-datepicker__current-month {
+      font-size: 1.3rem;
+    }
+    & .react-datepicker__navigation--next {
+      border-left-color: #FF0000;
+    }
+    & .react-datepicker__navigation--previous {
+      border-right-color: #FF0000;
+    }    
+  }
+}

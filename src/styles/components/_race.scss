@@ -1,0 +1,22 @@
+.raceInfo {
+  & input {
+    border:thin solid $dark;
+    margin-left:1rem;
+  }
+  & textarea {
+    border:thin solid $dark;
+    margin-left:1rem;
+  }
+  & li {
+    margin-bottom: 1rem;
+    list-style: none;
+    display: flex;
+    align-items:center;
+  }
+  & input[type="checkbox"]{
+    position:initial;
+    margin: 0 0 0 1rem;
+    height: 25px;
+    width: 25px;
+  }
+}

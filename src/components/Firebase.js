@@ -1,6 +1,7 @@
 import firebase from 'firebase/app';
 import 'firebase/database';
 import 'firebase/auth';
+import 'firebase/firestore';
 import firebaseKey from './keys/firebaseKey';
 
 
@@ -20,5 +21,6 @@ firebase.initializeApp(firebaseConfig);
 export const GoogleProvider = new firebase.auth.GoogleAuthProvider();
 export const FBProvider= new firebase.auth.FacebookAuthProvider();
 export const auth = firebase.auth();
-export const dbPaddlers = firebase.database().ref('users')
+export const dbPaddlers = firebase.database().ref('users');
+export const dbRaces = firebase.firestore().collection('races');
 export default firebase;
