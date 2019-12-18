@@ -4,10 +4,11 @@ import { Modal, CardDeck, Card, Form, Button, ListGroup } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import moment from 'moment';
 import { dbRacesToPaddlers } from '../../components/Firebase';
+import { addRaceToPaddler } from '../../store/store'
 
-function mapStateToProps({user, races, racesToPaddlers}) {
+function mapStateToProps({user, races, racesPaddlerSignedUpFor}) {
   return {
-    user, races
+    user, races, racesPaddlerSignedUpFor
   };
 }
 
@@ -18,24 +19,27 @@ class AddRaceToPaddler extends Component {
       showModal:false
     }
   }
-
   handleCloseModal = () => {
     this.setState({showModal:false})
   }
 
-  addRaceToPaddler = (id) => {
+  addRaceToPaddler = (id, addRace) => {
     const {userID} = this.props.user
     dbRacesToPaddlers.where("paddlerID", "==", userID).where("raceID", "==", id)
     .get()
-    .then(function(querySnapshot) {
-      if (querySnapshot.docs.length==0)
+    .then(function(querySnapshot, addRace) {
+      if (querySnapshot.docs.length==0){
         dbRacesToPaddlers.add({
           paddlerID:userID,
           raceID:id
         })
+      }
       else
         console.log('dupe');
     })
+    .then(
+      this.props.dispatch(addRaceToPaddler(id))
+    )
     .catch(function(error) {
         console.log("Error getting documents: ", error);
     });
@@ -43,7 +47,12 @@ class AddRaceToPaddler extends Component {
     // refresh the available race list
   }
   render() {
-    const {races} = this.props;
+    const {races, racesPaddlerSignedUpFor} = this.props;
+    const availableRaces = [];
+    races.forEach((race)=>{
+      if (!racesPaddlerSignedUpFor.includes(race.id))
+        availableRaces.push(race)
+    })
 
     return (
       <div className="addRaceToPaddler">
@@ -56,7 +65,7 @@ class AddRaceToPaddler extends Component {
           </Modal.Header>
           <Modal.Body>
               <CardDeck>
-                {races.map(race=>(
+                {availableRaces.map(race=>(
                   <Card key={race.id} className="raceCard">
                     <Card.Body>
                       <Card.Title>{race.name}</Card.Title>

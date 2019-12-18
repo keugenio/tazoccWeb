@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Card, Col, Row } from 'react-bootstrap';
+import { Card, Col, Row, CardDeck } from 'react-bootstrap';
 import { dbRaces, dbRacesToPaddlers } from '../../components/Firebase';
 import { addRace, addRaceToPaddler } from '../../store/store';
 import AddRaceToPaddler from './AddRaceToPaddler';
@@ -48,10 +48,10 @@ class Dashboard extends React.Component {
   render () {
     const {loggedIn, userName, userID, races, racesPaddlerSignedUpFor} = this.props;
     
-    const availableRaces = [];
+    const racesPaddlerSignedUpForInfo = [];
     races.forEach((race)=>{
-      if (!racesPaddlerSignedUpFor.includes(race.id))
-        availableRaces.push(race)
+      if (racesPaddlerSignedUpFor.includes(race.id))
+      racesPaddlerSignedUpForInfo.push(race)
     })
     
     if (loggedIn){   
@@ -82,13 +82,15 @@ class Dashboard extends React.Component {
                 <Card text="dark" style={{fontSize:'2rem'}} >
                     <Card.Title className="text-white bg-primary display-4 d-flex justify-content-between">My Races<AddRaceToPaddler /></Card.Title>
                     <Card.Body>
-                      { availableRaces.map((race,i)=>{
-                          const {id, name, host, location, date, longCourseReq, shortCourseReq, changeRequirement, info} = race
-                          return (
-                            <Race key={i} id={id} name={name} host={host} location={location} info={info} date={date} longCourseReq={longCourseReq} shortCourseReq={shortCourseReq} changeRequirement={changeRequirement} />
-                          )
-                        })
-                      }
+                      <CardDeck>
+                        { racesPaddlerSignedUpForInfo.map((race,i)=>{
+                            const {id, name, host, location, date, longCourseReq, shortCourseReq, changeRequirement, info} = race
+                            return (
+                              <Race key={i} id={id} name={name} host={host} location={location} info={info} date={date} longCourseReq={longCourseReq} shortCourseReq={shortCourseReq} changeRequirement={changeRequirement} />
+                            )
+                          })
+                        }
+                      </CardDeck>
                     </Card.Body>
                 </Card>              
               
