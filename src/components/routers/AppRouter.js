@@ -1,7 +1,7 @@
 import React from 'react'
 import { Router, navigate } from '@reach/router';
 import { connect } from 'react-redux';
-import firebase from '../Firebase';
+import firebase, { dbRacesToPaddlers } from '../Firebase';
 import Navigation from '../NavMenu/Navigation';
 import Home from '../Home';
 import AboutUs from '../AboutUs';
@@ -17,7 +17,7 @@ import Register from '../Auth/Register';
 import AdminControl from '../Dashboard/AdminControl';
 import NotFoundPage from '../NotFoundPage';
 import Footer from '../Footer';
-import { setUserName, setUserID, setUserImage } from '../../store/store';
+import { setUserName, setUserID, setUserImage, addRaceToPaddler } from '../../store/store';
 
 class AppRouter extends React.Component {
   componentDidMount() {
@@ -26,10 +26,21 @@ class AppRouter extends React.Component {
         this.props.dispatch(setUserName(FBUser.displayName));
         this.props.dispatch(setUserID(FBUser.uid))
         this.props.dispatch(setUserImage(FBUser.photoURL))
+
+        firebase.firestore().collection('racesToPaddlers').where("paddlerID", "==", FBUser.uid)
+        .get()
+        .then((querySnapshot)=>{
+          querySnapshot.forEach((race)=>{
+            const raceInfo = race.data();
+            this.props.dispatch(addRaceToPaddler(raceInfo.raceID))
+          })
+        })
       }
     })
     // make the hover message on the links viewable instantly suing jQuery
-    $('.titleHoverMessage').tooltip({show: {effect:"none", delay:0}});     
+    $('.titleHoverMessage').tooltip({show: {effect:"none", delay:0}});  
+    
+    
   }
 
   render(){
@@ -56,6 +67,5 @@ class AppRouter extends React.Component {
     )
   }
 }
-
 
 export default connect ()(AppRouter);

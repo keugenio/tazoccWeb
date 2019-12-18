@@ -1,23 +1,70 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Card, Col, Row } from 'react-bootstrap';
-import { navigate } from '@reach/router';
-import { CardBody } from 'react-bootstrap/Card';
+import { dbRaces, dbRacesToPaddlers } from '../../components/Firebase';
+import { addRace, addRaceToPaddler } from '../../store/store';
+import AddRaceToPaddler from './AddRaceToPaddler';
+import Race from './Races/Race';
 
 class Dashboard extends React.Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      userID: this.props.userID,
+      userRaces:this.props.racesPaddlerSignedUpFor,
+      availableRaces:[],
+      races:this.props.races
+    }
+  }
+  getRacesAndUpdateStore = () => {
+     dbRaces.get().then(docs=>{
+      docs.docs.forEach(doc => {
+        // the id and the actually data are in different brances so get those and add to a new object
+        // then add that new race object to the store individally.
+        const raceData = doc.data();
+        const newRaceData = {...raceData, id:doc.id}
+        this.props.dispatch(addRace(newRaceData));
+      });
+    })    
+  }
+  addRacesToPaddler = (userID) => {
+    if (userID)
+      dbRacesToPaddlers.where("paddlerID", "==", userID)
+      .then((querySnapshot)=>{
+        querySnapshot.map((race)=>{
+          this.props.dispatch(addRaceToPaddler(race.id))
+        })
+      })
+  }
+  async componentDidMount() {
+    //if no races in the store, load races from firestore into store
+    if (this.props.races.length<=0){
+     this.getRacesAndUpdateStore()
+    }
+    
+  }
+
   render () {
-    const {loggedIn, userName} = this.props
-    if (loggedIn)
+    const {loggedIn, userName, userID, races, racesPaddlerSignedUpFor} = this.props;
+    
+    const availableRaces = [];
+    races.forEach((race)=>{
+      if (!racesPaddlerSignedUpFor.includes(race.id))
+        availableRaces.push(race)
+    })
+    
+    if (loggedIn){   
+      
       return (
         <React.Fragment>
           <div className="dashboardStats">
             <Card className="dashboard">
-              <Card.Title>Hello {userName}!</Card.Title>
+              <Card.Title>Hello {userName}! {}</Card.Title>
               <Card.Body>
 
                 <Card bg="info" text="dark" style={{fontSize:'2rem'}} >
-                  <Card.Header className="display-4">SCORA Info</Card.Header>
+                  <Card.Header className="display-4">SCORA Info for {userName}</Card.Header>
                   <Card.Body>
                   <Row>
                     <Col lg={3} xs={12}><p>SCORA ID: n/a</p>
@@ -29,49 +76,19 @@ class Dashboard extends React.Component {
                     <Col lg={3} xs={12}><p>huli drill: yes</p>
                     </Col>                  
                   </Row>
-                    
-                    
-                    
-                    
                   </Card.Body>
                 </Card>
 
                 <Card text="dark" style={{fontSize:'2rem'}} >
-                  <Card.Header className="display-4">Races</Card.Header>
+                    <Card.Title className="text-white bg-primary display-4 d-flex justify-content-between">My Races<AddRaceToPaddler /></Card.Title>
                     <Card.Body>
-                      <Row>
-                        <Col lg={4} xs={12}>
-                          <Card>
-                            <Card.Title>Havasu : April, 2020</Card.Title>
-                              <Card.Body>
-                                <p>paid: no</p>
-                                <p>time trials: n/a</p>
-                                <p>practices attended: 0 <a href="#">see dates</a></p>
-                              </Card.Body>
-                          </Card>
-                        </Col>
-                        <Col lg={4} xs={12}>
-                          <Card>
-                            <Card.Title>Crystal Pier : May, 2020</Card.Title>
-                              <Card.Body>
-                                <p>paid: no</p>
-                                <p>time trials: n/a</p>
-                                <p>practices attended: 0 <a href="#">see dates</a></p>
-                              </Card.Body>
-                          </Card>
-                        </Col>                    
-                        <Col lg={4} xs={12}>
-                          <Card>
-                            <Card.Title>Catalina : Sept, 2020</Card.Title>
-                              <Card.Body>
-                                <p>paid: no</p>
-                                <p>time trials: n/a</p>
-                                <p>change requirement: completed</p>
-                                <p>practices attended: 0 <a href="#">see dates</a></p>
-                              </Card.Body>
-                          </Card>
-                        </Col>                     
-                      </Row>
+                      { availableRaces.map((race,i)=>{
+                          const {id, name, host, location, date, longCourseReq, shortCourseReq, changeRequirement, info} = race
+                          return (
+                            <Race key={i} id={id} name={name} host={host} location={location} info={info} date={date} longCourseReq={longCourseReq} shortCourseReq={shortCourseReq} changeRequirement={changeRequirement} />
+                          )
+                        })
+                      }
                     </Card.Body>
                 </Card>              
               
@@ -79,7 +96,8 @@ class Dashboard extends React.Component {
             </Card>)
           </div>
         </React.Fragment>  
-      )  
+      )
+    }  
     else 
         return (
           <React.Fragment>
@@ -91,8 +109,11 @@ class Dashboard extends React.Component {
   }
 }
 
-const MapStateToProps = ({user})=>({
+const MapStateToProps = ({user, races, racesPaddlerSignedUpFor})=>({
   loggedIn: user.userID || false,
-  userName: user.userName || ''
+  userName: user.userName || '',
+  userID: user.userID || '',
+  racesPaddlerSignedUpFor,
+  races
 })
 export default connect(MapStateToProps)(Dashboard)

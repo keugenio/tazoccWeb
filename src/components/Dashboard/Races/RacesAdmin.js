@@ -38,7 +38,10 @@ class RacesAdmin extends Component {
     })    
   }
   componentDidMount() {
-    this.getRacesAndUpdateStore()
+    //if no races in the store, load races from firestore into store
+    if (this.props.races.length<=0){
+      this.getRacesAndUpdateStore()
+     }
   }
   handleChangeChecked = (e) => {
     this.setState({[e.target.name]: e.target.checked })

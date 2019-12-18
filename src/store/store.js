@@ -186,6 +186,19 @@ const racesReducer = ( state=[], action ) => {
       return state;
   }
 }
+/****** races to Paddlers Action and Reducer *********/
+export const addRaceToPaddler = (race) => ({
+  type: 'ADD_RACE_TO_USER',
+  race
+})
+const racesPaddlerSignedForReducer = ( state=[], action ) =>{
+  switch (action.type) {
+    case 'ADD_RACE_TO_USER':
+      return [...state, action.race]
+    default:
+      return state;
+  }
+}
 /********* create a store by combining reducers ********************** */
 //create store by assigning expenses reducer to expenses property using combineReducer
 
@@ -199,7 +212,8 @@ export default () => {
         selectedPaddler: selectedPaddlerReducer,
         paddlers: allPaddlersReducer,
         selectedPaddlerEditable: selectedPaddlerEditableReducer,
-        races: racesReducer
+        races: racesReducer,
+        racesPaddlerSignedUpFor: racesPaddlerSignedForReducer
       }
     ),
     window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()

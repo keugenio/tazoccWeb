@@ -23,4 +23,5 @@ export const FBProvider= new firebase.auth.FacebookAuthProvider();
 export const auth = firebase.auth();
 export const dbPaddlers = firebase.database().ref('users');
 export const dbRaces = firebase.firestore().collection('races');
+export const dbRacesToPaddlers = firebase.firestore().collection('racesToPaddlers');
 export default firebase;

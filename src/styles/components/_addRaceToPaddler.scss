@@ -1,0 +1,32 @@
+.addRaceToPaddler {
+
+  & button:focus {
+    outline:none!important;
+    box-shadow: none!important;
+  }
+  & .modal-dialog {
+    max-width: 90vw;
+    
+    & .raceCard{
+      & .card-title{
+        font-size: 2rem!important;
+      }
+      & .card-subtitle{
+        font-size: 1.75rem!important;
+      }      
+      & .card-body {
+        font-size: 1.5rem;
+        border:thin solid $success;
+        border-radius: 15px;
+      }
+      & button {
+        border:none;
+        &:focus {
+          outline:none!important;
+          box-shadow: none!important;
+        }      
+      }      
+    }
+  }
+ 
+}

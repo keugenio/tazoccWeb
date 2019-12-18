@@ -27,9 +27,7 @@ class PaddlerBio extends React.Component{
       oldSex: 'n/a'
     }
   }
-  componentDidMount(){
 
-  }
   toggleEdit = () => {
     //display the editable fields
     this.setState({showEditable:true})

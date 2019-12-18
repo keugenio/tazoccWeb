@@ -1,6 +1,6 @@
 
 import React, { Component } from 'react';
-import firebase, { GoogleProvider, FBProvider } from '../Firebase';
+import firebase, { GoogleProvider, FBProvider, dbRacesToPaddlers } from '../Firebase';
 import { connect } from 'react-redux';
 import {Row, Col} from 'react-bootstrap';
 import { setUserName, setUserID, setUserImage } from '../../store/store';
@@ -114,9 +114,8 @@ class Login extends Component {
         const {uid, displayName} = FBUser;
         this.addUserToFirebaseUsersDb(FBUser.user)
         this.props.dispatch(setUserID(uid));
-        this.props.dispatch(setUserName(displayName));
-
-        navigate('/dashboard')
+        this.props.dispatch(setUserName(displayName));   
+        navigate('/dashboard')    
       })
       .catch(error => {
         if (error.message !== null) {
