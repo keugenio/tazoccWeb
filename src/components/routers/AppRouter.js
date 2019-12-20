@@ -1,7 +1,7 @@
 import React from 'react'
 import { Router, navigate } from '@reach/router';
 import { connect } from 'react-redux';
-import firebase, { dbRacesToPaddlers } from '../Firebase';
+import firebase, { dbRacesToPaddlers, dbPaddlers } from '../Firebase';
 import Navigation from '../NavMenu/Navigation';
 import Home from '../Home';
 import AboutUs from '../AboutUs';
@@ -17,7 +17,8 @@ import Register from '../Auth/Register';
 import AdminControl from '../Dashboard/AdminControl';
 import NotFoundPage from '../NotFoundPage';
 import Footer from '../Footer';
-import { setUserName, setUserID, setUserImage, addRaceToPaddler } from '../../store/store';
+import { setUserName, setUserID, setUserImage, addRaceToPaddler, setUserRole } from '../../store/store';
+
 
 class AppRouter extends React.Component {
   componentDidMount() {
@@ -25,7 +26,15 @@ class AppRouter extends React.Component {
       if (FBUser) {
         this.props.dispatch(setUserName(FBUser.displayName));
         this.props.dispatch(setUserID(FBUser.uid))
-        this.props.dispatch(setUserImage(FBUser.photoURL))
+        this.props.dispatch(setUserImage(FBUser.photoURL));
+        
+        // query the user db to find the role for the user logging in and set store
+        const dbUser = firebase.database().ref(`users/${FBUser.uid}`);  
+        dbUser.once('value')
+          .then((snapshot) => {
+            const userInfo = snapshot.val();
+            this.props.dispatch(setUserRole(userInfo.role));      
+          });
 
         firebase.firestore().collection('racesToPaddlers').where("paddlerID", "==", FBUser.uid)
         .get()

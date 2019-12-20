@@ -16,8 +16,8 @@ class Search extends React.Component {
   render(){
       return (
         <Form.Group>
-          <Form.Control as="select" size="lg" onChange={this.setPaddler} style={formStyle} disabled={!this.props.selectedPaddlerEditable}>
-            <option disabled value='0'>-- select Paddler --</option>
+          <Form.Control as="select" size="lg" value="0" onChange={this.setPaddler} style={formStyle} disabled={!this.props.selectedPaddlerEditable}>
+            <option disabled value='0' >-- select Paddler --</option>
             { this.props.paddlers.map((paddler, i)=>(
                 <option key={i} value={paddler.uid}>{paddler.name}</option>
               ))
@@ -30,8 +30,8 @@ const MapStateToProps = ({paddlers, selectedPaddlerEditable}) =>({
   paddlers,selectedPaddlerEditable
 })
 
-export default connect(MapStateToProps)(Search)
-
 const formStyle = {
   fontSize: '1.5rem'
 }
+export default connect(MapStateToProps)(Search)
+

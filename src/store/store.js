@@ -95,6 +95,9 @@ export const setUserImage = (image) => ({
   type:'SET_USER_IMAGE',
   image
 })
+export const setUserRole = (role) =>({
+  type:'SET_USER_ROLE', role
+})
 export const logUserOut = () => ({
   type: 'LOG_USER_OUT'
 })
@@ -106,6 +109,8 @@ const authenticatedUserReducer = (state = {}, action) => {
       return {...state, userID:action.userID }
     case 'SET_USER_IMAGE':      
       return {...state, image:action.image}
+    case 'SET_USER_ROLE':
+      return {...state, role:action.role}
     case 'LOG_USER_OUT':  
       return {}
     default:

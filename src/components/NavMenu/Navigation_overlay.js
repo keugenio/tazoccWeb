@@ -10,6 +10,8 @@ function closeNavOverlay() {
 }
 const  NavigationOverlay = (props) => {
   const loggedIn = props.user || false;
+  const role = props.user.role;
+  
   return (
     <div className="navigation">
       <input type="checkbox" className="navigation__checkbox" id="navi-toggle"></input>
@@ -61,7 +63,7 @@ const  NavigationOverlay = (props) => {
             </Link>
           </li>
           )}
-          {loggedIn && (
+          {loggedIn && (role == "admin" || role == "superAdmin") &&  (
             <li className="navigation__item">  
               <Link className="navigation__link" to="/admin" onClick={closeNavOverlay}>
                 <span>09</span>Admin

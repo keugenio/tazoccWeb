@@ -31,7 +31,7 @@ class Login extends Component {
 
   addUserToFirebaseUsersDb = (user) => {    
     const dbUsers = firebase.database().ref(`users/${user.uid}`);
-    dbUsers.set({
+    dbUsers.update({
       name:user.displayName,
       loggedInWith:user.providerData[0].providerId,
       email:user.providerData[0].email,

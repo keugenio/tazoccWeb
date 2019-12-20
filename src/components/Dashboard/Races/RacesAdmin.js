@@ -31,7 +31,6 @@ class RacesAdmin extends Component {
       docs.docs.forEach(doc => {
         const raceData = doc.data();
         const newRaceData = {...raceData, id:doc.id}
-        console.log(newRaceData);
         this.props.dispatch(addRace(newRaceData));
         this.setState({races: [...this.state.races, newRaceData]});
       });

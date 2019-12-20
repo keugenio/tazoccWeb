@@ -9,6 +9,7 @@ import Search from './Search';
 import LoadingIcon from '../LoadingIcon';
 import PaddlerBio from './PaddlerBio';
 import RacesAdmin from './Races/RacesAdmin';
+import EditRole from '../Auth/EditRole';
 
 class AdminControl extends React.Component{
   constructor(){
@@ -42,6 +43,7 @@ class AdminControl extends React.Component{
                 </Col>
                 <Col lg={4} xs={12}>
                   <Search />
+                  {this.props.user.role == "superAdmin" && (<EditRole />)}
                 </Col>
               </Row>
               <Row>
@@ -55,7 +57,7 @@ class AdminControl extends React.Component{
     )};
 }
 
-const MapStateToProps = ({selectedPaddler, paddlers}) => ({
-  selectedPaddler,paddlers
+const MapStateToProps = ({selectedPaddler, paddlers, user}) => ({
+  selectedPaddler,paddlers, user
 })
 export default connect(MapStateToProps)(AdminControl)
