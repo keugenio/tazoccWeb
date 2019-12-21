@@ -55,6 +55,10 @@ export const setReadNews = (localNewsStorage) => ({
   type:'SET_READ_NEWS',
   localNewsStorage
 })
+export const setAmountUnread = (amountUnread) => ({
+  type:'SET_AMOUNT_UNREAD',
+  amountUnread
+})
 export const addReadArticle = (articleID) => ({
   type:'ADD_READ_ARTICLE',
   articleID
@@ -69,7 +73,9 @@ const amountUnreadDefault = 0;
 const readNewsArticlesReducer = (state = {readNews:readNewsDefault, amountUnread:amountUnreadDefault}, action) => {
   switch (action.type) {
     case 'SET_READ_NEWS':
-      return {readNews:[...action.localNewsStorage], amountUnread:action.localNewsStorage.length}
+      return {readNews:[...action.localNewsStorage], amountUnread:action.localNewsStorage.length};
+    case 'SET_AMOUNT_UNREAD':
+      return {readNews:[...state.readNews], amountUnread:action.amountUnread}
     case 'ADD_READ_ARTICLE':
       // "append" read articleID to localstorage. don't mutate
       ls.set('readNews', [...state.readNews, action.articleID]);

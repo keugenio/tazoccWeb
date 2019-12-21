@@ -10,25 +10,30 @@ import NewIcon from './NewIcon';
 const ls = require('local-storage');
 
 class News extends React.Component {
-  state = {
-    loading:false,
-    images:[],
-    showModal:false,
-    currNewsTitle:'',
-    currNewsBody:''
+  constructor(props){
+    super(props)
+    this.state = {
+      loading:false,
+      images:[],
+      showModal:false,
+      currNewsTitle:'',
+      currNewsBody:''
+    }
   }
 
   handleClose = () => this.setState({showModal:false});
   handleShow = (i) => {
     const {news} = this.props;
 
-    // udate the read articles in the store, open the modal and update the current state's title and body to the selected article
-    this.props.dispatch(addReadArticle(news[i].id))
-    this.setState({
-      showModal:true, 
-      currNewsTitle:news[i].title.rendered,
-      currNewsBody:news[i].content.rendered
-    })
+    // if the article is NOT in the read articles array, 
+    // update the read articles in the store, open the modal and update the current state's title and body to the selected article
+    if (!this.props.readNewsArticles.readNews.includes(news[i].id))
+      this.props.dispatch(addReadArticle(news[i].id))
+      this.setState({
+        showModal:true, 
+        currNewsTitle:news[i].title.rendered,
+        currNewsBody:news[i].content.rendered
+      })
   }
     
   // parse the title and replace the iso numbers back to normal characters
@@ -53,6 +58,7 @@ class News extends React.Component {
       }
       this.setState({images:filtered})
     })
+    
     
   }
   
@@ -127,8 +133,7 @@ class News extends React.Component {
 
 
 const MapStateToProps = ({news, readNewsArticles}) => ({
-  news: news,
-  readNewsArticles:readNewsArticles
+  news, readNewsArticles
 })
 
 export default connect(MapStateToProps)(News)

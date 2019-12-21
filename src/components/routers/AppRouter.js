@@ -17,10 +17,11 @@ import Register from '../Auth/Register';
 import AdminControl from '../Dashboard/AdminControl';
 import NotFoundPage from '../NotFoundPage';
 import Footer from '../Footer';
-import { setUserName, setUserID, setUserImage, addRaceToPaddler, setUserRole } from '../../store/store';
+import { setUserName, setUserID, setUserImage, addRaceToPaddler, setUserRole, setAmountUnread } from '../../store/store';
 
 
 class AppRouter extends React.Component {
+
   componentDidMount() {
     firebase.auth().onAuthStateChanged(FBUser => {      
       if (FBUser) {
@@ -47,9 +48,13 @@ class AppRouter extends React.Component {
       }
     })
     // make the hover message on the links viewable instantly suing jQuery
-    $('.titleHoverMessage').tooltip({show: {effect:"none", delay:0}});  
-    
-    
+    $('.titleHoverMessage').tooltip({show: {effect:"none", delay:0}});
+
+    // set the number of articles not read
+    const { news, readNewsArticles } = this.props;
+
+    const unreadNewsAmount = news.length - readNewsArticles.readNews.length;
+    this.props.dispatch(setAmountUnread(unreadNewsAmount))
   }
 
   render(){
@@ -76,5 +81,7 @@ class AppRouter extends React.Component {
     )
   }
 }
-
-export default connect ()(AppRouter);
+const MapStateToProps = ({news, readNewsArticles  }) => ({
+  news, readNewsArticles 
+})
+export default connect (MapStateToProps)(AppRouter);

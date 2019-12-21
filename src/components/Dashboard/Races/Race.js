@@ -102,7 +102,7 @@ class Race extends React.Component{
         <Card border="info" className="text-dark border-1 m-3 box-shadow-primary raceInfo">
           <Card.Title className="bg-info text-light d-flex justify-content-between">
             <span>{this.props.name}</span>
-            <Button onClick={this.toggleEdit}><FontAwesomeIcon icon="edit"/></Button>
+            {this.props.role && (this.props.role == "admin" || this.props.role== "superAdmin") && (<Button onClick={this.toggleEdit}><FontAwesomeIcon icon="edit"/></Button>)}
           </Card.Title>
           <Card.Body>
             <ul>

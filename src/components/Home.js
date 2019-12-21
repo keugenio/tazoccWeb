@@ -7,7 +7,7 @@ import EmailUs from './EmailUs';
 import JoinUs from './JoinUs';
 import moment from 'moment';
 import "babel-polyfill";
-import { setNewsArticles } from '../store/store';
+import { setNewsArticles, setAmountUnread } from '../store/store';
 
 const thisYear = (new Date()).getFullYear();    
 const start = new Date("1/1/" + thisYear);
@@ -50,6 +50,7 @@ class Home extends React.Component {
         } else { // else just add locally read articles ids to the store
           this.props.dispatch(setNewsArticles([...localStorageArray]))  
         }
+
       })
   }
 
