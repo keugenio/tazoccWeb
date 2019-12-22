@@ -50,8 +50,6 @@ class PaddlerBio extends React.Component{
   toggleSave = () => {
     //hide editable fields
     this.setState({showEditable:false})
-
-    console.log(this.state.birthday);
     
     // write data to firebase and update store
     const dbUsers = firebase.database().ref(`users/${this.props.selectedPaddler.uid}`);    

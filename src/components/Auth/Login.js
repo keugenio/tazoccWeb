@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import firebase, { GoogleProvider, FBProvider, dbRacesToPaddlers } from '../Firebase';
 import { connect } from 'react-redux';
 import {Row, Col} from 'react-bootstrap';
-import { setUserName, setUserID, setUserImage } from '../../store/store';
+import { setUserName, setUserID, setUserImage, setRacesPaddlerSignedUpFor } from '../../store/store';
 import { navigate, Link } from '@reach/router';
 import Swal from 'sweetalert2';
 
@@ -29,22 +29,19 @@ class Login extends Component {
     this.setState({ [itemName]: itemValue });
   }
 
-  addUserToFirebaseUsersDb = (user) => {    
+  updateUserImage = (user) => {    
     const dbUsers = firebase.database().ref(`users/${user.uid}`);
     dbUsers.update({
-      name:user.displayName,
-      loggedInWith:user.providerData[0].providerId,
-      email:user.providerData[0].email,
-      uid:user.uid,
       image:user.photoURL
     })
   }
+
   signInWithGoogle = () => {
     firebase
     .auth()
     .signInWithPopup(GoogleProvider)
     .then((FBUser)=>{
-      this.addUserToFirebaseUsersDb(FBUser.user)
+      this.updateUserImage(FBUser.user);
       navigate('/dashboard');
     })
     .catch(error => {
@@ -72,8 +69,7 @@ class Login extends Component {
     .auth()
     .signInWithPopup(FBProvider)
     .then((FBUser)=>{   
-      this.addUserToFirebaseUsersDb(FBUser.user)
-
+      this.updateUserImage(FBUser.user)
       navigate('/dashboard');
     })
     .catch(error => {
@@ -111,10 +107,6 @@ class Login extends Component {
         registrationInfo.password
       )
       .then((FBUser) => {
-        const {uid, displayName} = FBUser;
-        this.addUserToFirebaseUsersDb(FBUser.user)
-        this.props.dispatch(setUserID(uid));
-        this.props.dispatch(setUserName(displayName));   
         navigate('/dashboard')    
       })
       .catch(error => {
@@ -138,6 +130,7 @@ class Login extends Component {
         }
       });
   }
+
   handleGoToRegister = () => {
     navigate('/register')
   }
@@ -207,8 +200,11 @@ class Login extends Component {
       );
   }
 }
+const MapStateToProps=({user}) => ({
+  user
+})
 
-export default connect ()(Login);
+export default connect (MapStateToProps)(Login);
 const formStyle = {
   height: '100vh',
   display:'flex',

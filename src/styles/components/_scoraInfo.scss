@@ -10,19 +10,6 @@
     color:$dark;
     font-size: 1.5rem;
   }
-  & .form-check {
-    display: flex;
-    align-items: center;
-    & .form-check-input {
-      position: relative;
-      margin:0;
-      width:25px;
-      height: 25px;
-    }
-    & label {
-      padding-left: 1rem;
-    }
-  }
   & .h5 {
       font-size: 2.5rem!important;
     }

@@ -17,7 +17,7 @@ import Register from '../Auth/Register';
 import AdminControl from '../Dashboard/AdminControl';
 import NotFoundPage from '../NotFoundPage';
 import Footer from '../Footer';
-import { setUserName, setUserID, setUserImage, addRaceToPaddler, setUserRole, setAmountUnread } from '../../store/store';
+import { setUserName, setUserID, setUserImage, addRaceToPaddler, setUserRole, setAmountUnread, setLoggedInUserReadNews, setSCORAInfo } from '../../store/store';
 
 
 class AppRouter extends React.Component {
@@ -34,15 +34,18 @@ class AppRouter extends React.Component {
         dbUser.once('value')
           .then((snapshot) => {
             const userInfo = snapshot.val();
-            this.props.dispatch(setUserRole(userInfo.role));      
+            this.props.dispatch(setUserRole(userInfo.role));  
+            this.props.dispatch(setLoggedInUserReadNews(userInfo.readArticles));
+            this.props.dispatch(setSCORAInfo(userInfo)) 
           });
-
-        firebase.firestore().collection('racesToPaddlers').where("paddlerID", "==", FBUser.uid)
+        
+        //get the races that the paddler signed up for and load into store
+       dbRacesToPaddlers.where("paddlerID", "==", FBUser.uid).where("enabled", "==", true)
         .get()
         .then((querySnapshot)=>{
           querySnapshot.forEach((race)=>{
             const raceInfo = race.data();
-            this.props.dispatch(addRaceToPaddler(raceInfo.raceID))
+            this.props.dispatch(addRaceToPaddler(raceInfo))
           })
         })
       }
@@ -52,8 +55,7 @@ class AppRouter extends React.Component {
 
     // set the number of articles not read
     const { news, readNewsArticles } = this.props;
-
-    const unreadNewsAmount = news.length - readNewsArticles.readNews.length;
+    const unreadNewsAmount = news.length - readNewsArticles.readNews.length +1;
     this.props.dispatch(setAmountUnread(unreadNewsAmount))
   }
 

@@ -17,3 +17,8 @@
     margin-bottom:2rem;
   }
 }
+.dashboard__scoraInfo {
+  & label {
+    color:$dark!important;
+  }
+}

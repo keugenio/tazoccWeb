@@ -66,12 +66,17 @@ export const addReadArticle = (articleID) => ({
 export const resetReadArticles = () => ({
   type:'RESET_READ_ARTICLES'
 })
+export const setLoggedInUserReadNews = (readNewsArray) => ({
+  type: 'SET_LOGGED_IN_USER_READ_NEWS',
+  readNewsArray
+})
 // create a locaStorage reducer
 const readNewsDefault = (ls('readNews')? ls('readNews'): []);
-// const amountUnreadDefault = ls('news').length-(ls('readNews')? ls('readNews').length:0);
 const amountUnreadDefault = 0;
 const readNewsArticlesReducer = (state = {readNews:readNewsDefault, amountUnread:amountUnreadDefault}, action) => {
   switch (action.type) {
+    case 'SET_LOGGED_IN_USER_READ_NEWS':
+      return {...state, readNews:action.readNewsArray}
     case 'SET_READ_NEWS':
       return {readNews:[...action.localNewsStorage], amountUnread:action.localNewsStorage.length};
     case 'SET_AMOUNT_UNREAD':
@@ -104,6 +109,10 @@ export const setUserImage = (image) => ({
 export const setUserRole = (role) =>({
   type:'SET_USER_ROLE', role
 })
+export const setSCORAInfo = (scoraInfo) => ({
+  type: 'SET_SCORA_INFO',
+  scoraInfo
+})
 export const logUserOut = () => ({
   type: 'LOG_USER_OUT'
 })
@@ -117,6 +126,8 @@ const authenticatedUserReducer = (state = {}, action) => {
       return {...state, image:action.image}
     case 'SET_USER_ROLE':
       return {...state, role:action.role}
+    case 'SET_SCORA_INFO':
+      return { ...state, ...action.scoraInfo}
     case 'LOG_USER_OUT':  
       return {}
     default:
@@ -198,14 +209,32 @@ const racesReducer = ( state=[], action ) => {
   }
 }
 /****** races to Paddlers Action and Reducer *********/
-export const addRaceToPaddler = (race) => ({
-  type: 'ADD_RACE_TO_USER',
+export const addRaceToPaddler = (race) => ({  
+  type: 'ADD_RACE_TO_PADDLER',
   race
 })
-const racesPaddlerSignedForReducer = ( state=[], action ) =>{
+export const removeRaceForPaddler = (raceID) => ({
+  type: 'REMOVE_RACE_FOR_PADDLER',
+  raceID
+})
+export const setRacesPaddlerSignedUpFor = (races) => ({
+  type: 'SET_RACES_PADDLER_SIGNED_UP_FOR',
+  races
+})
+export const clearRacesPaddlerSignedUpFor = () => ({
+  type: 'CLEAR_RACES_PADDLER_SIGNED_UP_FOR'
+})
+const racesPaddlerSignedUpForReducer = ( state=[], action ) =>{
   switch (action.type) {
-    case 'ADD_RACE_TO_USER':
+    case 'ADD_RACE_TO_PADDLER':     
       return [...state, action.race]
+    case 'REMOVE_RACE_FOR_PADDLER':
+      const filtered = state.filter(race=>race.raceID !== action.raceID);
+      return filtered;
+    case 'SET_RACES_PADDLER_SIGNED_UP_FOR':
+      return [...action.races]
+    case 'CLEAR_RACES_PADDLER_SIGNED_UP_FOR':
+      return [];
     default:
       return state;
   }
@@ -224,7 +253,7 @@ export default () => {
         paddlers: allPaddlersReducer,
         selectedPaddlerEditable: selectedPaddlerEditableReducer,
         races: racesReducer,
-        racesPaddlerSignedUpFor: racesPaddlerSignedForReducer
+        racesPaddlerSignedUpFor: racesPaddlerSignedUpForReducer
       }
     ),
     window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()

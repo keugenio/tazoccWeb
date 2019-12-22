@@ -101,7 +101,6 @@ class Register extends Component {
         role:{author:false, editor:false}
       }).then (()=>{
         const newUser = {displayName: FBUser.displayName,userID: FBUser.uid}
-        console.log(newUser);
         
         this.props.dispatch(setUserName(newUser.displayName));
         this.props.dispatch(setUserID(newUser.userID));

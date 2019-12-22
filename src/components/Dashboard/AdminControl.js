@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Row, Col, Card } from 'react-bootstrap';
-import firebase, {dbPaddlers} from '../Firebase';
+import firebase, {dbAllPaddlers} from '../Firebase';
 import { setAllPaddlers } from '../../store/store';
 import "babel-polyfill";
 import SCORA_INFO from '../Dashboard/SCORA_INFO';
@@ -20,9 +20,10 @@ class AdminControl extends React.Component{
   }
   async componentDidMount(props){
     // load up the store with paddlers
-    await dbPaddlers.on('value', snapshot => {
+    await dbAllPaddlers.on('value', snapshot => {
       // snapshot is an object. convert to array
       let paddlers = Object.values(snapshot.val())
+      
       this.props.dispatch(setAllPaddlers(paddlers))
       this.setState({loading:false})
     })

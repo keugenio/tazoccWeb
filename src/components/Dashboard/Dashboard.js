@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Card, Col, Row, CardDeck } from 'react-bootstrap';
-import { dbRaces, dbRacesToPaddlers } from '../../components/Firebase';
-import { addRace, addRaceToPaddler } from '../../store/store';
+import { Card, Col, Row, CardDeck, Form } from 'react-bootstrap';
+import firebase, { dbRaces, dbRacesToPaddlers, dB } from '../../components/Firebase';
+import { addRace} from '../../store/store';
 import AddRaceToPaddler from './AddRaceToPaddler';
 import Race from './Races/Race';
 
@@ -11,16 +11,17 @@ class Dashboard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      userID: this.props.userID,
-      userRaces:this.props.racesPaddlerSignedUpFor,
+      scoraID:'',
       availableRaces:[],
-      races:this.props.races
+      scoraWaiver:false,
+      scoraSmartWaiver:false,
+      huliDrill:false
     }
   }
   getRacesAndUpdateStore = () => {
      dbRaces.get().then(docs=>{
       docs.docs.forEach(doc => {
-        // the id and the actually data are in different brances so get those and add to a new object
+        // the id and the actual data are in different brances so get those and add to a new object
         // then add that new race object to the store individally.
         const raceData = doc.data();
         const newRaceData = {...raceData, id:doc.id}
@@ -28,52 +29,75 @@ class Dashboard extends React.Component {
       });
     })    
   }
-  addRacesToPaddler = (userID) => {
-    if (userID)
-      dbRacesToPaddlers.where("paddlerID", "==", userID)
-      .then((querySnapshot)=>{
-        querySnapshot.map((race)=>{
-          this.props.dispatch(addRaceToPaddler(race.id))
-        })
+
+  static getDerivedStateFromProps(props, state) {
+    const { racesPaddlerSignedUpFor, races } = props
+    const availableRaces=[];
+    if (props.loggedIn) {  
+      racesPaddlerSignedUpFor.forEach(signedUpRace =>{
+        const { changeRequirement, longCourseReq, shortCourseReq, raceID, paddlerID } = signedUpRace
+        const raceInfo = races.find(race=>race.id==raceID);
+        const {name, date, host, info, location} = raceInfo;
+        const userRaceInfo = {name, date, host, info, location, changeRequirement, longCourseReq, shortCourseReq, raceID, paddlerID };
+        availableRaces.push(userRaceInfo)
       })
+      const { scoraSmartWaiver, scoraWaiver, huliDrill, scoraID } = props.user
+      return {...state, scoraSmartWaiver, scoraWaiver, huliDrill, scoraID, availableRaces}
+    }
+    else 
+      return null
   }
-  async componentDidMount() {
+
+  componentDidMount() {
     //if no races in the store, load races from firestore into store
     if (this.props.races.length<=0){
-     this.getRacesAndUpdateStore()
+      this.getRacesAndUpdateStore()
     }
-    
+
   }
 
   render () {
-    const {loggedIn, userName, userID, races, racesPaddlerSignedUpFor} = this.props;
-    
-    const racesPaddlerSignedUpForInfo = [];
-    races.forEach((race)=>{
-      if (racesPaddlerSignedUpFor.includes(race.id))
-      racesPaddlerSignedUpForInfo.push(race)
-    })
-    
+    const {loggedIn, user} = this.props;
+    const {userName} = user;
+
     if (loggedIn){   
-      
       return (
         <React.Fragment>
           <div className="dashboardStats">
             <Card className="dashboard">
-              <Card.Title>Hello {userName}! {}</Card.Title>
               <Card.Body>
-
                 <Card bg="info" text="dark" style={{fontSize:'2rem'}} >
                   <Card.Header className="display-4">SCORA Info for {userName}</Card.Header>
                   <Card.Body>
                   <Row>
-                    <Col lg={3} xs={12}><p>SCORA ID: n/a</p>
+                    <Col lg={3} xs={12}><p>SCORA ID: {this.state.scoraID} </p>
                     </Col>
-                    <Col lg={3} xs={12}><p>SCORA Waiver: no</p>
+                    <Col lg={3} xs={12}>
+                      <Form.Check
+                        type='checkbox'
+                        checked = {this.state.scoraWaiver || false}
+                        disabled
+                        className="form-check-input"
+                        label= "SCORA Waiver"
+                      /> 
                     </Col>
-                    <Col lg={3} xs={12}><p>Smart Waiver: no</p>
+                    <Col lg={3} xs={12}>
+                      <Form.Check
+                        type='checkbox'
+                        checked = {this.state.scoraSmartWaiver || false}
+                        disabled
+                        className="form-check-input"
+                        label= "Smart Waiver"
+                      />                   
                     </Col>
-                    <Col lg={3} xs={12}><p>huli drill: yes</p>
+                    <Col lg={3} xs={12}>
+                      <Form.Check
+                        type='checkbox'
+                        checked = {this.state.huliDrill || false}
+                        disabled
+                        className="form-check-input"
+                        label="Huli Drill"
+                      />                    
                     </Col>                  
                   </Row>
                   </Card.Body>
@@ -83,22 +107,35 @@ class Dashboard extends React.Component {
                     <Card.Title className="text-white bg-primary display-4 d-flex justify-content-between">My Races<AddRaceToPaddler /></Card.Title>
                     <Card.Body>
                       <CardDeck>
-                        { racesPaddlerSignedUpForInfo.map((race,i)=>{
-                            const {id, name, host, location, date, longCourseReq, shortCourseReq, changeRequirement, info} = race
-                            return (
-                              <Race key={i} id={id} name={name} host={host} location={location} info={info} date={date} longCourseReq={longCourseReq} shortCourseReq={shortCourseReq} changeRequirement={changeRequirement} />
-                            )
-                          })
-                        }
+                      
+                      { this.state.availableRaces.map((race)=>{
+                        const { paddlerID, changeRequirement, date, host, info, location, longCourseReq, name, raceID, shortCourseReq } = race;
+                        return (
+                          <Race 
+                            key={raceID}
+                            paddlerID={paddlerID}
+                            changeRequirement={changeRequirement}
+                            date={date}
+                            host={host}
+                            info={info}
+                            location={location}
+                            longCourseReq={longCourseReq}
+                            name={name}
+                            raceID={raceID}
+                            shortCourseReq={shortCourseReq}/>
+                        )
+                    })}
+                    
                       </CardDeck>
                     </Card.Body>
                 </Card>              
               
               </Card.Body>
-            </Card>)
+            </Card>
           </div>
         </React.Fragment>  
       )
+
     }  
     else 
         return (
@@ -112,9 +149,8 @@ class Dashboard extends React.Component {
 }
 
 const MapStateToProps = ({user, races, racesPaddlerSignedUpFor})=>({
-  loggedIn: user.userID || false,
-  userName: user.userName || '',
-  userID: user.userID || '',
+  loggedIn: (user.userID) ? true : false,
+  user,
   racesPaddlerSignedUpFor,
   races
 })

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import firebase from '../Firebase';
 import NavigationOverlay from './Navigation_overlay';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { logUserOut } from '../../store/store';
+import { logUserOut, clearRacesPaddlerSignedUpFor } from '../../store/store';
 import { navigate, Link } from '@reach/router';
 import { Modal, Button } from 'react-bootstrap'
 import UnreadNewsBadge from './UnreadNewsBadge';
@@ -23,8 +23,12 @@ class Navigation extends Component {
   logOutUser = (e) => {
     e.preventDefault ();
     this.props.dispatch(logUserOut())
-    firebase.auth().signOut().then(() =>{
+    firebase.auth().signOut()
+    .then(() =>{
       navigate('/')
+    })
+    .then(()=>{
+      this.props.dispatch(clearRacesPaddlerSignedUpFor())
     });
   }
 

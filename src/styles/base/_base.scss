@@ -77,3 +77,24 @@ button:disabled {
 .card-img-top {
   padding:1rem;
 }
+
+.form-check {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  min-width: 100%;
+  & label {
+    padding-left: 1.6rem;
+    display: block;
+  }
+}
+.form-check-input {
+  position: relative;
+  margin:0;
+  width:25px;
+  height: 25px;
+  & .form-check-input:disabled{
+    color: #000!important;
+  }
+}

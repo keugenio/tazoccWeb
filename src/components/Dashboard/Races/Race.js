@@ -5,8 +5,8 @@ import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { dbRaces } from '../../Firebase';
-import { updateRace } from '../../../store/store';
+import { dbRaces, dbRacesToPaddlers } from '../../Firebase';
+import { updateRace, removeRaceForPaddler } from '../../../store/store';
 
 class Race extends React.Component{
   constructor(props) {
@@ -21,9 +21,11 @@ class Race extends React.Component{
       longCourseReq:props.longCourseReq || 0,
       shortCourseReq:props.shortCourseReq || 0,
       changeRequirement:props.changeRequirement || false,
-      editable:false
+      editable:false,
+      showReqs: (this.props.paddlerID == this.props.user.userID)
     }
   }
+
   toggleEdit = () => {
     const { name, host, location, info, date, longCourseReq, shortCourseReq, changeRequirement, id } = this.props
     this.setState({ name, host, location, info, date, longCourseReq, shortCourseReq, changeRequirement, id, editable:true });
@@ -63,6 +65,21 @@ class Race extends React.Component{
     this.setState({[e.target.name]: e.target.checked })
   }
 
+  handleRemoveRace = () => {
+    const {raceID, paddlerID} = this.props;
+    
+    // query firestore then delete from the array it returned and finally update state
+    dbRacesToPaddlers.where("raceID", "==", raceID).where("paddlerID", "==", paddlerID)
+    .get()
+    .then(docs=>{      
+      dbRacesToPaddlers.doc(docs.docs[0].id).update({enabled:false})
+      this.props.dispatch(removeRaceForPaddler(raceID))
+    })
+    .catch(error=>{
+      console.log('error in deletion:', error);
+      
+    })
+  }
   render(){
     return (
       <div>
@@ -112,8 +129,16 @@ class Race extends React.Component{
               {this.props.longCourseReq>0 && (<li><b className="mr-3" >Long Course Req:</b>  {this.props.longCourseReq}</li>)}
               {this.props.shortCourseReq>0 && (<li><b className="mr-3" >Short Course Req:</b>  {this.props.shortCourseReq}</li>)}
               {this.props.changeRequirement && (<li><b className="mr-3" >Change Req:</b> {this.props.changeRequirement}</li>)}
-              {this.props.info!='' && (<li><b className="mr-3" >more info:</b>  {this.props.info}</li>)}
+
+              {this.state.showReqs && (<li><b className="mr-3" >Long Course Req:</b>  {this.props.longCourseReq}</li>)}
+              {this.state.showReqs && (<li><b className="mr-3" >Short Course Req:</b>  {this.props.shortCourseReq}</li>)}
+              {this.state.showReqs && (<li><b className="mr-3" >Change Req:</b> {this.props.changeRequirement}</li>)}              
+
+              {this.props.info!='' && (<li><b className="mr-3" >more info:</b>  {this.props.info}</li>)}         
             </ul>
+            <div className="d-flex w-100">
+              <Button variant="danger" className="mx-auto" onClick={this.handleRemoveRace}><FontAwesomeIcon icon="minus-circle" className="fa-2x"></FontAwesomeIcon></Button>
+            </div>
           </Card.Body>
         </Card>         
       )}
@@ -122,5 +147,7 @@ class Race extends React.Component{
   }
 
 }
-
-export default connect()(Race);
+const MapStateToProps = ({user}) =>({
+  user
+})
+export default connect(MapStateToProps)(Race);
