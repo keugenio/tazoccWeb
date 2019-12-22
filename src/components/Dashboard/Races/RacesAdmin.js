@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { dbRaces } from '../../Firebase';
-import { Row, Col, Card, CardGroup, Modal, Button, Form } from 'react-bootstrap';
+import { Row, Col, Card, CardGroup, Modal, Button, Form, Accordion} from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { addRace } from '../../../store/store';
 
@@ -22,7 +22,8 @@ class RacesAdmin extends Component {
       longCourseReq:0,
       shortCourseReq:0,
       info:'',
-      changeRequirement:false
+      changeRequirement:false,
+      rotation:0
     }
   }
   
@@ -99,34 +100,52 @@ class RacesAdmin extends Component {
   }
   handleCalendarChange = date => {
     this.setState({date:date.valueOf()});
-  }     
+  } 
+  rotate = () => {
+    let newRotation = this.state.rotation + 180;
+    if(newRotation >= 360){
+      newRotation =- 360;
+    }
+    this.setState({
+      rotation: newRotation,
+    })
+  }  
+      
   render() {
     const {races} = this.props
     
     return (
       <div className="raceAdmin">
-        <Card>
-          <Card.Title className="d-flex justify-content-between align-items-center bg-primary text-light">
-            <span>Races</span>
-            <div>
-              <Button variant="primary" onClick={this.handleShowModal} className="bg-transparent border-0">
-                <FontAwesomeIcon icon="plus-circle" className="fa-4x text-warning bg-primary"/>
-              </Button>
-            </div>
-          </Card.Title>
-          <Card.Body>
-            { races.length > 0 && (
-                  <CardGroup>
-                    {races.map((race,i)=>{
-                      const {id, name, host, location, date, longCourseReq, shortCourseReq, changeRequirement, info} = race
-                      return (
-                        <Race key={i} id={id} name={name} host={host} location={location} info={info} date={date} longCourseReq={longCourseReq} shortCourseReq={shortCourseReq} changeRequirement={changeRequirement} />
-                      )
-                    })}           
-                </CardGroup>
-            )}
-          </Card.Body>
-        </Card>
+      <Accordion defaultActiveKey="0">      
+          <Card>
+            <Accordion.Toggle as={Card.Title} eventKey="0" className="bg-primary" onClick={this.rotate}>
+              <Card.Title className="d-flex justify-content-between align-items-center bg-primary text-light">
+                <span>Races</span>
+                <div className="d-flex">                  
+                  <FontAwesomeIcon icon="angle-up" className="fa-2x text-warning bg-primary" style={{transform: `rotate(${this.state.rotation}deg)`}}/>                  
+                  <Button variant="primary" onClick={this.handleShowModal} className="bg-transparent border-0">
+                    <FontAwesomeIcon icon="plus-circle" className="fa-3x text-warning bg-primary"/>
+                  </Button>
+                </div>
+              </Card.Title>
+            </Accordion.Toggle>          
+            <Accordion.Collapse eventKey='0'>
+              <Card.Body>
+                { races.length > 0 && (
+                      <CardGroup>
+                        {races.map((race,i)=>{
+                          const {id, name, host, location, date, longCourseReq, shortCourseReq, changeRequirement, info} = race
+                          return (
+                            <Race key={i} id={id} name={name} host={host} location={location} info={info} date={date} longCourseReq={longCourseReq} shortCourseReq={shortCourseReq} changeRequirement={changeRequirement} />
+                          )
+                        })}           
+                    </CardGroup>
+                )}
+              </Card.Body>
+            </Accordion.Collapse>          
+          </Card>
+        </Accordion>
+
         <Modal show={this.state.showModal} onHide={this.handleCloseModal} animation={false} size="lg" centered className="addRaceModal">
           <Modal.Header closeButton>
             <Modal.Title>Add a Race</Modal.Title>

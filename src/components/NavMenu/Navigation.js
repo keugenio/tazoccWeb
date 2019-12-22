@@ -20,16 +20,14 @@ class Navigation extends Component {
   handleClose = () => {this.setState({show: false})};
   handleShow = () => {this.setState({show: true})};
   
-  logOutUser = (e) => {
-    e.preventDefault ();
+  logOutUser = () => {
+    //clear the user and his/her races from store, logout from firebase
     this.props.dispatch(logUserOut())
+    this.props.dispatch(clearRacesPaddlerSignedUpFor())
     firebase.auth().signOut()
     .then(() =>{
       navigate('/')
     })
-    .then(()=>{
-      this.props.dispatch(clearRacesPaddlerSignedUpFor())
-    });
   }
 
   render() {
