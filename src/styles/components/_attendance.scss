@@ -1,0 +1,15 @@
+.attendance {
+  & .card-body .row {
+    margin-bottom: 4rem;
+  }
+  & .paddlersWhoPaddledText {
+    font-size: 1.75rem;
+  }
+  & .list-group-item{
+    cursor: pointer;
+  }
+  & .availablePaddlers {
+    color:$dark;
+    font-size: 1.75rem;
+  }
+}

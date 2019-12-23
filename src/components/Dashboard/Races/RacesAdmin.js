@@ -116,7 +116,7 @@ class RacesAdmin extends Component {
     
     return (
       <div className="raceAdmin">
-      <Accordion defaultActiveKey="0">      
+      <Accordion>      
           <Card>
             <Accordion.Toggle as={Card.Title} eventKey="0" className="bg-primary" onClick={this.rotate}>
               <Card.Title className="d-flex justify-content-between align-items-center bg-primary text-light">

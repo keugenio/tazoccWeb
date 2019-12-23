@@ -10,6 +10,7 @@ import LoadingIcon from '../LoadingIcon';
 import PaddlerBio from './PaddlerBio';
 import RacesAdmin from './Races/RacesAdmin';
 import EditRole from '../Auth/EditRole';
+import Attendance from './Attendance';
 
 class AdminControl extends React.Component{
   constructor(){
@@ -49,7 +50,8 @@ class AdminControl extends React.Component{
               </Row>
               <Row>
                 <Col>
-                  <RacesAdmin />   
+                  <RacesAdmin />
+                  <Attendance />
                 </Col>   
               </Row>
             </Card.Body>

@@ -25,4 +25,5 @@ export const dB = firebase.database();
 export const dbAllPaddlers = firebase.database().ref('users');
 export const dbRaces = firebase.firestore().collection('races');
 export const dbRacesToPaddlers = firebase.firestore().collection('racesToPaddlers');
+export const dbAttendance = firebase.firestore().collection('practiceAttendance');
 export default firebase;
