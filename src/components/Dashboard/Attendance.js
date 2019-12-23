@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { dbAttendance } from '../Firebase';
 import { connect} from 'react-redux';
-import { Accordion, Form, Card, Button, Row, Col, ListGroup } from 'react-bootstrap';
+import { Accordion, Form, Card, Button, Row, Col, ListGroup, InputGroup, Text } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -16,7 +16,8 @@ class Attendance extends Component {
       paddlers:[],
       selectedPaddlers:[],
       rotation:0,
-      paddlersWhoPracticed:[]
+      paddlersWhoPracticed:[],
+      noLoginPaddler:''
     }
   }
   static getDerivedStateFromProps(props, state) {
@@ -53,6 +54,17 @@ class Attendance extends Component {
     const filteredPaddlers = this.state.paddlersWhoPracticed.filter(paddler=> paddler.uid!= uid)
     this.setState({paddlersWhoPracticed: filteredPaddlers})
   }
+  updateNoLoginPaddler = (e) => {
+    this.setState({noLoginPaddler:e.target.value})
+  }
+
+  addNoLoginPaddler = (e) =>{
+    e.preventDefault()
+    this.setState({
+      paddlersWhoPracticed:[...this.state.paddlersWhoPracticed, {name:this.state.noLoginPaddler}],
+      noLoginPaddler:''})
+    document.getElementById("addNoLoginPaddler").reset()
+  }
   render() {
     return (
       <div className="attendance">
@@ -68,43 +80,68 @@ class Attendance extends Component {
           </Accordion.Toggle>          
           <Accordion.Collapse eventKey='0'>
             <Card.Body>
-              <Row>
-                <Col lg={'auto'} xs={12}>
+              <Card bg="warning" text="dark" >
+                <Card.Title className="d-flex align-items-center">
+                <div>
                   <DatePicker
                     value={this.state.date}
                     selected={this.state.date}
                     onChange={this.handleCalendarChange}
                     defaultValue={new Date()}
                     inline
-                  />
-                </Col>
-                <Col lg={4} xs={12}>
-                  <div className="text-muted paddlersWhoPaddledText">
-                    <span>Date:</span>
-                    <span className="ml-2">{ (this.state.date) ? moment(this.state.date).format("dddd MMM Do YYYY") : 'Select Date' }</span>
-                    
-                    <ListGroup className="availablePaddlers border border-secondary" >
-                      <ListGroup.Item className="bg-dark text-white">Paddlers attended:</ListGroup.Item>
-                      {this.state.paddlersWhoPracticed.map((paddler)=>(
-                        <ListGroup.Item key={paddler.uid} onClick={()=>{this.removePaddlerFromPractice(paddler.uid)}}>{paddler.name}</ListGroup.Item>
-                      ))}
-                    </ListGroup>
-                  </div>
-                </Col>
-                <Col lg={'auto'} xs={12}>
-                  <p>paddlers count: {this.state.paddlers.length}</p>
-                  <Form.Group>
-                    <ListGroup className="availablePaddlers border border-secondary">
-                      <ListGroup.Item className="bg-secondary text-dark">Available Paddlers</ListGroup.Item>
-                      { this.state.paddlers.map( paddler => (
-                        <ListGroup.Item onClick={()=>{this.addPaddlerToPractice(paddler.uid)}} key={paddler.uid}>
-                        {paddler.name}
-                        </ListGroup.Item>
-                      )) }
-                    </ListGroup>
-                  </Form.Group>
-                </Col>
-              </Row>
+                  />                    
+                </div>                
+                <div className="ml-3">
+                  <span>Date:</span>
+                  <span className="ml-2">{ (this.state.date) ? moment(this.state.date).format("dddd MMM Do YYYY") : 'Select Date' }</span>
+                </div>
+                </Card.Title>
+                <Card.Body>
+                  <Row>
+                    <Col lg={4} xs={12}>
+                        <div className="text-muted paddlersWhoPaddledText">                            
+                          <ListGroup className="listboxText border border-secondary" >
+                            <ListGroup.Item className="bg-dark text-white">Paddlers attended:</ListGroup.Item>
+                            {this.state.paddlersWhoPracticed.map((paddler)=>(
+                              <ListGroup.Item key={paddler.uid} onClick={()=>{this.removePaddlerFromPractice(paddler.uid)}} className={!paddler.uid && ("text-muted")}>{paddler.name}</ListGroup.Item>
+                            ))}
+                          </ListGroup>
+                        </div>
+                      </Col>
+                    <Col lg={'auto'} xs={12}>  
+                      <Form.Group>
+                        <ListGroup className="listboxText border border-secondary">
+                          <ListGroup.Item className="bg-secondary text-dark">Available Paddlers</ListGroup.Item>
+                          { this.state.paddlers.map( paddler => (
+                            <ListGroup.Item onClick={()=>{this.addPaddlerToPractice(paddler.uid)}} key={paddler.uid}>
+                            {paddler.name}
+                            </ListGroup.Item>
+                          )) }
+                        </ListGroup>
+                      </Form.Group>
+                    </Col>
+                    <Col lg={"auto"} xs={12}>   
+                      <Form onSubmit={this.addNoLoginPaddler} id="addNoLoginPaddler">                                         
+                        <Form.Group controlId="exampleForm.ControlTextarea1" className="p-3 border border-secondary noLogin d-flex justify-content-center flex-column">
+                          <Form.Label>Paddler who does not have a login</Form.Label>
+                          <Form.Row >
+                            <InputGroup onSubmit={()=>{alert('holla')}}>                            
+                              <Form.Control
+                                name="noLoginPaddler"
+                                placeholder="1 paddler per entry"
+                                onChange={this.updateNoLoginPaddler}
+                                defaultValue={this.state.noLoginPaddler}
+                              />
+                              <button type="submit">submit</button>
+                            </InputGroup>
+                                                    
+                          </Form.Row>
+                        </Form.Group>     
+                      </Form>                  
+                    </Col>
+                  </Row>
+                </Card.Body>
+              </Card>                      
             </Card.Body>
             </Accordion.Collapse>          
           </Card>

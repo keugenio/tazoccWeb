@@ -1,4 +1,11 @@
 .attendance {
+  & .card {
+    & .card-title {
+      font-size: 2rem;
+      font-weight: 600;
+      padding: 0 .5rem 0 .5rem;
+    }    
+  }
   & .card-body .row {
     margin-bottom: 4rem;
   }
@@ -8,8 +15,16 @@
   & .list-group-item{
     cursor: pointer;
   }
-  & .availablePaddlers {
+  & .listboxText {
     color:$dark;
-    font-size: 1.75rem;
+    font-size: 1.5rem;
+  }
+  & label {
+    font-size:1.5rem
+  }
+  .noLogin {
+    & button {
+      margin-left: 1rem;
+    }
   }
 }
