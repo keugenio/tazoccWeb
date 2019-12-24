@@ -6,21 +6,24 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import moment from 'moment';
+import uuid from 'uuid/v4'
 import { } from '../../store/store';
 
 class Attendance extends Component {
   constructor(props) {
     super(props);
     this.state={
-      date:null,
+      date: Date.now(),
       paddlers:[],
       selectedPaddlers:[],
+      dBpaddlersWhoPracticed:[],
       rotation:0,
       paddlersWhoPracticed:[],
       noLoginPaddler:''
     }
   }
   static getDerivedStateFromProps(props, state) {
+    // update the available paddlers so it DOES NOT contain any paddlers already chosen
     const { paddlers } = props
     const filteredPaddlers =[];
 
@@ -28,8 +31,29 @@ class Attendance extends Component {
       if (!state.paddlersWhoPracticed.find((p)=>p.uid == paddler.uid))
         filteredPaddlers.push(paddler)
     })
-    
+
     return {paddlers:filteredPaddlers}
+  }
+  componentDidMount(){
+    //convert date to show just the MMDDYYYY instead of timecode
+    const date = moment(this.state.date).format('MMDDYYYY');
+    
+    // on the initial mount of this component, load up dbPaddlersWhoPracticed and paddlersWhoPracticed to 
+    // show those users for today.
+    dbAttendance.doc(date)
+    .get()
+    .then((snapshot) => {
+      const data = snapshot.data();
+      console.log(data);
+      
+      this.setState({dBpaddlersWhoPracticed: [...data.paddler]})
+      this.setState({paddlersWhoPracticed: [...data.paddler]})
+      
+      
+
+    })
+    
+    
   }
   setPaddler = (e) => {
     this.setState({selectedPaddlers: [...this.state.selectedPaddlers, e.target.value]})
@@ -48,7 +72,7 @@ class Attendance extends Component {
   }   
   addPaddlerToPractice = (uid) => {
     const selectedPaddler = this.props.paddlers.find(paddler=>paddler.uid == uid)
-    this.setState({paddlersWhoPracticed: [...this.state.paddlersWhoPracticed, selectedPaddler]})    
+    this.setState({paddlersWhoPracticed: [...this.state.paddlersWhoPracticed, {uid:selectedPaddler.uid, name:selectedPaddler.name}]})    
   }
   removePaddlerFromPractice = (uid) => {
     const filteredPaddlers = this.state.paddlersWhoPracticed.filter(paddler=> paddler.uid!= uid)
@@ -61,9 +85,28 @@ class Attendance extends Component {
   addNoLoginPaddler = (e) =>{
     e.preventDefault()
     this.setState({
-      paddlersWhoPracticed:[...this.state.paddlersWhoPracticed, {name:this.state.noLoginPaddler}],
-      noLoginPaddler:''})
+      paddlersWhoPracticed:[...this.state.paddlersWhoPracticed, {name:this.state.noLoginPaddler, uid: "XXXX-" + uuid() }]
+      })
     document.getElementById("addNoLoginPaddler").reset()
+  }
+  savePaddlersWhoAttended = () => {
+    
+    // write to db then update the display for paddlers who practiced
+    dbAttendance.doc(moment(this.state.date).format('MMDDYYYY')).set({paddler:[...this.state.paddlersWhoPracticed]})
+    .then(()=>{
+      this.setState({dBpaddlersWhoPracticed: [...this.state.paddlersWhoPracticed]})
+    })
+    .catch((error)=>{
+      console.log("error writing to db:", error);
+      
+    })
+  }
+  isEmpty = (obj) => {
+    for(var key in obj) {
+        if(obj.hasOwnProperty(key))
+            return false;
+    }
+    return true;
   }
   render() {
     return (
@@ -95,16 +138,27 @@ class Attendance extends Component {
                   <span>Date:</span>
                   <span className="ml-2">{ (this.state.date) ? moment(this.state.date).format("dddd MMM Do YYYY") : 'Select Date' }</span>
                 </div>
+                <div className="ml-4">
+                  <ListGroup className="text-dark">
+                    <ListGroup.Item>{this.state.dBpaddlersWhoPracticed.length} Practiced</ListGroup.Item>
+                    {this.state.dBpaddlersWhoPracticed.map((paddler, i)=>(
+                      <ListGroup.Item key={paddler.uid}>{paddler.name}</ListGroup.Item>
+                    ))}
+                  </ListGroup>
+                </div>
                 </Card.Title>
                 <Card.Body>
                   <Row>
                     <Col lg={4} xs={12}>
                         <div className="text-muted paddlersWhoPaddledText">                            
                           <ListGroup className="listboxText border border-secondary" >
-                            <ListGroup.Item className="bg-dark text-white">Paddlers attended:</ListGroup.Item>
-                            {this.state.paddlersWhoPracticed.map((paddler)=>(
-                              <ListGroup.Item key={paddler.uid} onClick={()=>{this.removePaddlerFromPractice(paddler.uid)}} className={!paddler.uid && ("text-muted")}>{paddler.name}</ListGroup.Item>
-                            ))}
+                            <ListGroup.Item className="bg-dark text-white d-flex justify-content-between">
+                              <div>Paddlers attended:</div>
+                              {( this.state.date ) && (this.state.paddlersWhoPracticed.length > 0) && (<div><Button variant="danger" onClick={this.savePaddlersWhoAttended}><span className="mr-2">Save  </span><FontAwesomeIcon icon="save" className="text-white bg-dark "/></Button></div>)}
+                            </ListGroup.Item>
+                            {!this.isEmpty(this.state.paddlersWhoPracticed) && (this.state.paddlersWhoPracticed.map((paddler, i)=>(
+                              <ListGroup.Item key={paddler.uid||i} onClick={()=>{this.removePaddlerFromPractice(paddler.uid)}} className={paddler.uid.includes('XXXX') && ("text-muted")}>{paddler.name}</ListGroup.Item>
+                            )))}
                           </ListGroup>
                         </div>
                       </Col>
@@ -133,12 +187,12 @@ class Attendance extends Component {
                                 defaultValue={this.state.noLoginPaddler}
                               />
                               <button type="submit">submit</button>
-                            </InputGroup>
-                                                    
+                            </InputGroup>                                                    
                           </Form.Row>
                         </Form.Group>     
                       </Form>                  
                     </Col>
+
                   </Row>
                 </Card.Body>
               </Card>                      

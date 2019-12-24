@@ -45,7 +45,8 @@ class AppRouter extends React.Component {
         .then((querySnapshot)=>{
           querySnapshot.forEach((race)=>{
             const raceInfo = race.data();
-            this.props.dispatch(addRaceToPaddler(raceInfo))
+            const scoraRaceInfo = this.props.races.find(race=> race.id == raceInfo.raceID)
+            this.props.dispatch(addRaceToPaddler({...raceInfo, ...scoraRaceInfo}))
           })
         })
       }
@@ -83,7 +84,7 @@ class AppRouter extends React.Component {
     )
   }
 }
-const MapStateToProps = ({news, readNewsArticles  }) => ({
-  news, readNewsArticles 
+const MapStateToProps = ({news, readNewsArticles, races  }) => ({
+  news, readNewsArticles, races
 })
 export default connect (MapStateToProps)(AppRouter);
