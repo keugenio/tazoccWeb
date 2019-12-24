@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { dbAttendance } from '../Firebase';
 import { connect} from 'react-redux';
-import { Accordion, Form, Card, Button, Row, Col, ListGroup, InputGroup, Text } from 'react-bootstrap';
+import { Accordion, Form, Card, Button, Row, Col, ListGroup, InputGroup, Badge } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -35,31 +35,49 @@ class Attendance extends Component {
     return {paddlers:filteredPaddlers}
   }
   componentDidMount(){
+    this.getPaddlersWhoAttendedFromDb()
+  }
+  getPaddlersWhoAttendedFromDb = () => {
     //convert date to show just the MMDDYYYY instead of timecode
     const date = moment(this.state.date).format('MMDDYYYY');
     
-    // on the initial mount of this component, load up dbPaddlersWhoPracticed and paddlersWhoPracticed to 
+    // on the initial mount of this component, get info from db and
+    // load up dbPaddlersWhoPracticed and paddlersWhoPracticed to 
     // show those users for today.
     dbAttendance.doc(date)
     .get()
     .then((snapshot) => {
       const data = snapshot.data();
-      console.log(data);
       
       this.setState({dBpaddlersWhoPracticed: [...data.paddler]})
       this.setState({paddlersWhoPracticed: [...data.paddler]})
-      
-      
-
-    })
-    
-    
+    })    
   }
   setPaddler = (e) => {
     this.setState({selectedPaddlers: [...this.state.selectedPaddlers, e.target.value]})
   }
   handleCalendarChange = date => {
+    
     this.setState({date:date.valueOf()});
+    //convert date to show just the MMDDYYYY instead of timecode
+    const newDate = moment(date.valueOf()).format('MMDDYYYY');
+    
+    // on the initial mount of this component, get info from db and
+    // load up dbPaddlersWhoPracticed and paddlersWhoPracticed to 
+    // show those users for today.
+    dbAttendance.doc(newDate)
+    .get()
+    .then((snapshot) => {
+      const data = snapshot.data();
+      // if anything returned update the paddlers else clear the fields to show no paddlers
+      if (data) {
+        this.setState({dBpaddlersWhoPracticed: [...data.paddler]})
+        this.setState({paddlersWhoPracticed: [...data.paddler]})
+      }
+      else {
+        this.setState({dBpaddlersWhoPracticed:[], paddlersWhoPracticed:[]})
+      }
+    })   
   } 
   rotate = () => {
     let newRotation = this.state.rotation + 180;
@@ -83,14 +101,12 @@ class Attendance extends Component {
   }
 
   addNoLoginPaddler = (e) =>{
-    e.preventDefault()
+    e.preventDefault();
     this.setState({
-      paddlersWhoPracticed:[...this.state.paddlersWhoPracticed, {name:this.state.noLoginPaddler, uid: "XXXX-" + uuid() }]
-      })
-    document.getElementById("addNoLoginPaddler").reset()
+      paddlersWhoPracticed:[...this.state.paddlersWhoPracticed, {name:this.state.noLoginPaddler, uid: "XXXX-" + uuid() }],
+      noLoginPaddler:''})
   }
   savePaddlersWhoAttended = () => {
-    
     // write to db then update the display for paddlers who practiced
     dbAttendance.doc(moment(this.state.date).format('MMDDYYYY')).set({paddler:[...this.state.paddlersWhoPracticed]})
     .then(()=>{
@@ -124,28 +140,40 @@ class Attendance extends Component {
           <Accordion.Collapse eventKey='0'>
             <Card.Body>
               <Card bg="warning" text="dark" >
-                <Card.Title className="d-flex align-items-center">
-                <div>
-                  <DatePicker
-                    value={this.state.date}
-                    selected={this.state.date}
-                    onChange={this.handleCalendarChange}
-                    defaultValue={new Date()}
-                    inline
-                  />                    
-                </div>                
-                <div className="ml-3">
-                  <span>Date:</span>
-                  <span className="ml-2">{ (this.state.date) ? moment(this.state.date).format("dddd MMM Do YYYY") : 'Select Date' }</span>
-                </div>
-                <div className="ml-4">
-                  <ListGroup className="text-dark">
-                    <ListGroup.Item>{this.state.dBpaddlersWhoPracticed.length} Practiced</ListGroup.Item>
-                    {this.state.dBpaddlersWhoPracticed.map((paddler, i)=>(
-                      <ListGroup.Item key={paddler.uid}>{paddler.name}</ListGroup.Item>
-                    ))}
-                  </ListGroup>
-                </div>
+                <Card.Title className="align-items-center p-2">
+                <Row>
+                  <Col lg={6} xs={12}>
+                    <Card bg="light" text="white">
+                      <Card.Body className="d-flex justify-content-center">
+                        <DatePicker
+                          value={this.state.date}
+                          selected={this.state.date}
+                          onChange={this.handleCalendarChange}
+                          defaultValue={new Date()}
+                          inline
+                        />                    
+                      </Card.Body>
+                    </Card>              
+                  </Col>
+                  <Col lg={6} xs={12} className="d-flex justify-content-center">
+                    <Card border="light" text="white" className="ml-3 bg-transparent">
+                      <Card.Header className="d-flex justify-content-start">
+                        <span className="ml-2">{moment(this.state.date).format("ddd MM-DD-YYYY")}</span>
+                        <span className="ml-auto">
+                          <Badge pill variant="warning" className="ml-3">{this.state.dBpaddlersWhoPracticed.length} attended</Badge>
+                        </span>
+                      </Card.Header>
+
+                      <Card.Body>
+                        <Card.Text>
+                          {this.state.dBpaddlersWhoPracticed.map((paddler, i)=>(
+                              <span key={paddler.uid} className="ml-3 comma">{paddler.name}</span>
+                            ))}
+                        </Card.Text>
+                      </Card.Body>
+                    </Card>
+                  </Col>
+                </Row>
                 </Card.Title>
                 <Card.Body>
                   <Row>
@@ -156,9 +184,9 @@ class Attendance extends Component {
                               <div>Paddlers attended:</div>
                               {( this.state.date ) && (this.state.paddlersWhoPracticed.length > 0) && (<div><Button variant="danger" onClick={this.savePaddlersWhoAttended}><span className="mr-2">Save  </span><FontAwesomeIcon icon="save" className="text-white bg-dark "/></Button></div>)}
                             </ListGroup.Item>
-                            {!this.isEmpty(this.state.paddlersWhoPracticed) && (this.state.paddlersWhoPracticed.map((paddler, i)=>(
+                            {this.state.paddlersWhoPracticed.map((paddler, i)=>(
                               <ListGroup.Item key={paddler.uid||i} onClick={()=>{this.removePaddlerFromPractice(paddler.uid)}} className={paddler.uid.includes('XXXX') && ("text-muted")}>{paddler.name}</ListGroup.Item>
-                            )))}
+                            ))}
                           </ListGroup>
                         </div>
                       </Col>
@@ -184,7 +212,7 @@ class Attendance extends Component {
                                 name="noLoginPaddler"
                                 placeholder="1 paddler per entry"
                                 onChange={this.updateNoLoginPaddler}
-                                defaultValue={this.state.noLoginPaddler}
+                                value={this.state.noLoginPaddler}
                               />
                               <button type="submit">submit</button>
                             </InputGroup>                                                    

@@ -2,7 +2,7 @@
   & .card {
     & .card-title {
       font-size: 2rem;
-      font-weight: 600;
+      font-weight: 300;
       padding: 0 .5rem 0 .5rem;
     }    
   }
@@ -27,4 +27,27 @@
       margin-left: 1rem;
     }
   }
+ & .comma:not(:last-child):after {
+    content: ", ";
+  }
+  & .react-datepicker {
+    font-size: 2rem;
+    & .react-datepicker__day-name {
+      margin: 1.5rem;
+    }
+    & .react-datepicker__day--selected{
+      padding:.5rem;
+      width:3rem;
+    }
+    & .react-datepicker__day {
+      margin: 1rem 1.5rem;
+    }
+    & .react-datepicker__week {
+      padding: 0rem 1rem;
+    }
+    & .react-datepicker__current-month{
+      font-size: initial;
+    }
+  }
 }
+
