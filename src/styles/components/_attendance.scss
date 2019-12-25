@@ -4,6 +4,7 @@
       font-size: 2rem;
       font-weight: 300;
       padding: 0 .5rem 0 .5rem;
+      
     }    
   }
   & .card-body .row {
@@ -48,6 +49,13 @@
     & .react-datepicker__current-month{
       font-size: initial;
     }
+    & .react-datepicker__day--highlighted {
+      background-color: $warning!important;
+      width: 3rem!important;
+      height: 2rem!important;
+      color: $dark!important;
+    }
   }
 }
+
 

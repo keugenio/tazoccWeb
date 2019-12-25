@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { dbAttendance } from '../Firebase';
+import firebase, { dbAttendance } from '../Firebase';
 import { connect} from 'react-redux';
 import { Accordion, Form, Card, Button, Row, Col, ListGroup, InputGroup, Badge } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -19,7 +19,8 @@ class Attendance extends Component {
       dBpaddlersWhoPracticed:[],
       rotation:0,
       paddlersWhoPracticed:[],
-      noLoginPaddler:''
+      noLoginPaddler:'',
+      daysThatHadPractices:''
     }
   }
   static getDerivedStateFromProps(props, state) {
@@ -35,7 +36,16 @@ class Attendance extends Component {
     return {paddlers:filteredPaddlers}
   }
   componentDidMount(){
-    this.getPaddlersWhoAttendedFromDb()
+    this.getPaddlersWhoAttendedFromDb();
+
+    //get all the dates where there are attendances and add to state
+    firebase.firestore().collection('practiceAttendance')
+    .get()
+    .then(snapshot=>{
+      snapshot.docs.forEach(doc=>{
+        this.setState({daysThatHadPractices:[...this.state.daysThatHadPractices, new Date(doc.id)]})    
+      })
+    })
   }
   getPaddlersWhoAttendedFromDb = () => {
     //convert date to show just the MMDDYYYY instead of timecode
@@ -48,9 +58,10 @@ class Attendance extends Component {
     .get()
     .then((snapshot) => {
       const data = snapshot.data();
-      
-      this.setState({dBpaddlersWhoPracticed: [...data.paddler]})
-      this.setState({paddlersWhoPracticed: [...data.paddler]})
+      if (data){
+        this.setState({dBpaddlersWhoPracticed: [...data.paddler]})
+        this.setState({paddlersWhoPracticed: [...data.paddler]})
+      }
     })    
   }
   setPaddler = (e) => {
@@ -60,7 +71,7 @@ class Attendance extends Component {
     
     this.setState({date:date.valueOf()});
     //convert date to show just the MMDDYYYY instead of timecode
-    const newDate = moment(date.valueOf()).format('MMDDYYYY');
+    const newDate = moment(date.valueOf()).format('MM-DD-YYYY');
     
     // on the initial mount of this component, get info from db and
     // load up dbPaddlersWhoPracticed and paddlersWhoPracticed to 
@@ -99,7 +110,6 @@ class Attendance extends Component {
   updateNoLoginPaddler = (e) => {
     this.setState({noLoginPaddler:e.target.value})
   }
-
   addNoLoginPaddler = (e) =>{
     e.preventDefault();
     this.setState({
@@ -108,7 +118,7 @@ class Attendance extends Component {
   }
   savePaddlersWhoAttended = () => {
     // write to db then update the display for paddlers who practiced
-    dbAttendance.doc(moment(this.state.date).format('MMDDYYYY')).set({paddler:[...this.state.paddlersWhoPracticed]})
+    dbAttendance.doc(moment(this.state.date).format('MM-DD-YYYY')).set({paddler:[...this.state.paddlersWhoPracticed]})
     .then(()=>{
       this.setState({dBpaddlersWhoPracticed: [...this.state.paddlersWhoPracticed]})
     })
@@ -117,14 +127,18 @@ class Attendance extends Component {
       
     })
   }
-  isEmpty = (obj) => {
-    for(var key in obj) {
-        if(obj.hasOwnProperty(key))
-            return false;
-    }
-    return true;
-  }
+  
   render() {
+    const highlightWithRanges = [
+      {
+        "react-datepicker__day--highlighted": [
+          new Date('12-12-2019'),
+          new Date('12-14-2019'),
+          new Date('12-16-2019'),
+          new Date('12-18-2019')
+        ]
+      }
+    ];    
     return (
       <div className="attendance">
         <Accordion defaultActiveKey="0">      
@@ -150,6 +164,7 @@ class Attendance extends Component {
                           selected={this.state.date}
                           onChange={this.handleCalendarChange}
                           defaultValue={new Date()}
+                          highlightDates={this.state.daysThatHadPractices}
                           inline
                         />                    
                       </Card.Body>
