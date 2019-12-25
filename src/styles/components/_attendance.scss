@@ -10,27 +10,18 @@
   & .card-body .row {
     margin-bottom: 4rem;
   }
-  & .paddlersWhoPaddledText {
-    font-size: 1.75rem;
-  }
-  & .list-group-item{
-    cursor: pointer;
-  }
-  & .listboxText {
-    color:$dark;
-    font-size: 1.5rem;
-  }
-  & label {
-    font-size:1.5rem
-  }
-  .noLogin {
-    & button {
-      margin-left: 1rem;
+  & .dbListOfPaddlersWhoAttended{
+    min-width: 100%;
+    & .card-header {
+      font-size: 1.5rem;
+    }
+    & .card-body p {
+      font-size: 1.75rem;
     }
   }
- & .comma:not(:last-child):after {
-    content: ", ";
-  }
+  & .comma:not(:last-child):after {
+      content: ", ";
+    }
   & .react-datepicker {
     font-size: 2rem;
     & .react-datepicker__day-name {
@@ -52,10 +43,35 @@
     & .react-datepicker__day--highlighted {
       background-color: $warning!important;
       width: 3rem!important;
-      height: 2rem!important;
+      padding:.5rem;
       color: $dark!important;
     }
+  }    
+}
+.attendanceModal {
+  & .modal-dialog {
+    min-width: 80%;
   }
+  & .modal-content {
+    & .paddlersWhoPaddledText {
+        font-size: 1.75rem;
+      }
+    & .list-group-item{
+      cursor: pointer;
+    }
+    & .listboxText {
+      color:$dark;
+      font-size: 1.5rem;
+    }
+    & label {
+      font-size:1.5rem
+    }
+    .noLogin {
+      & button {
+        margin-left: 1rem;
+      }
+    }    
+  } 
 }
 
 
