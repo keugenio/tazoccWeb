@@ -22,8 +22,9 @@ export const GoogleProvider = new firebase.auth.GoogleAuthProvider();
 export const FBProvider= new firebase.auth.FacebookAuthProvider();
 export const auth = firebase.auth();
 export const dB = firebase.database();
-export const dbAllPaddlers = firebase.database().ref('users');
+
 export const dbRaces = firebase.firestore().collection('races');
 export const dbRacesToPaddlers = firebase.firestore().collection('racesToPaddlers');
 export const dbAttendance = firebase.firestore().collection('practiceAttendance');
+export const dbAllPaddlers = firebase.firestore().collection('allPaddlers');
 export default firebase;

@@ -122,8 +122,7 @@ class Login extends Component {
             },
             hideClass: {
               popup: 'animated fadeOutUp faster'
-            }
-                    
+            }                    
           }) 
         } else {
           this.setState({ errorMessage: null });

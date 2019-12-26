@@ -2,7 +2,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Card, Row, Col, Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import firebase from '../Firebase';
+import { dbAllPaddlers } from '../Firebase';
+import Swal from 'sweetalert2';
+
 import { setSelectedPaddler, editSelectedPaddler } from '../../store/store'
 
 class SCORA_INFO extends React.Component {
@@ -25,26 +27,48 @@ class SCORA_INFO extends React.Component {
     //hide editable fields
     this.setState({showEditable:false})
 
-    // write data to firebase and update store
-      
-    const dbUsers = firebase.database().ref(`users/${this.props.selectedPaddler.uid}`);    
-    dbUsers.set({
+    // write data to firestore and update store
+
+    dbAllPaddlers.doc(this.props.selectedPaddler.uid).set({
       ...this.props.selectedPaddler, 
       scoraID:this.state.scoraID,
       scoraWaiver:this.state.scoraWaiver,
       scoraSmartWaiver:this.state.scoraSmartWaiver,
-      huliDrill:this.state.huliDrill      
-    }) 
+      huliDrill:this.state.huliDrill        
+    })
+    .then(()=>{
+      // update the selected paddlers info in the store from the database
+      this.props.dispatch(setSelectedPaddler({
+        ...this.props.selectedPaddler, 
+        scoraID:this.state.scoraID,
+        scoraWaiver:this.state.scoraWaiver,
+        scoraSmartWaiver:this.state.scoraSmartWaiver,
+        huliDrill:this.state.huliDrill        
+      }));      
+      //enable the select paddler input in the Search Component
+      this.props.dispatch(editSelectedPaddler(true))  
+    })
+    .then(()=>{
+      // clear state
+      this.setState({scoraID:'', scoraSmartWaiver:false, scoraWaiver:false, huliDrill:false, oldHuliDrill:false, oldScoraID:false, oldScoraSmartWaiver:false, oldScoraWaiver:false, })
+    })
+    .catch(error=>{
+      Swal.fire({
+        icon: 'error',
+        title: "Oops...",
+        text: error,
+        confirmButtonText: 'OK',
+        showClass: {
+          popup: 'animated fadeInDown faster'
+        },
+        hideClass: {
+          popup: 'animated fadeOutUp faster'
+        }                  
+      })     
+    })
 
-    // clear state
-    this.setState({scoraID:'', scoraSmartWaiver:false, scoraWaiver:false, huliDrill:false, oldHuliDrill:false, oldScoraID:false, oldScoraSmartWaiver:false, oldScoraWaiver:false, })
-    // update the selected paddlers info in the store from the database
-    dbUsers.once('value').then((snapshot) => {
-      this.props.dispatch(setSelectedPaddler(snapshot.val()));      
-    });
 
-    //enable the select paddler input in the Search Component
-    this.props.dispatch(editSelectedPaddler(true))    
+  
   }
   toggleEdit = () => {
     //display the editable fields

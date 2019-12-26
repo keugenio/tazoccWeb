@@ -1,7 +1,7 @@
 import React from 'react'
 import { Router, navigate } from '@reach/router';
 import { connect } from 'react-redux';
-import firebase, { dbRacesToPaddlers, dbPaddlers } from '../Firebase';
+import firebase, { dbRacesToPaddlers, dbAllPaddlers } from '../Firebase';
 import Navigation from '../NavMenu/Navigation';
 import Home from '../Home';
 import AboutUs from '../AboutUs';
@@ -29,15 +29,14 @@ class AppRouter extends React.Component {
         this.props.dispatch(setUserID(FBUser.uid))
         this.props.dispatch(setUserImage(FBUser.photoURL));
         
-        // query the user db to find the role for the user logging in and set store
-        const dbUser = firebase.database().ref(`users/${FBUser.uid}`);  
-        dbUser.once('value')
-          .then((snapshot) => {
-            const userInfo = snapshot.val();
-            this.props.dispatch(setUserRole(userInfo.role));  
-            this.props.dispatch(setLoggedInUserReadNews(userInfo.readArticles));
-            this.props.dispatch(setSCORAInfo(userInfo)) 
-          });
+        dbAllPaddlers.doc(FBUser.uid).get()
+        .then(doc=>{
+          const paddler = doc.data();
+          
+          this.props.dispatch(setUserRole(paddler.role));  
+          this.props.dispatch(setLoggedInUserReadNews(paddler.readArticles));
+          this.props.dispatch(setSCORAInfo(paddler))           
+        })
         
         //get the races that the paddler signed up for and load into store
        dbRacesToPaddlers.where("paddlerID", "==", FBUser.uid).where("enabled", "==", true)

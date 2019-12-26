@@ -144,12 +144,18 @@ export const addNewPaddler = (newPaddler) => ({
   type:'ADD_PADDLER',
   newPaddler
 })
+export const addPaddlerToAllPaddlers = (paddler) => ({
+  type: 'ADD_PADDLER_TO_ALL_PADDLERS',
+  paddler
+})
 const allPaddlersReducer = (state = [], action) => {
   switch (action.type) {
     case 'SET_PADDLERS':
       return [...action.allPaddlersArray]
       case 'ADD_PADDLER':
-          return [...state, action.newPaddler]      
+        return [...state, action.newPaddler]   
+      case 'ADD_PADDLER_TO_ALL_PADDLERS':
+        return [...state, action.paddler]   
     default:
       return state;
   }

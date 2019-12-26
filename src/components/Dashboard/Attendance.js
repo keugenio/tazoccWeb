@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import firebase, { dbAttendance } from '../Firebase';
+import firebase, { dbAttendance, dbAllPaddlers } from '../Firebase';
 import { connect} from 'react-redux';
 import { Accordion, Form, Card, Button, Row, Col, ListGroup, InputGroup, Badge, Modal } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Swal from 'sweetalert2';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import moment from 'moment';
@@ -122,6 +123,31 @@ class Attendance extends Component {
     dbAttendance.doc(moment(this.state.date).format('MM-DD-YYYY')).set({paddler:[...this.state.paddlersWhoPracticed]})
     .then(()=>{
       this.setState({dBpaddlersWhoPracticed: [...this.state.paddlersWhoPracticed], showModal:false})
+    })
+    .then(()=>{
+      this.state.paddlersWhoPracticed.forEach(paddler=>{
+        if (!paddler.uid.includes('XXXX')) {
+          // add the date to the user's attendance field
+          dbAllPaddlers.doc(paddler.uid).update({
+            attendance:firebase.firestore.FieldValue.arrayUnion(this.state.date)
+          })
+          .catch(error=>{
+            Swal.fire({
+              icon: 'error',
+              title: "Oops...",
+              text: error,
+              confirmButtonText: 'OK',
+              showClass: {
+                popup: 'animated fadeInDown faster'
+              },
+              hideClass: {
+                popup: 'animated fadeOutUp faster'
+              }                    
+            }) 
+            
+          })
+        }
+      })
     })
     .catch((error)=>{
       console.log("error writing to db:", error);

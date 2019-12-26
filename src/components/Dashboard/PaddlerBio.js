@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Card, Button, Row, Col, Image, Form } from 'react-bootstrap';
-import firebase from '../Firebase.js';
+import firebase, { dbAllPaddlers } from '../Firebase.js';
 import { setSelectedPaddler, editSelectedPaddler } from '../../store/store';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import moment from 'moment';
@@ -50,23 +50,29 @@ class PaddlerBio extends React.Component{
   toggleSave = () => {
     //hide editable fields
     this.setState({showEditable:false})
+
+    // write to firestore and update the current paddler's info
+    dbAllPaddlers.doc(this.props.selectedPaddler.uid)
+      .set({
+        ...this.props.selectedPaddler, 
+        duesPaid:this.state.duesPaid,
+        membershipType:this.state.membershipType,
+        birthday:this.state.birthday,
+        jerseySize:this.state.jerseySize,
+        sex: this.state.sex      
+      })
+      .then(()=>{
+          this.props.dispatch(setSelectedPaddler({
+            ...this.props.selectedPaddler, 
+            duesPaid:this.state.duesPaid,
+            membershipType:this.state.membershipType,
+            birthday:this.state.birthday,
+            jerseySize:this.state.jerseySize,
+            sex: this.state.sex       
+          }
+        ))
+      })      
     
-    // write data to firebase and update store
-    const dbUsers = firebase.database().ref(`users/${this.props.selectedPaddler.uid}`);    
-    dbUsers.set({
-      ...this.props.selectedPaddler, 
-      duesPaid:this.state.duesPaid,
-      membershipType:this.state.membershipType,
-      birthday:this.state.birthday,
-      jerseySize:this.state.jerseySize,
-      sex: this.state.sex      
-    }) 
-
-    // update the selected paddlers info in the store from the database
-    dbUsers.once('value').then((snapshot) => {
-      this.props.dispatch(setSelectedPaddler(snapshot.val()));      
-    });
-
     //enable the select paddler input in the Search Component
     this.props.dispatch(editSelectedPaddler(true))    
   }
