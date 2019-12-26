@@ -17,7 +17,7 @@ import Register from '../Auth/Register';
 import AdminControl from '../Dashboard/AdminControl';
 import NotFoundPage from '../NotFoundPage';
 import Footer from '../Footer';
-import { setUserName, setUserID, setUserImage, addRaceToPaddler, setUserRole, setAmountUnread, setLoggedInUserReadNews, setSCORAInfo } from '../../store/store';
+import { setUserName, setUserID, setUserImage, addRaceToPaddler, setUserRole, setUserAttendance, setAmountUnread, setLoggedInUserReadNews, setSCORAInfo } from '../../store/store';
 
 
 class AppRouter extends React.Component {
@@ -33,7 +33,8 @@ class AppRouter extends React.Component {
         .then(doc=>{
           const paddler = doc.data();
           
-          this.props.dispatch(setUserRole(paddler.role));  
+          this.props.dispatch(setUserRole(paddler.role));
+          this.props.dispatch(setUserAttendance(paddler.attendance))  
           this.props.dispatch(setLoggedInUserReadNews(paddler.readArticles));
           this.props.dispatch(setSCORAInfo(paddler))           
         })

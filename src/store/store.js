@@ -109,6 +109,9 @@ export const setUserImage = (image) => ({
 export const setUserRole = (role) =>({
   type:'SET_USER_ROLE', role
 })
+export const setUserAttendance = (attendanceArray) =>({
+  type:'SET_USER_ATTENDANCE', attendanceArray
+})
 export const setSCORAInfo = (scoraInfo) => ({
   type: 'SET_SCORA_INFO',
   scoraInfo
@@ -126,6 +129,9 @@ const authenticatedUserReducer = (state = {}, action) => {
       return {...state, image:action.image}
     case 'SET_USER_ROLE':
       return {...state, role:action.role}
+    case 'SET_USER_ATTENDANCE':
+      
+      return { ...state, attendance:[...action.attendanceArray]}
     case 'SET_SCORA_INFO':
       return { ...state, ...action.scoraInfo}
     case 'LOG_USER_OUT':  
