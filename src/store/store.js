@@ -204,6 +204,10 @@ export const updateRace = (race) => ({
   type: 'UPDATE_RACE',
   race
 })
+export const deleteRace = (raceID) => ({
+  type:'DELETE_RACE',
+  raceID
+})
 const racesReducer = ( state=[], action ) => {
   switch (action.type) {
     case 'ADD_RACE':
@@ -216,6 +220,11 @@ const racesReducer = ( state=[], action ) => {
       const updatedRaces = [...filteredRaces, action.race];
       updatedRaces.sort(function(a, b){return a.date - b.date});
       return updatedRaces 
+    case 'DELETE_RACE':
+      const racesNotDeleted = state.filter( race=> race.id !== action.raceID)
+      console.log("racesnotdeleted", racesNotDeleted);
+      
+      return [...racesNotDeleted];
     default:
       return state;
   }
@@ -238,7 +247,7 @@ export const clearRacesPaddlerSignedUpFor = () => ({
 })
 const racesPaddlerSignedUpForReducer = ( state=[], action ) =>{
   switch (action.type) {
-    case 'ADD_RACE_TO_PADDLER':     
+    case 'ADD_RACE_TO_PADDLER':           
       return [...state, action.race]
     case 'REMOVE_RACE_FOR_PADDLER':
       const filtered = state.filter(race=>race.raceID !== action.raceID);

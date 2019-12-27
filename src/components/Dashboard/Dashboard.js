@@ -35,10 +35,11 @@ class Dashboard extends React.Component {
     const availableRaces=[];
     if (props.loggedIn) {  
       racesPaddlerSignedUpFor.forEach(signedUpRace =>{
-        const { changeRequirement, longCourseReq, shortCourseReq, raceID, paddlerID } = signedUpRace
+        const { changeRequirement, longCourseReq, shortCourseReq, raceID, paddlerID, changeRequirementForRace } = signedUpRace
         const raceInfo = races.find(race=>race.id==raceID);
         const {name, date, host, info, location} = raceInfo;
-        const userRaceInfo = {name, date, host, info, location, changeRequirement, longCourseReq, shortCourseReq, raceID, paddlerID };
+        const userRaceInfo = {name, date, host, info, location, changeRequirement, changeRequirementForRace, longCourseReq, shortCourseReq, raceID, paddlerID };;
+    
         availableRaces.push(userRaceInfo)
       })
       const { scoraSmartWaiver, scoraWaiver, huliDrill, scoraID } = props.user
@@ -109,7 +110,8 @@ class Dashboard extends React.Component {
                       <CardDeck>
                       
                       { this.state.availableRaces.map((race)=>{
-                        const { paddlerID, changeRequirement, date, host, info, location, longCourseReq, name, raceID, shortCourseReq } = race;
+                        const { paddlerID, changeRequirement,changeRequirementForRace, date, host, info, location, longCourseReq, name, raceID, shortCourseReq } = race;
+                        
                         return (
                           <Race 
                             key={raceID}
@@ -122,7 +124,8 @@ class Dashboard extends React.Component {
                             longCourseReq={longCourseReq}
                             name={name}
                             raceID={raceID}
-                            shortCourseReq={shortCourseReq}/>
+                            shortCourseReq={shortCourseReq}
+                            changeRequirementForRace={changeRequirementForRace}/>
                         )
                     })}
                     

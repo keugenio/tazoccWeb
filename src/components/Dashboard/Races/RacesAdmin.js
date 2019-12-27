@@ -33,7 +33,7 @@ class RacesAdmin extends Component {
         const raceData = doc.data();
         const newRaceData = {...raceData, id:doc.id}
         this.props.dispatch(addRace(newRaceData));
-        this.setState({races: [...this.state.races, newRaceData]});
+        //this.setState({races: [...this.state.races, newRaceData]});
       });
     })    
   }
@@ -56,7 +56,8 @@ class RacesAdmin extends Component {
     this.setState({showModal:false})
   }
   handleSaveNewRace = () => {
-    // write the new race to firebase and update store  
+    // write the new race to firebase and update store 
+    let newDocID = '';
     dbRaces.add({
       name:this.state.name,
       host:this.state.host,
@@ -67,22 +68,34 @@ class RacesAdmin extends Component {
       info:this.state.info,
       changeRequirement:this.state.changeRequirement     
     })
-    .then(function(docRef) {
-      console.log("Document written with ID: ", docRef.id);
+    .then((docRef) => {
+      //console.log("Document written with ID: ", docRef.id);
+      const newRaceInfo = { name, location, date, longCourseReq, shortCourseReq, info, changeRequirement } = this.state
+      this.props.dispatch(addRace({
+        id:docRef.id,
+        name: newRaceInfo.name,
+        host: newRaceInfo.host,
+        location: newRaceInfo.location,
+        date: newRaceInfo.date,
+        longCourseReq: newRaceInfo.longCourseReq,
+        shortCourseReq: newRaceInfo.shortCourseReq,
+        info: newRaceInfo.info,
+        changeRequirement: newRaceInfo.changeRequirement         
+      }))
     })
     .catch(function(error) {
         console.error("Error adding document: ", error);
     });
 
     // clear the current races in the state and reload from the db
-    this.setState({races:[]})
+    //this.setState({races:[]})
     // dbRaces.get().then(docs=>{
     //   docs.docs.forEach(doc => {
     //     this.setState({races: [...this.state.races, doc.data()]});
     //     this.store.dispatch(addRace(doc.data()))
     //   });
     // }) 
-    this.getRacesAndUpdateStore();
+    // this.getRacesAndUpdateStore();
 
     // clear the current state race info so the modal shows blank on next popup
     this.setState({
@@ -111,12 +124,10 @@ class RacesAdmin extends Component {
     })
   }  
       
-  render() {
-    const {races} = this.props
-    
+  render() {    
     return (
       <div className="raceAdmin">
-      <Accordion>      
+      <Accordion defaultActiveKey="0">      
           <Card>
             <Accordion.Toggle as={Card.Title} eventKey="0" className="bg-primary" onClick={this.rotate}>
               <Card.Title className="d-flex justify-content-between align-items-center bg-primary text-light">
@@ -131,12 +142,12 @@ class RacesAdmin extends Component {
             </Accordion.Toggle>          
             <Accordion.Collapse eventKey='0'>
               <Card.Body>
-                { races.length > 0 && (
+                { this.props.races.length > 0 && (
                       <CardGroup>
-                        {races.map((race,i)=>{
+                        {this.props.races.map((race,i)=>{
                           const {id, name, host, location, date, longCourseReq, shortCourseReq, changeRequirement, info} = race
                           return (
-                            <Race key={i} id={id} name={name} host={host} location={location} info={info} date={date} longCourseReq={longCourseReq} shortCourseReq={shortCourseReq} changeRequirement={changeRequirement} />
+                            <Race key={i} raceID={id} name={name} host={host} location={location} info={info} date={date} longCourseReq={longCourseReq} shortCourseReq={shortCourseReq} changeRequirement={changeRequirement} />
                           )
                         })}           
                     </CardGroup>
@@ -191,28 +202,29 @@ class RacesAdmin extends Component {
               </Row>
               <Row>
                 <Col className="text-right" lg={4}>
+                  <Form.Label>Change Requirement</Form.Label>
+                </Col>
+                <Col>
+                  <Form.Check name="changeRequirement" checked={this.state.changeRequirement} onChange={this.handleChangeChecked} />
+                </Col>
+              </Row>               
+              <Row>
+                <Col className="text-right" lg={4}>
                   <Form.Label>Long Course Req</Form.Label>
                 </Col>
                 <Col>
                   <Form.Control type="number" name="longCourseReq" placeholder="Long Course Time Requirement" value={this.state.longCourseReq} onChange={this.handleChange} />
                 </Col>
               </Row>
-              <Row>
+              {!this.state.changeRequirement && (<Row>
                 <Col className="text-right" lg={4}>
                   <Form.Label>Short Course Req </Form.Label>
                 </Col>
                 <Col>                  
                   <Form.Control type="text" name="shortCourseReq" placeholder="Short Course Time Requirement" value={this.state.shortCourseReq} onChange={this.handleChange} />
                 </Col>
-              </Row>
-              <Row>
-                <Col className="text-right" lg={4}>
-                  <Form.Label>Change Requirement</Form.Label>
-                </Col>
-                <Col>
-                  <Form.Check name="changeRequirement" checked={this.state.changeRequirement} onChange={this.handleChangeChecked} />
-                </Col>
-              </Row> 
+              </Row>)}
+
               <Row>
                 <Col className="text-right" lg={4}>
                   <Form.Label>More Info </Form.Label>

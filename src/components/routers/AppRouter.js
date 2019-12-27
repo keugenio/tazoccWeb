@@ -46,7 +46,8 @@ class AppRouter extends React.Component {
           querySnapshot.forEach((race)=>{
             const raceInfo = race.data();
             const scoraRaceInfo = this.props.races.find(race=> race.id == raceInfo.raceID)
-            this.props.dispatch(addRaceToPaddler({...raceInfo, ...scoraRaceInfo}))
+            if (scoraRaceInfo)
+              this.props.dispatch(addRaceToPaddler({...scoraRaceInfo, ...raceInfo, changeRequirementForRace:scoraRaceInfo.changeRequirement}))
           })
         })
       }
