@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import firebase, { GoogleProvider, FBProvider, dbRacesToPaddlers } from '../Firebase';
 import { connect } from 'react-redux';
 import {Row, Col} from 'react-bootstrap';
-import { setUserName, setUserID, setUserImage, setRacesPaddlerSignedUpFor } from '../../store/store';
+//import { setUserName, setUserID, setUserImage, setRacesPaddlerSignedUpFor } from '../../store/store';
 import { navigate, Link } from '@reach/router';
 import Swal from 'sweetalert2';
 
@@ -13,16 +13,11 @@ class Login extends Component {
     this.state = {
       email: '',
       password: '',
-      errorMessage: null,
-      goToRegister: false,
-      goToDashboard: false
+      errorMessage: null
     };
-
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleChange(e) {
+  handleChange = (e) => {
     const itemName = e.target.name;
     const itemValue = e.target.value;
 
@@ -39,7 +34,7 @@ class Login extends Component {
   signInWithGoogle = () => {
     firebase
     .auth()
-    .signInWithPopup(GoogleProvider)
+    .signInWithRedirect(GoogleProvider)
     .then((FBUser)=>{
       this.updateUserImage(FBUser.user);
       navigate('/dashboard');
@@ -67,7 +62,7 @@ class Login extends Component {
   signInWithFacebook = () => {
     firebase
     .auth()
-    .signInWithPopup(FBProvider)
+    .signInWithRedirect(FBProvider)
     .then((FBUser)=>{   
       this.updateUserImage(FBUser.user)
       navigate('/dashboard');
@@ -92,12 +87,12 @@ class Login extends Component {
       }
     });
   }  
-  handleSubmit(e) {
+  signInWithEmail = (e) => {
+    e.preventDefault();
     var registrationInfo = {
       email: this.state.email,
       password: this.state.password
     };
-    e.preventDefault();
 
     // login, set the store with the user info and navigate to the dashboard page
     firebase
@@ -106,8 +101,8 @@ class Login extends Component {
         registrationInfo.email,
         registrationInfo.password
       )
-      .then((FBUser) => {
-        navigate('/dashboard')    
+      .then(()=>{
+        navigate('/dashboard')
       })
       .catch(error => {
         if (error.message !== null) {
@@ -137,7 +132,7 @@ class Login extends Component {
   render() {
     return (
         <div style={formStyle}>
-          <form className="mt-3" onSubmit={this.handleSubmit} style={{width:'100%'}}>
+          <form className="mt-3" onSubmit={this.signInWithEmail} style={{width:'100%'}}>
             <div className="container">
               <div className="row justify-content-center w-100">
                 <div className="col-lg-12">
