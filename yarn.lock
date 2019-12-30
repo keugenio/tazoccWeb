@@ -4991,6 +4991,11 @@ js-tokens@^3.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/js-tokens/-/js-tokens-4.0.0.tgz#19203fb59991df98e3a287050d4647cdeaf32499"
 
+js-year-calendar@^1.0.0-alpha.7:
+  version "1.0.0-alpha.7"
+  resolved "https://registry.yarnpkg.com/js-year-calendar/-/js-year-calendar-1.0.0-alpha.7.tgz#be269ebd74c3d3481b3d693a1b67c7a16b813194"
+  integrity sha512-iW9kC+OXGgpvhgfXGXmEmNiA4E4V3ubrY1roDv0WNNjzaNsoDUGHgJzCAuYLqA8E+Q8gvE1r3LprYGP5OJQkJA==
+
 jsbn@~0.1.0:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/jsbn/-/jsbn-0.1.1.tgz#a5e654c2e5a2deb5f201d96cefbca80c0ef2f513"
@@ -6599,6 +6604,13 @@ raw-body@2.4.0:
     http-errors "1.7.2"
     iconv-lite "0.4.24"
     unpipe "1.0.0"
+
+rc-year-calendar@^1.0.0-alpha.8:
+  version "1.0.0-alpha.8"
+  resolved "https://registry.yarnpkg.com/rc-year-calendar/-/rc-year-calendar-1.0.0-alpha.8.tgz#a86528879a05c3fb7618bc73ab6ba4e8e6cedd25"
+  integrity sha512-e5GgtlsxAMxt1vEu6ZOzGgL7G5c1VVAGOnv1bm84EDTG7kciW5RlhqeZA8MuD9c588ucmV+1Ta9hdNqMKhjz3Q==
+  dependencies:
+    js-year-calendar "^1.0.0-alpha.7"
 
 rc@^1.1.7:
   version "1.2.1"

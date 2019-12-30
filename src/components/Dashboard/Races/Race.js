@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Card, Button, Form } from 'react-bootstrap';
+import { Card, Button, Modal } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import Swal from 'sweetalert2';
@@ -8,6 +8,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { dbRaces, dbRacesToPaddlers } from '../../Firebase';
 import { updateRace, removeRaceForPaddler, deleteRace } from '../../../store/store';
+import Calendar from 'rc-year-calendar';
 
 class Race extends React.Component{
   constructor(props) {
@@ -24,10 +25,32 @@ class Race extends React.Component{
       changeRequirement:props.changeRequirement || false,
       showPaddlerReqs: (props.paddlerID == props.user.userID),
       showRaceReqs: (props.paddlerID != props.user.userID),
-      showChangeReq: (props.changeRequirementForRace || false)
+      showChangeReq: (props.changeRequirementForRace || false),
+      showModal: false,
+      attendance:[]
     }
   }
   
+  static getDerivedStateFromProps(props, state) {
+    const {attendance} = props.user
+    let attendanceDates = []
+
+    if ( attendance.length > 0 ) {
+      attendance.forEach( practice => {
+        if (moment(practice).toDate() >= moment(props.date).subtract(45,"days").toDate() &&
+            moment(practice).toDate()< moment(props.date).toDate() ) {
+              attendanceDates.push({
+                startDate:moment(practice).toDate(),
+                endDate:moment(practice).toDate(),
+                color:'#FF8800'
+              })
+            }
+      })
+    }
+    console.log('attendance:', attendanceDates);
+    return {...state, attendance: attendanceDates }
+  }
+
   toggleEdit = () => {
     const { name, host, location, info, date, longCourseReq, shortCourseReq, changeRequirement, raceID } = this.props
     this.setState({ name, host, location, info, date, longCourseReq, shortCourseReq, changeRequirement, raceID, editable:true });
@@ -117,7 +140,36 @@ class Race extends React.Component{
       
     })
   }
-  render(){
+  handleShowModal = () => {
+    this.setState({showModal:true})
+  }
+  handleCloseModal = () => {
+    this.setState({showModal:false})
+  } 
+  
+  getIssues(year) {
+    // Load data from GitHub API
+    return fetch(`https://api.github.com/search/issues?q=repo:Paul-DS/bootstrap-year-calendar%20created:${year}-01-01..${year}-12-31`)
+      .then(result => result.json())
+      .then(result => {
+        
+        if (result.items) {
+          const dates =  result.items.map(r => ({
+            startDate: new Date(r.created_at),
+            endDate: new Date(r.created_at),
+            name: '#' + r.number + ' - ' + r.title,
+            details: r.comments + ' comments'
+          }));
+          console.log(dates);
+          return dates
+          
+        }
+        
+        return [];
+      });
+  }
+
+  render(){    
     return (
       <div>
       { this.state.editable && (
@@ -175,6 +227,11 @@ class Race extends React.Component{
               {this.state.showChangeReq && this.state.showPaddlerReqs && (<li><b className="mr-3" >Able to do a change?</b> {this.props.changeRequirement? ('yes'):('no')}</li>)}              
 
               {this.props.info!='' && (<li><b className="mr-3" >more info:</b>  {this.props.info}</li>)}         
+              <li>
+                <Button variant="dark" onClick={this.handleShowModal} className="text-white border-0">
+                  {this.state.attendance.length} practices attended
+                </Button>
+              </li>
             </ul>
             {!this.state.showRaceReqs && (<div className="d-flex w-100">
               <Button variant="danger" className="mx-auto" onClick={this.handleRemoveRace}><FontAwesomeIcon icon="minus-circle" className="fa-2x"></FontAwesomeIcon></Button>
@@ -182,6 +239,31 @@ class Race extends React.Component{
           </Card.Body>
         </Card>         
       )}
+
+      <Modal show={this.state.showModal} onHide={this.handleCloseModal} animation={false} size="lg" centered className="addRaceModal">
+        <Modal.Header closeButton>
+          <Modal.Title>Practices for Race Name {this.state.name} </Modal.Title>
+        </Modal.Header>
+        <Modal.Body className="bigCalendar">
+            <p>Race Date: {moment(this.state.date).format("MM-DD-YYYY")}</p>
+            <p>{this.state.attendance.length} attended practices</p>
+            
+            <Calendar
+              year = {moment(this.state.date).format('YYYY')}
+              minDate = {moment(this.state.date).subtract(45, "days").toDate()}
+              maxDate = {moment(this.state.date).toDate()}
+              dataSource={this.state.attendance}
+              style={'background'}
+            />
+            
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={this.handleCloseModal} className="btn-lg">
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>      
+
     </div>
     )
   }

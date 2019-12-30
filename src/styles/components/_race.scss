@@ -23,3 +23,11 @@
     font-size: 2.5rem;
   }
 }
+
+.event-tooltip-content {
+  padding: 5px;
+}
+
+.event-tooltip-content:not(:last-child) {
+  border-bottom: 1px solid #ccc;
+}

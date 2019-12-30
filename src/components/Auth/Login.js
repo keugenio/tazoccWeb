@@ -34,7 +34,7 @@ class Login extends Component {
   signInWithGoogle = () => {
     firebase
     .auth()
-    .signInWithRedirect(GoogleProvider)
+    .signInWithPopup(GoogleProvider)
     .then((FBUser)=>{
       this.updateUserImage(FBUser.user);
       navigate('/dashboard');
@@ -58,11 +58,13 @@ class Login extends Component {
         this.setState({ errorMessage: null });
       }
     });
+
+    
   }
   signInWithFacebook = () => {
     firebase
     .auth()
-    .signInWithRedirect(FBProvider)
+    .signInWithPopup(FBProvider)
     .then((FBUser)=>{   
       this.updateUserImage(FBUser.user)
       navigate('/dashboard');

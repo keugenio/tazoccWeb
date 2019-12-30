@@ -13,12 +13,10 @@ export const addCalendarEvent = ( { id=uuid(), title='', start=0, end=0 } ) => (
     end
   }
 })
-
 export const setCalendarEvents = (events) => ({
   type: 'SET_CALENDAR_EVENTS',
   events
 })
-
 //create a events reducer
 const eventsReducerDefault = [];
 const eventsReducer = (state = eventsReducerDefault, action) => {
@@ -229,6 +227,7 @@ const racesReducer = ( state=[], action ) => {
       return state;
   }
 }
+
 /****** races to Paddlers Action and Reducer *********/
 export const addRaceToPaddler = (race) => ({  
   type: 'ADD_RACE_TO_PADDLER',

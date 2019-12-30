@@ -98,3 +98,31 @@ button:disabled {
     color: #000!important;
   }
 }
+
+.bigCalendar {
+  & .react-datepicker {
+    font-size: 2rem;
+    & .react-datepicker__day-name {
+      margin: 1.5rem;
+    }
+    & .react-datepicker__day--selected{
+      padding:.5rem;
+      width:3rem;
+    }
+    & .react-datepicker__day {
+      margin: 1rem 1.5rem;
+    }
+    & .react-datepicker__week {
+      padding: 0rem 1rem;
+    }
+    & .react-datepicker__current-month{
+      font-size: initial;
+    }
+    & .react-datepicker__day--highlighted {
+      background-color: $warning!important;
+      width: 3rem!important;
+      padding:.5rem;
+      color: $dark!important;
+    }  
+  }
+}
