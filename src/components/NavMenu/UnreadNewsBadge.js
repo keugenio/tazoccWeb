@@ -15,7 +15,7 @@ class UnreadNewsBadge extends React.Component {
   }
 }
 
-const MapStateToProps = (({readNewsArticles})=>({
-  amountUnread:readNewsArticles.amountUnread
+const MapStateToProps = (({user})=>({
+  amountUnread:user.amountStillNeedsToRead
 }))
 export default connect(MapStateToProps)(UnreadNewsBadge)

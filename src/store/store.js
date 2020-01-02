@@ -1,6 +1,5 @@
 import { createStore, combineReducers } from 'redux'
 import uuid from 'uuid';
-const ls=require('local-storage');
 
 /********* Calendar Events Actions and Reducer ************* */
 // Events actions
@@ -37,7 +36,7 @@ export const setNewsArticles = ( articles ) => ({
   articles
 })
 // create a news reducer
-const newsReducerDefault = ls('news') || []
+const newsReducerDefault = []
 const newsReducer = (state = newsReducerDefault, action) => {
   switch (action.type) {
     case 'SET_NEWS_ARTICLES':
@@ -69,7 +68,7 @@ export const setLoggedInUserReadNews = (readNewsArray) => ({
   readNewsArray
 })
 // create a locaStorage reducer
-const readNewsDefault = (ls('readNews')? ls('readNews'): []);
+const readNewsDefault = [];
 const amountUnreadDefault = 0;
 const readNewsArticlesReducer = (state = {readNews:readNewsDefault, amountUnread:amountUnreadDefault}, action) => {
   switch (action.type) {
@@ -80,11 +79,8 @@ const readNewsArticlesReducer = (state = {readNews:readNewsDefault, amountUnread
     case 'SET_AMOUNT_UNREAD':
       return {readNews:[...state.readNews], amountUnread:action.amountUnread}
     case 'ADD_READ_ARTICLE':
-      // "append" read articleID to localstorage. don't mutate
-      ls.set('readNews', [...state.readNews, action.articleID]);
       return {readNews:[...state.readNews, action.articleID], amountUnread: state.amountUnread-1};
     case 'RESET_READ_ARTICLES':
-      ls('readNews', []);
       return {readNews:[], amountUnread:0};
     default:
       return state;
@@ -110,12 +106,27 @@ export const setUserRole = (role) =>({
 export const setUserAttendance = (attendanceArray) =>({
   type:'SET_USER_ATTENDANCE', attendanceArray
 })
+export const setUserReadNews = (readNewsArray) => ({
+  type:'SET_USER_READ_NEWS',
+  readNewsArray
+})
+export const setAmountOfNewsUserStillNeedsToRead = (amount) => ({
+  type:'SET_AMOUNT_OF_NEWS_USERS_STILL_NEEDS_TO_READ',
+  amount
+})
+export const subtractAmountToBeRead = () => ({
+  type:'SUBTRACT_AMOUNT_TO_BE_READ'
+})
 export const setSCORAInfo = (scoraInfo) => ({
   type: 'SET_SCORA_INFO',
   scoraInfo
 })
 export const logUserOut = () => ({
   type: 'LOG_USER_OUT'
+})
+export const addReadNewsArticle = (articleID) => ({
+  type:'ADD_READ_NEWS_ARTICLE',
+  articleID
 })
 const authenticatedUserReducer = (state = {}, action) => {
   switch (action.type) {
@@ -127,13 +138,20 @@ const authenticatedUserReducer = (state = {}, action) => {
       return {...state, image:action.image}
     case 'SET_USER_ROLE':
       return {...state, role:action.role}
-    case 'SET_USER_ATTENDANCE':
-      
+    case 'SET_USER_ATTENDANCE':      
       return { ...state, attendance:[...action.attendanceArray]}
+    case 'SET_USER_READ_NEWS':
+      return {...state, readNews:[...action.readNewsArray]}      
     case 'SET_SCORA_INFO':
       return { ...state, ...action.scoraInfo}
+    case 'SET_AMOUNT_OF_NEWS_USERS_STILL_NEEDS_TO_READ':
+      return {...state, amountStillNeedsToRead:action.amount}      
     case 'LOG_USER_OUT':  
       return {}
+    case 'ADD_READ_NEWS_ARTICLE':
+      return { ...state, readNews:[...state.readNews, action.articleID]}
+    case 'SUBTRACT_AMOUNT_TO_BE_READ':
+      return { ...state, amountStillNeedsToRead:state.amountStillNeedsToRead - 1}
     default:
       return state;
   }

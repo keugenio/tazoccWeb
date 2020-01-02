@@ -3,8 +3,9 @@ import { connect } from 'react-redux';
 import { Badge } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-const NewIcon = ({readNewsArticles, id}) => {
-  const show = !readNewsArticles.readNews.includes(id)
+const NewIcon = (props) => {
+  const {id, readNews} = props;
+  let show=readNews? !readNews.includes(id): false;
   if (show) 
     return (
       <Badge variant="warning" className="ml-auto text-dark d-flex">
@@ -14,8 +15,8 @@ const NewIcon = ({readNewsArticles, id}) => {
   return null
 }
 
-const MapStateToProps = ({news, readNewsArticles}) => ({
-  news, readNewsArticles
+const MapStateToProps = ({ user}) => ({
+   readNews:user.readNews
 })
 
 export default connect (MapStateToProps)(NewIcon)

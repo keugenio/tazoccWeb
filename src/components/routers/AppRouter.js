@@ -2,6 +2,7 @@ import React from 'react'
 import { Router } from '@reach/router';
 import { connect } from 'react-redux';
 import firebase, { dbRacesToPaddlers, dbAllPaddlers } from '../Firebase';
+import axios from 'axios';
 import Navigation from '../NavMenu/Navigation';
 import Home from '../Home';
 import AboutUs from '../AboutUs';
@@ -19,13 +20,30 @@ import NotFoundPage from '../NotFoundPage';
 import Footer from '../Footer';
 import SuperAdmin from '../_SuperAdmin/SuperAdmin';
 import EditProfile from '../Auth/EditProfile';
-
-import { setUserName, setUserID, setUserImage, addRaceToPaddler, setUserRole, setUserAttendance, setAmountUnread, setLoggedInUserReadNews, setSCORAInfo } from '../../store/store';
-
+import "babel-polyfill";
+import { setUserName, setUserID, setUserImage, addRaceToPaddler, setUserRole, setUserAttendance, setAmountUnread, setUserReadNews, setSCORAInfo, setNewsArticles, setAmountOfNewsUserStillNeedsToRead } from '../../store/store';
 
 class AppRouter extends React.Component {
+  constructor(){
+    super();
+    this.state={
+      newsAmount:0
+    }
+    this.getNewsArticlesAndPostToStore = this.getNewsArticlesAndPostToStore.bind(this);
+  }
+  async getNewsArticlesAndPostToStore() {
+   
+  }
 
-  componentDidMount() {
+  async componentDidMount() {
+    // get the last 10 articles from tazocc.com
+    let newsAmount = 0;
+    await axios.get(`http://tazocc.com/wp-json/wp/v2/posts?per_page=10`)       
+      .then(res => {
+          this.props.dispatch(setNewsArticles([...res.data]))  
+          newsAmount = res.data.length;
+      }) 
+
     firebase.auth().onAuthStateChanged(FBUser => {      
       if (FBUser) {
         // set user in store
@@ -42,8 +60,9 @@ class AppRouter extends React.Component {
           if (paddler){
             this.props.dispatch(setUserRole(paddler.role || ''));                   
             this.props.dispatch(setUserAttendance(paddler.attendance || []))  
-            this.props.dispatch(setLoggedInUserReadNews(paddler.readArticles || []));
-            this.props.dispatch(setSCORAInfo(paddler))           
+            this.props.dispatch(setUserReadNews(paddler.readNews || []));
+            this.props.dispatch(setAmountOfNewsUserStillNeedsToRead( newsAmount - paddler.readNews.length));
+            this.props.dispatch(setSCORAInfo(paddler));          
           } 
           else {
             dbAllPaddlers.doc(FBUser.uid).set({
@@ -70,10 +89,7 @@ class AppRouter extends React.Component {
     // make the hover message on the links viewable instantly suing jQuery
     $('.titleHoverMessage').tooltip({show: {effect:"none", delay:0}});
 
-    // set the number of articles not read
-    const { news, readNewsArticles } = this.props;
-    const unreadNewsAmount = news.length - readNewsArticles.readNews.length +1;
-    this.props.dispatch(setAmountUnread(unreadNewsAmount))
+
   }
 
   render(){
@@ -102,7 +118,7 @@ class AppRouter extends React.Component {
     )
   }
 }
-const MapStateToProps = ({user, news, readNewsArticles, races  }) => ({
-  user, news, readNewsArticles, races
+const MapStateToProps = ({user, news, races  }) => ({
+  user, news, races
 })
 export default connect (MapStateToProps)(AppRouter);

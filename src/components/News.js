@@ -4,8 +4,9 @@ import axios from 'axios';
 import { Spinner, Card, CardColumns, Button, Modal, Col } from 'react-bootstrap';
 import fbToken from './keys/facebookToken';
 import moment from 'moment';
-import { addReadArticle } from '../store/store';
+import { addReadNewsArticle, subtractAmountToBeRead } from '../store/store';
 import NewIcon from './NewIcon';
+import { dbAllPaddlers } from './Firebase'
 
 const ls = require('local-storage');
 
@@ -23,12 +24,33 @@ class News extends React.Component {
 
   handleClose = () => this.setState({showModal:false});
   handleShow = (i) => {
-    const {news} = this.props;
+    const {news, user} = this.props;
 
     // if the article is NOT in the read articles array, 
     // update the read articles in the store, open the modal and update the current state's title and body to the selected article
-    if (!this.props.readNewsArticles.readNews.includes(news[i].id))
-      this.props.dispatch(addReadArticle(news[i].id))
+    if (!this.props.user.readNews){
+      this.props.dispatch(addReadNewsArticle(news[i].id))   
+      // add to the user's read articles in firestore      
+      dbAllPaddlers.doc(user.uid).update({
+        readNews:[...user.readNews]
+      })
+      .catch((error)=>{
+        console.log(`error saving read news: ${error}`);
+      })          
+    }
+
+    else if (!this.props.user.readNews.includes(news[i].id)){
+      this.props.dispatch(addReadNewsArticle(news[i].id))
+      this.props.dispatch(subtractAmountToBeRead());
+      // add to the user's read articles in firestore      
+      dbAllPaddlers.doc(user.uid).update({
+        readNews:[...user.readNews, news[i].id]
+      })
+      .catch((error)=>{
+        console.log(`error saving read news: ${error}`);
+      })         
+    }
+
       this.setState({
         showModal:true, 
         currNewsTitle:news[i].title.rendered,
@@ -132,8 +154,8 @@ class News extends React.Component {
 }
 
 
-const MapStateToProps = ({news, readNewsArticles}) => ({
-  news, readNewsArticles
+const MapStateToProps = ({news, user, readNewsArticles}) => ({
+  news, user, readNewsArticles
 })
 
 export default connect(MapStateToProps)(News)

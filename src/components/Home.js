@@ -7,7 +7,7 @@ import EmailUs from './EmailUs';
 import JoinUs from './JoinUs';
 import moment from 'moment';
 import "babel-polyfill";
-import { setNewsArticles, setAmountUnread } from '../store/store';
+import { setNewsArticles } from '../store/store';
 
 const thisYear = (new Date()).getFullYear();    
 const start = new Date("1/1/" + thisYear);
@@ -24,7 +24,8 @@ class Home extends React.Component {
   }
   async componentDidMount() {
     // get wordpress articles
-    await axios.get(`http://tazocc.com/wp-json/wp/v2/posts?after=${beginningOfThisYear}`)   
+    // await axios.get(`http://tazocc.com/wp-json/wp/v2/posts?after=${beginningOfThisYear}`)  
+    await axios.get(`http://tazocc.com/wp-json/wp/v2/posts?per_page=10`)       
       .then(res => {
         const newNews = res.data;
         this.setState({ showSpinner:false});
