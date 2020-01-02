@@ -23,7 +23,7 @@ const eventsReducer = (state = eventsReducerDefault, action) => {
     case 'ADD_CALENDAR_EVENT':            
       // spread the current state and add the event passed which will overwrite with new values
       return [...state, action.event]
-    case 'SET_CALENDAR_EVENTS':
+    case 'SET_CALENDAR_EVENTS': 
       return [...action.events]
     default:
       return state;
@@ -238,8 +238,6 @@ const racesReducer = ( state=[], action ) => {
       return updatedRaces 
     case 'DELETE_RACE':
       const racesNotDeleted = state.filter( race=> race.id !== action.raceID)
-      console.log("racesnotdeleted", racesNotDeleted);
-      
       return [...racesNotDeleted];
     default:
       return state;

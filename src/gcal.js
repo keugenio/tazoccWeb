@@ -3,10 +3,12 @@ import moment from 'moment';
 import GoogleCalendarAPIKey from './components/keys/googleCalendarKey'
 const CALENDAR_ID = 'teamazoutrigger@gmail.com'
 const API_KEY = GoogleCalendarAPIKey.key
-const time_min = moment().subtract(9, "months").format("YYYY-MM-DDTHH:mm:ssZ");
-let url = `https://www.googleapis.com/calendar/v3/calendars/${CALENDAR_ID}/events?key=${API_KEY}&singleEvents=true&timeMin=${time_min}`
 
-export function getEvents (callback) {
+export function getEvents (callback, focusDate) {
+  const time_min = moment(focusDate).subtract(3, "months").format("YYYY-MM-DDTHH:mm:ssZ");
+  const time_max = moment(focusDate).add(3, "months").format("YYYY-MM-DDTHH:mm:ssZ");
+  let url = `https://www.googleapis.com/calendar/v3/calendars/${CALENDAR_ID}/events?key=${API_KEY}&singleEvents=true&timeMin=${time_min}&timeMax=${time_max}`
+  
   request
     .get(url)
     .end((err, resp) => {

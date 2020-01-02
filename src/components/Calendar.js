@@ -36,39 +36,29 @@ class TAZCalendar extends React.Component{
       displayWaitingIcon:{display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', minHeight:'100vh', color:'#01579b'},
       displayEvents:{'display':'none'},
     }   
+    this.updateCalendarData = this.updateCalendarData.bind(this)
   }
 
   async componentDidMount (props) {
-    // add localStorage.events into store to view on <Calender/>
-    this.props.dispatch(setCalendarEvents(ls('events')));
-
     // turn off watiing Icon
     this.setState({displayWaitingIcon:{'display':'none'}})
     this.setState({displayEvents:{'display':'block'}})
 
     // download events from the Google Calendar and add any new events to the store and localStorage
-    await getEvents((events) => {
-
-      // if new, load localStorage
-        const localStorageArray = ls('events') ? ls('events') : [];
-        let newEvents= [];
-
-        if (localStorageArray.length<=0){
-          newEvents = [...events];
-        } else {
-          newEvents = events.filter((event)=>(
-            !localStorageArray.find(ls => ls.id=== event.id)
-          ))
-        }
-        // if there are any new Events to add, add them to local storage and store
-        if (newEvents.length>0) {
-          ls.set('events', [...localStorageArray, ...newEvents]);
-          this.props.dispatch(setCalendarEvents([...localStorageArray, ...newEvents]))          
-        }
-    })
+    await getEvents((events) => {      
+      this.props.dispatch(setCalendarEvents([...events]))          
+    }, moment().valueOf())
     
   }
-  
+
+  async updateCalendarData (focusDate) {
+      //get 3 months prev and next of focusDate
+      // download events from the Google Calendar and add any new events to the store and localStorage
+      await getEvents((events) => {      
+        this.props.dispatch(setCalendarEvents([...events]))          
+      },focusDate)      
+  }
+
   render(){
     return(
       <React.Fragment> 
@@ -82,6 +72,7 @@ class TAZCalendar extends React.Component{
               localizer={localizer}
               events={this.props.storeEvents}
               onSelectEvent={event => handleOnSelect(event)}
+              onNavigate={(focusDate, flipUnit, prevOrNext) => this.updateCalendarData(focusDate)}
               />              
             </div>
           </div>
