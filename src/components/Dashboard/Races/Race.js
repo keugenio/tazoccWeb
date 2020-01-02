@@ -9,6 +9,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { dbRaces, dbRacesToPaddlers } from '../../Firebase';
 import { updateRace, removeRaceForPaddler, deleteRace } from '../../../store/store';
 import Calendar from 'rc-year-calendar';
+import events from '../../eventDescriptions';
 
 class Race extends React.Component{
   constructor(props) {
@@ -23,10 +24,12 @@ class Race extends React.Component{
       longCourseReq:props.longCourseReq || 0,
       shortCourseReq:props.shortCourseReq || 0,
       changeRequirement:props.changeRequirement || false,
+      internalInfo:props.internalInfo || -1,
       showPaddlerReqs: (props.paddlerID == props.user.userID),
       showRaceReqs: (props.paddlerID != props.user.userID),
       showChangeReq: (props.changeRequirementForRace || false),
       showModal: false,
+      showInternalInfoModal: false,
       attendance:[]
     }
   }
@@ -47,7 +50,6 @@ class Race extends React.Component{
             }
       })
     }
-    console.log('attendance:', attendanceDates);
     return {...state, attendance: attendanceDates }
   }
 
@@ -69,6 +71,7 @@ class Race extends React.Component{
       longCourseReq:this.state.longCourseReq,
       shortCourseReq:this.state.shortCourseReq,
       changeRequirement:this.state.changeRequirement,
+      internalInfo:this.state.internalInfo
     })
     .then(() => { 
       this.setState({editable:false}) 
@@ -79,6 +82,7 @@ class Race extends React.Component{
 
   }
   handleChange = (e) => {
+    console.log(e.target.name, e.target.value);
     
     this.setState({ [e.target.name]: e.target.value })
   }
@@ -140,34 +144,15 @@ class Race extends React.Component{
       
     })
   }
-  handleShowModal = () => {
-    this.setState({showModal:true})
+  handleShowModal = (modalName) => {
+    if (modalName == 'practices')
+      this.setState({showModal:true})
+    else
+      this.setState({showInternalInfoModal:true})
   }
   handleCloseModal = () => {
-    this.setState({showModal:false})
+    this.setState({showModal:false, showInternalInfoModal:false})
   } 
-  
-  getIssues(year) {
-    // Load data from GitHub API
-    return fetch(`https://api.github.com/search/issues?q=repo:Paul-DS/bootstrap-year-calendar%20created:${year}-01-01..${year}-12-31`)
-      .then(result => result.json())
-      .then(result => {
-        
-        if (result.items) {
-          const dates =  result.items.map(r => ({
-            startDate: new Date(r.created_at),
-            endDate: new Date(r.created_at),
-            name: '#' + r.number + ' - ' + r.title,
-            details: r.comments + ' comments'
-          }));
-          console.log(dates);
-          return dates
-          
-        }
-        
-        return [];
-      });
-  }
 
   render(){    
     return (
@@ -199,6 +184,13 @@ class Race extends React.Component{
               <li>Long Course Req: <input type="text" name="longCourseReq" placeholder="long course requirement" value={this.state.longCourseReq} onChange={this.handleChange}/></li>
               {!this.state.changeRequirement && (<li>Short Course Req: <input type="text" name="shortCourseReq" placeholder="short course requirement" value={this.state.shortCourseReq} onChange={this.handleChange}/></li>)}
               <li>Change Req: <input type="checkbox" name="changeRequirement" placeholder="change requirement" defaultChecked={this.state.changeRequirement}  onChange={this.handleChangeChecked}/></li>
+              <li>Race Desc: 
+                <select name="internalInfo" onChange={this.handleChange} defaultValue={'none'}>
+                  <option value={-1} >none</option>
+                  { events.map((race, i)=> (
+                      <option key={i} value={i}>{race.title}</option>
+                  ))}
+                </select></li>
               <li>More info:<textarea name="info" rows="3" value={this.state.info}  placeholder="add more info" onChange={this.handleChange}/></li>
             </ul>
           </Card.Body>
@@ -220,18 +212,21 @@ class Race extends React.Component{
               {this.state.showRaceReqs && this.props.longCourseReq>0 && (<li><b className="mr-3" >Long Course Req:</b>  {this.props.longCourseReq}</li>)}
               {!this.state.changeRequirement && this.state.showRaceReqs && this.props.shortCourseReq>0 && (<li><b className="mr-3" >Short Course Req:</b>  {this.props.shortCourseReq}</li>)}
               {this.state.showRaceReqs && (<li><b className="mr-3" >Change Req:</b> {this.state.changeRequirement ? ('yes'):('no')}</li>)}
+              {this.state.showRaceReqs && this.state.internalInfo>=0 && (<li><b className="mr-3" >Race Desc:</b> <Button onClick={()=>{this.handleShowModal("internalInfo")}}>more</Button></li>)}
 
               { /* if showing on the dashboard, show the paddler's requirements that they have currently earned */}              
               {this.state.showPaddlerReqs && (<li><b className="mr-3" >Long Course Time:</b>  {this.props.longCourseReq}</li>)}
               {this.state.showPaddlerReqs && (<li><b className="mr-3" >Short Course Time:</b>  {this.props.shortCourseReq}</li>)}
               {this.state.showChangeReq && this.state.showPaddlerReqs && (<li><b className="mr-3" >Able to do a change?</b> {this.props.changeRequirement? ('yes'):('no')}</li>)}              
-
+              {this.state.internalInfo && this.state.showPaddlerReqs && this.state.internalInfo >=0 && (<li><b className="mr-3">Race Desc:</b> <Button onClick={()=>{this.handleShowModal("internalInfo")}}>more</Button></li>)}
               {this.props.info!='' && (<li><b className="mr-3" >more info:</b>  {this.props.info}</li>)}         
-              <li>
-                <Button variant="dark" onClick={this.handleShowModal} className="text-white border-0">
-                  {this.state.attendance.length} practices attended
-                </Button>
-              </li>
+              {this.state.showPaddlerReqs && 
+                ( <li>
+                    <Button variant="dark" onClick={()=>this.handleShowModal('practices')} className="text-white border-0">
+                      {this.state.attendance.length} practices attended
+                    </Button>
+                  </li>
+                )}
             </ul>
             {!this.state.showRaceReqs && (<div className="d-flex w-100">
               <Button variant="danger" className="mx-auto" onClick={this.handleRemoveRace}><FontAwesomeIcon icon="minus-circle" className="fa-2x"></FontAwesomeIcon></Button>
@@ -263,7 +258,38 @@ class Race extends React.Component{
           </Button>
         </Modal.Footer>
       </Modal>      
-
+      {this.state.internalInfo>=0 && (<Modal show={this.state.showInternalInfoModal} onHide={this.handleCloseModal} animation={false} size="lg" centered className="addRaceModal">
+          <Modal.Header closeButton />
+          <Modal.Title className="pl-4"> {events[this.state.internalInfo].title}</Modal.Title>
+          <Modal.Body>
+            <Card>
+              <Card.Img variant="top" src={events[this.state.internalInfo].img}></Card.Img>
+              <Card.Body>
+                <table style={tableStyle}>
+                  <tbody>           
+                    <tr>
+                      <td><label style={labelStyle}>Description:</label></td>
+                      <td>{events[this.state.internalInfo].description}</td>
+                    </tr>
+                    <tr>
+                      <td><label style={labelStyle}>Date:</label></td>
+                      <td>{events[this.state.internalInfo].date}</td>
+                    </tr>
+                      <tr>
+                      <td><label style={labelStyle}>Location:</label></td>
+                      <td>{events[this.state.internalInfo].location}</td>
+                    </tr>
+                    <tr>
+                      <td><label style={labelStyle}>More:</label></td>
+                      <td>{events[this.state.internalInfo].more}</td>
+                    </tr>              
+                  </tbody>
+                </table>           
+              </Card.Body>
+            </Card>
+          </Modal.Body>
+             
+      </Modal>)}
     </div>
     )
   }
@@ -272,4 +298,14 @@ class Race extends React.Component{
 const MapStateToProps = ({user}) =>({
   user
 })
+const labelStyle = {
+  marginRight:'1rem',
+  fontWeight:600
+}
+const buttonStyle = {
+  maxWidth:'90%'
+}
+const tableStyle = {
+  fontSize:'1.5rem'
+}
 export default connect(MapStateToProps)(Race);

@@ -5,7 +5,7 @@ import NavigationOverlay from './Navigation_overlay';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { logUserOut, clearRacesPaddlerSignedUpFor } from '../../store/store';
 import { navigate, Link } from '@reach/router';
-import { Modal, Button } from 'react-bootstrap'
+import { Modal, Button, Navbar, NavDropdown } from 'react-bootstrap'
 import UnreadNewsBadge from './UnreadNewsBadge';
 import EmailUs from '../EmailUs';
 import Monogram from '../Monogram';
@@ -26,13 +26,13 @@ class Navigation extends Component {
     this.props.dispatch(clearRacesPaddlerSignedUpFor())
     firebase.auth().signOut()
     .then(() =>{
-      navigate('/')
+      navigate('/login')
     })
   }
 
+
   render() {
-    const { loggedIn, userImageURL, userName} = this.props;
-    
+    const { loggedIn, userImageURL, userName} = this.props;   
     return (
       <nav className="site-nav family-sans navbar navbar-expand higher">
         <div className="container-fluid navigatorMenu">
@@ -54,21 +54,34 @@ class Navigation extends Component {
                 </Link>
               </div>
             )}            
-            {loggedIn && (
-              <div className="nav-item">
-                <Link className="nav_link titleHoverMessage" to="/login" onClick={this.logOutUser} title="Logout">
-                  Logout
-                </Link>
-              </div>
-            )}
-            <div className="mx-3">
-              { (loggedIn) && (userImageURL) && (<div className="nav-item"><img src={userImageURL} className="userProfileIcon" /></div>)}
-              { (loggedIn) && (!userImageURL) && (<Monogram name= {userName}/>)}
-            </div>
+            <div className="nav-item d-flex flex-row">
+              <Navbar expand="lg" bg="transparent">
+                <NavDropdown
+                  className="border-0" 
+                  title={(loggedIn) && (userImageURL) ? 
+                  (<span className="bg-warning"><img src={userImageURL} className="userProfileIcon" /></span>) :
+                  (<span><Monogram name= {userName}/></span>) }
+                  id="basic-nav-dropdown">
+                  <NavDropdown.Item>
+                    <Link className="nav_link titleHoverMessage text-dark" to="/editprofile" title="Settings">
+                        Settings <FontAwesomeIcon icon="cog" />
+                    </Link>
+                  </NavDropdown.Item>
+                  <NavDropdown.Item>
+                    <Link className="nav_link titleHoverMessage text-dark" to="/login" onClick={this.logOutUser} title="Logout">
+                      Logout <FontAwesomeIcon icon="sign-out-alt" />
+                    </Link>
+                  </NavDropdown.Item>
+                </NavDropdown>
+              </Navbar>
+            </div> 
+            <div className="nav-item">
+              <NavigationOverlay />
+            </div>           
           </div>
         </div>
 
-        <NavigationOverlay />
+        
         
         <Modal show={this.state.show} onHide={this.handleClose}>
           <Modal.Header closeButton>

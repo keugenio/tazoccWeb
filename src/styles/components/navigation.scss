@@ -5,18 +5,11 @@
   &__button {
     height: 6rem;
     width: 5.5rem;
-    position: fixed;
-    top:5rem;
-    right: 4rem;
-    border:thin solid $primary;
-    border-radius:50%;
-    z-index: 2000;
-    box-shadow: .25rem .25rem .5rem rgba($dark, .75);
+    color: $white;
     cursor: pointer;
     display: flex;
     justify-content: center;
     align-items: center;
-    background:rgba($info, .5);
   }
   &__background {
     height: 6rem;
@@ -175,4 +168,8 @@
   & .navbar-brand {
     padding-left:2rem;
   }
+}
+#basic-nav-dropdown {
+  display: flex;
+  align-items: center;
 }

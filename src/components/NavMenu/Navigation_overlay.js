@@ -19,8 +19,8 @@ const  NavigationOverlay = (props) => {
         <span className="navigation__icon">&nbsp;</span>
       </label>
       <div className="navigation__background fadeIn">&nbsp;</div>
-      <nav className="navigation__nav">
-        <ul className="navigation__list">
+      <nav className="navigation__nav" onClick={closeNavOverlay}>
+        <ol className="navigation__list">
           <li className="navigation__item">
             <Link className="navigation__link" to="/" onClick={closeNavOverlay}>
               <span>01</span>Home
@@ -69,8 +69,13 @@ const  NavigationOverlay = (props) => {
                 <span>09</span>Admin
               </Link>
             </li>
-          )}          
-        </ul>
+          )}
+          <li className="navigation__item">  
+            <Link className="navigation__link" to="/editprofile" onClick={closeNavOverlay}>
+            Settings
+            </Link>
+          </li>                    
+        </ol>
       </nav>
     </div>
   )

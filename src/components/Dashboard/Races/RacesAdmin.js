@@ -145,9 +145,9 @@ class RacesAdmin extends Component {
                 { this.props.races.length > 0 && (
                       <CardGroup>
                         {this.props.races.map((race,i)=>{
-                          const {id, name, host, location, date, longCourseReq, shortCourseReq, changeRequirement, info} = race
+                          const {id, name, host, location, date, longCourseReq, shortCourseReq, changeRequirement, internalInfo, info} = race
                           return (
-                            <Race key={i} raceID={id} name={name} host={host} location={location} info={info} date={date} longCourseReq={longCourseReq} shortCourseReq={shortCourseReq} changeRequirement={changeRequirement} />
+                            <Race key={i} raceID={id} name={name} host={host} location={location} internalInfo={internalInfo} info={info} date={date} longCourseReq={longCourseReq} shortCourseReq={shortCourseReq} changeRequirement={changeRequirement} />
                           )
                         })}           
                     </CardGroup>

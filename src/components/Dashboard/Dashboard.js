@@ -37,8 +37,8 @@ class Dashboard extends React.Component {
       racesPaddlerSignedUpFor.forEach(signedUpRace =>{
         const { changeRequirement, longCourseReq, shortCourseReq, raceID, paddlerID, changeRequirementForRace } = signedUpRace
         const raceInfo = races.find(race=>race.id==raceID);
-        const {name, date, host, info, location} = raceInfo;
-        const userRaceInfo = {name, date, host, info, location, changeRequirement, changeRequirementForRace, longCourseReq, shortCourseReq, raceID, paddlerID };;
+        const {name, date, host, info, internalInfo, location} = raceInfo;
+        const userRaceInfo = {name, date, host, info, internalInfo, location, changeRequirement, changeRequirementForRace, longCourseReq, shortCourseReq, raceID, paddlerID };;
     
         availableRaces.push(userRaceInfo)
       })
@@ -110,7 +110,7 @@ class Dashboard extends React.Component {
                       <CardDeck>
                       
                       { this.state.availableRaces.map((race)=>{
-                        const { paddlerID, changeRequirement,changeRequirementForRace, date, host, info, location, longCourseReq, name, raceID, shortCourseReq } = race;
+                        const { paddlerID, changeRequirement,changeRequirementForRace, date, host, info, internalInfo, location, longCourseReq, name, raceID, shortCourseReq } = race;
                         
                         return (
                           <Race 
@@ -120,6 +120,7 @@ class Dashboard extends React.Component {
                             date={date}
                             host={host}
                             info={info}
+                            internalInfo={internalInfo}
                             location={location}
                             longCourseReq={longCourseReq}
                             name={name}
