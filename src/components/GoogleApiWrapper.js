@@ -16,9 +16,7 @@ export class MapContainer extends React.Component {
     });    
   }
 
- 
   onMapClicked = (props) => {
-    alert('pepe')
     if (this.state.showingInfoWindow) {
       this.setState({
         showingInfoWindow: false,
@@ -76,6 +74,6 @@ export default GoogleApiWrapper({
 })(MapContainer)
 
 const style = {
-  width: '100%',
-  height: '100%'
+  maxWidth: '90%',
+  maxHeight: '80%'
 }

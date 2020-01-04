@@ -23,3 +23,17 @@ $desktop-breakpoint: 45rem;
 .bg-taz-blue {
   background-color: $taz-blue;
 }
+.bg-white-{
+  &1 {
+    background-color: rgba($white, .1)!important;
+  }
+  &2 {
+    background-color: rgba($white, .25)!important;
+  }
+  &3 {
+    background-color: rgba($white, .5)!important;
+  }
+  &4 {
+    background-color: rgba($white, .75)!important;
+  }      
+}

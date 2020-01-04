@@ -197,7 +197,7 @@ class Race extends React.Component{
         </Card>
       )}
       {!this.state.editable && (
-        <Card border="info" className="text-dark border-1 m-3 box-shadow-primary raceInfo">
+        <Card border="info" className="text-dark border-1 m-3 box-shadow-primary raceInfo bg-white-3">
           <Card.Title className="bg-info text-light d-flex justify-content-between">
             <span>{this.props.name}</span>
             {this.props.user.role && (this.props.user.role == "admin" || this.props.user.role== "superAdmin") && (<Button onClick={this.toggleEdit}><FontAwesomeIcon icon="edit"/></Button>)}

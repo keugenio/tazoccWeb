@@ -1,3 +1,12 @@
+.news {
+  background-image: url('/images/bg_join.png');
+  font-size: 1.5rem;
+}
 p.link-more {
   display: none;
+}
+.newsModal {
+  & .modal-dialog {
+    min-width: 75%;
+  }
 }

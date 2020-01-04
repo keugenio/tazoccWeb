@@ -19,7 +19,9 @@ class EditProfile extends Component {
     }
   }
 
-
+  static getDerivedStateFromProps(props, state) {
+    return {displayName:props.user.userName}
+  }
   handleOnChange = (e) => {    
     this.setState({[e.target.name]:e.target.value})
   }  
@@ -29,18 +31,18 @@ class EditProfile extends Component {
       displayName:this.state.displayName
     }).then(()=>{
       this.props.dispatch(setUserName(this.state.displayName))
-    })
-    console.log(user);
-    
+    })    
   }
 
   render() {
     return (
       <div>
         <div className="pageTitle text-white">Edit Profile</div>
-        <Card as={Col} lg={10} className="editProfile mx-auto">
+        <Card as={Col} lg={10} className="editProfile mx-auto text-dark">
           <Card.Body>
-            <div>          
+            <div>
+              <label>Current Display Name:</label>
+              <span className="ml-3 font-weight-bold">{this.state.displayName}</span>          
               <Form className="container-fluid">
                 <Form.Group as={Row} controlId="formPlaintextEmail" className="d-flex align-items-center">
                   <Form.Label column sm="3" className="text-right">
@@ -52,8 +54,7 @@ class EditProfile extends Component {
                         type="text"
                         placeholder="Display Name"
                         name="displayName"
-                        defaultValue={this.props.user.userName} 
-                        value={this.state.displayName}                       
+                        defaultValue={this.state.displayName}                      
                         onChange={this.handleOnChange}
                       />
                     </Col>

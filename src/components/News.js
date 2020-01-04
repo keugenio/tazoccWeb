@@ -24,38 +24,39 @@ class News extends React.Component {
 
   handleClose = () => this.setState({showModal:false});
   handleShow = (i) => {
-    const {news, user} = this.props;
+    const {news, user, loggedIn} = this.props;
 
     // if the article is NOT in the read articles array, 
     // update the read articles in the store, open the modal and update the current state's title and body to the selected article
-    if (!this.props.user.readNews){
-      this.props.dispatch(addReadNewsArticle(news[i].id))   
-      // add to the user's read articles in firestore      
-      dbAllPaddlers.doc(user.uid).update({
-        readNews:[...user.readNews]
-      })
-      .catch((error)=>{
-        console.log(`error saving read news: ${error}`);
-      })          
-    }
+    if (loggedIn) {  
+      if (!this.props.user.readNews){
+        this.props.dispatch(addReadNewsArticle(news[i].id))   
+        // add to the user's read articles in firestore      
+        dbAllPaddlers.doc(user.uid).update({
+          readNews:[...user.readNews]
+        })
+        .catch((error)=>{
+          console.log(`error saving read news: ${error}`);
+        })          
+      }
 
-    else if (!this.props.user.readNews.includes(news[i].id)){
-      this.props.dispatch(addReadNewsArticle(news[i].id))
-      this.props.dispatch(subtractAmountToBeRead());
-      // add to the user's read articles in firestore      
-      dbAllPaddlers.doc(user.uid).update({
-        readNews:[...user.readNews, news[i].id]
-      })
-      .catch((error)=>{
-        console.log(`error saving read news: ${error}`);
-      })         
-    }
+      else if (!this.props.user.readNews.includes(news[i].id)){
+        this.props.dispatch(addReadNewsArticle(news[i].id))
+        this.props.dispatch(subtractAmountToBeRead());
+        // add to the user's read articles in firestore      
+        dbAllPaddlers.doc(user.uid).update({
+          readNews:[...user.readNews, news[i].id]
+        })
+        .catch((error)=>{
+          console.log(`error saving read news: ${error}`);
+        })         
+      }}
 
-      this.setState({
-        showModal:true, 
-        currNewsTitle:news[i].title.rendered,
-        currNewsBody:news[i].content.rendered
-      })
+    this.setState({
+      showModal:true, 
+      currNewsTitle:news[i].title.rendered,
+      currNewsBody:news[i].content.rendered
+    })
   }
     
   // parse the title and replace the iso numbers back to normal characters
@@ -106,14 +107,14 @@ class News extends React.Component {
       }
 
       return (
-        <React.Fragment>
+        <div className="news">
           <div><p className="text-center text-white pageTitle">News</p></div>
           <CardColumns className="100%">
           {news.map((article, i)=>{
 
               // show the new Icon only if the current article id is NOT in the readNewsArticles arrray
               return (
-                <Card key={i} body={true}>
+                <Card key={i} body={true} className="bg-white-4">
                     <CardImg src={this.state.images[0] ? this.state.images[0].full_picture : null} index={i} />
                     <Card.Title className="d-flex row">
                       <Col md="8" xs={12}>
@@ -135,7 +136,7 @@ class News extends React.Component {
                      
           )}
           </CardColumns>
-          <Modal  show={this.state.showModal} onHide={this.handleClose}>
+          <Modal show={this.state.showModal} onHide={this.handleClose} className="newsModal">
             <Modal.Header closeButton>
                 <Modal.Title>{this.convertTitle(this.state.currNewsTitle)}</Modal.Title>
               </Modal.Header>
@@ -147,15 +148,15 @@ class News extends React.Component {
                 <Button variant="secondary"  onClick={this.handleClose}>Close</Button>
               </Modal.Footer>
           </Modal>
-        </React.Fragment>
+        </div>
       )
     }
   }
 }
 
 
-const MapStateToProps = ({news, user, readNewsArticles}) => ({
-  news, user, readNewsArticles
+const MapStateToProps = ({news, user}) => ({
+  loggedIn:user.uid, news, user
 })
 
 export default connect(MapStateToProps)(News)

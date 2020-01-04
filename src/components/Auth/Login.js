@@ -1,8 +1,8 @@
 
 import React, { Component } from 'react';
-import firebase, { GoogleProvider, FBProvider, dbRacesToPaddlers } from '../Firebase';
+import firebase, { GoogleProvider, FBProvider } from '../Firebase';
 import { connect } from 'react-redux';
-import {Row, Col} from 'react-bootstrap';
+import {Row, Col, Card} from 'react-bootstrap';
 //import { setUserName, setUserID, setUserImage, setRacesPaddlerSignedUpFor } from '../../store/store';
 import { navigate, Link } from '@reach/router';
 import Swal from 'sweetalert2';
@@ -133,64 +133,58 @@ class Login extends Component {
 
   render() {
     return (
-        <div style={formStyle}>
-          <form className="mt-3" onSubmit={this.signInWithEmail} style={{width:'100%'}}>
-            <div className="container">
-              <div className="row justify-content-center w-100">
-                <div className="col-lg-12">
-                  <div className="card bg-light">
-                    <div className="card-body">
-                      <h3 className="font-weight-light mb-3">Log in</h3>
-                      <section className="form-group">
-                        <label
-                          className="form-control-label sr-only"
-                          htmlFor="Email"
-                        >
-                          Email
-                        </label>
-                        <input
-                          required
-                          className="form-control"
-                          type="email"
-                          id="email"
-                          name="email"
-                          placeholder="Email"
-                          value={this.state.email}
-                          onChange={this.handleChange}
-                        />
-                      </section>
-                      <section className="form-group">
-                        <input
-                          required
-                          className="form-control"
-                          type="password"
-                          name="password"
-                          placeholder="Password"
-                          value={this.state.password}
-                          onChange={this.handleChange}
-                        />
-                      </section>
-                      <section className="form-group">
-                        <div className="form-group text-center py-3">
-                          <button className="btn btn-primary" type="submit">
-                            Log in
-                          </button>
-                          
-                        </div>
-                      </section>
-                      <section className="form-group">
-                        <div className="text-right">no account? <Link to="/register">Register</Link> </div>
-                      </section>
-                    </div>
+        <div className="login">
+          <form className="mt-3" onSubmit={this.signInWithEmail} >
+            <Card className="bg-white-3">
+              <Card.Body>
+                <h3 className="font-weight-light mb-3">Log in</h3>
+                <section className="form-group">
+                  <label
+                    className="form-control-label sr-only"
+                    htmlFor="Email"
+                  >
+                    Email
+                  </label>
+                  <input
+                    required
+                    className="form-control"
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="Email"
+                    value={this.state.email}
+                    onChange={this.handleChange}
+                  />
+                </section>
+                <section className="form-group">
+                  <input
+                    required
+                    className="form-control"
+                    type="password"
+                    name="password"
+                    placeholder="Password"
+                    value={this.state.password}
+                    onChange={this.handleChange}
+                  />
+                </section>
+                <section className="form-group">
+                  <div className="form-group text-center py-3">
+                    <button className="btn btn-lg btn-warning" type="submit">
+                      Log in
+                    </button>
+                    
                   </div>
-                </div>
-                
-                </div>
-            </div>
-          </form>
+                </section>
+                <section className="form-group">
+                  <div className="text-center">no account? <Link to="/register">Register</Link> </div>
+                </section>
+              </Card.Body>
+            </Card>
+          </form>            
+
           <Row className="mt-4 p-4">
-            <button className="btn btn-success" onClick={this.signInWithGoogle} >Sign with Google</button>
-            <button className="btn btn-primary" onClick={this.signInWithFacebook} >Sign with Facebook</button>
+            <button className="btn btn-lg btn-success" onClick={this.signInWithGoogle} >Sign with Google</button>
+            <button className="btn btn-lg btn-primary" onClick={this.signInWithFacebook} >Sign with Facebook</button>
           </Row>
         </div>
       );
@@ -201,10 +195,3 @@ const MapStateToProps=({user}) => ({
 })
 
 export default connect (MapStateToProps)(Login);
-const formStyle = {
-  height: '100vh',
-  display:'flex',
-  alignItems:'center',
-  flexDirection:'column',
-  justifyContent:'center'
-}

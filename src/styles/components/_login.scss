@@ -1,0 +1,12 @@
+.login {
+  font-size: 1.5rem;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  flex-direction : column;
+  justify-content: center;
+  background-image: url('/images/bg_join.png');
+  & input {
+    font-size: 2rem;
+  }
+}

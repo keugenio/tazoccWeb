@@ -65,7 +65,7 @@ class Dashboard extends React.Component {
       return (
         <React.Fragment>
           <div className="dashboardStats">
-            <Card className="dashboard">
+            <Card className="dashboard bg-white-1">
               <Card.Body>
                 <Card bg="info" text="dark" style={{fontSize:'2rem'}} >
                   <Card.Header className="display-4">SCORA Info for {userName}</Card.Header>
@@ -104,7 +104,7 @@ class Dashboard extends React.Component {
                   </Card.Body>
                 </Card>
 
-                <Card text="dark" style={{fontSize:'2rem'}} >
+                <Card text="dark" style={{fontSize:'2rem'}}  className="bg-white-3">
                     <Card.Title className="text-white bg-primary display-4 d-flex justify-content-between">My Races<AddRaceToPaddler /></Card.Title>
                     <Card.Body>
                       <CardDeck>

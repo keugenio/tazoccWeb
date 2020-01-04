@@ -8,9 +8,9 @@ const AboutUs = () => {
     {title:'President',name:'Lisa Zanin', img:'/images/lisa.jpg'},
     {title:'Vice-President',name:'Jeff Leonard', img:'/images/jeff.jpg'},
     {title:'Treasurer',name:'Diana Durham', img:'/images/diana.jpg'},
-    {title:'Secretary',name:'Sofia Tuncap', img:'/images/sofia.jpg'},
+    {title:'Secretary',name:'Suzette Lanzarotta', img:'/images/suzette.jpg'},
     {title:'SCORA Representative',name:'Tony Holland', img:'/images/tony.jpg'},
-    {title:'Member-At-Large',name:'Michelle Vega', img:'/images/vega.jpg'},
+    {title:'Member-At-Large',name:'Todd Hosier', img:'/images/todd.jpg'},
     {title:'Head Coach',name:'Kui Eugenio', img:'/images/kui.jpg'}];
   return(
     <React.Fragment> 

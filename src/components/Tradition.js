@@ -65,9 +65,8 @@ const Tradition = () => {
 
   return(
     <React.Fragment> 
-      <div className="bgOverlayColor">
+      <div className="bgTraditionPage">
         <Suspense fallback={<h1>loading...</h1>}>
-          <img src={bgImage} className="fullsize-bg-image"></img>
           <div><p className="text-center text-white pageTitle">Tradition</p></div>
             <div className="container traditionContainer">
             <Tabs defaultActiveKey="terms" id="uncontrolled-tab-example">

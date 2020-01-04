@@ -30,7 +30,6 @@ class Navigation extends Component {
     })
   }
 
-
   render() {
     const { loggedIn, userImageURL, userName} = this.props;   
     return (
@@ -54,7 +53,7 @@ class Navigation extends Component {
                 </Link>
               </div>
             )}            
-            <div className="nav-item d-flex flex-row">
+            {loggedIn && (<div className="nav-item d-flex flex-row">
               <Navbar expand="lg" bg="transparent">
                 <NavDropdown
                   className="border-0" 
@@ -63,18 +62,18 @@ class Navigation extends Component {
                   (<span><Monogram name= {userName}/></span>) }
                   id="basic-nav-dropdown">
                   <NavDropdown.Item>
-                    <Link className="nav_link titleHoverMessage text-dark" to="/editprofile" title="Settings">
+                    <Button className="nav_link titleHoverMessage text-dark  bg-white border-0" onClick={()=>{navigate('/editprofile')}} title="Settings">
                         Settings <FontAwesomeIcon icon="cog" />
-                    </Link>
+                    </Button>
                   </NavDropdown.Item>
                   <NavDropdown.Item>
-                    <Link className="nav_link titleHoverMessage text-dark" to="/login" onClick={this.logOutUser} title="Logout">
+                    <Button className="nav_link titleHoverMessage text-dark bg-white border-0"  onClick={()=>{navigate("/login")}} onClick={this.logOutUser} title="Logout">
                       Logout <FontAwesomeIcon icon="sign-out-alt" />
-                    </Link>
+                    </Button>
                   </NavDropdown.Item>
                 </NavDropdown>
               </Navbar>
-            </div> 
+            </div> )}
             <div className="nav-item">
               <NavigationOverlay />
             </div>           

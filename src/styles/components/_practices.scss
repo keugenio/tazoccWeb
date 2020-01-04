@@ -1,17 +1,29 @@
-.practiceText {
+.practices {
   color:$white;
-  text-shadow: .25rem .25rem .5rem $dark;
-  display: inline-block;
-  padding: 3rem;
-  font-size: 2rem;
-  & .alert-heading {
-    font-size: 2rem!important;
-    font-weight: 700;
+  font-size: 1.5rem;
+
+  & .card:first-child{
+    margin-bottom: 2rem;
+  }
+  & .card-title {
+    padding:2rem;
+    &.h5{
+      font-size:2rem!important
+    }
+  }
+  & .card-body {
+    font-size: 1.5rem;
+  }
+  & ul.practiceTimes {
+    list-style-type: none;
+    color:$white;
+    text-shadow: .25rem .25rem .5rem $primary;
+    display: inline-block;
+    padding: 3rem;
+    font-size: 2rem;
   }
 }
-.practiceTimes {
-  list-style-type: none;
-}
+
 .practiceTabs {
   min-height: 75vh;
   & .nav {
@@ -37,10 +49,7 @@
   font-size: 1.75rem;
   & img {
     text-align: center;
-    width: 75%;
-  }
-  & .alert-heading {
-    font-size: 2rem;
+    width: 50%;
   }
 }
 
@@ -48,9 +57,6 @@
   font-size: 1.75rem;
   & img {
     text-align: center;
-    width: 75%;
-  }
-  & .alert-heading {
-    font-size: 2rem;
+    width: 50%;
   }
 }

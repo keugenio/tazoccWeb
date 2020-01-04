@@ -9,7 +9,7 @@ function closeNavOverlay() {
   document.getElementById("navi-toggle").checked = false;
 }
 const  NavigationOverlay = (props) => {
-  const loggedIn = props.user || false;
+  const loggedIn = props.user.uid || false;
   const role = props.user.role;
   
   return (
@@ -70,11 +70,11 @@ const  NavigationOverlay = (props) => {
               </Link>
             </li>
           )}
-          <li className="navigation__item">  
+          {loggedIn && (<li className="navigation__item">  
             <Link className="navigation__link" to="/editprofile" onClick={closeNavOverlay}>
             Settings
             </Link>
-          </li>                    
+          </li> )}                   
         </ol>
       </nav>
     </div>
