@@ -1,7 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Card, Col, Row, CardDeck, Form } from 'react-bootstrap';
-import firebase, { dbRaces, dbRacesToPaddlers, dB } from '../../components/Firebase';
+import { dbRaces } from '../../components/Firebase';
+import PaddlerBio from '../Dashboard/PaddlerBio';
 import { addRace} from '../../store/store';
 import AddRaceToPaddler from './AddRaceToPaddler';
 import Race from './Races/Race';
@@ -67,45 +68,46 @@ class Dashboard extends React.Component {
           <div className="dashboardStats">
             <Card className="dashboard bg-white-1">
               <Card.Body>
-                <Card bg="info" text="dark" style={{fontSize:'2rem'}} >
-                  <Card.Header className="display-4">SCORA Info for {userName}</Card.Header>
+                <PaddlerBio />
+                <Card >
+                  <Card.Title className="bg-info">SCORA Info for {userName}</Card.Title>
                   <Card.Body>
-                  <Row>
-                    <Col lg={3} xs={12}><p>SCORA ID: {this.state.scoraID} </p>
-                    </Col>
-                    <Col lg={3} xs={12}>
-                      <Form.Check
-                        type='checkbox'
-                        checked = {this.state.scoraWaiver || false}
-                        disabled
-                        className="form-check-input"
-                        label= "SCORA Waiver"
-                      /> 
-                    </Col>
-                    <Col lg={3} xs={12}>
-                      <Form.Check
-                        type='checkbox'
-                        checked = {this.state.scoraSmartWaiver || false}
-                        disabled
-                        className="form-check-input"
-                        label= "Smart Waiver"
-                      />                   
-                    </Col>
-                    <Col lg={3} xs={12}>
-                      <Form.Check
-                        type='checkbox'
-                        checked = {this.state.huliDrill || false}
-                        disabled
-                        className="form-check-input"
-                        label="Huli Drill"
-                      />                    
-                    </Col>                  
-                  </Row>
+                    <Row>
+                      <Col lg={3} xs={12}><p>SCORA ID: {this.state.scoraID} </p>
+                      </Col>
+                      <Col lg={3} xs={12}>
+                        <Form.Check
+                          type='checkbox'
+                          checked = {this.state.scoraWaiver || false}
+                          disabled
+                          className="form-check-input"
+                          label= "SCORA Waiver"
+                        /> 
+                      </Col>
+                      <Col lg={3} xs={12}>
+                        <Form.Check
+                          type='checkbox'
+                          checked = {this.state.scoraSmartWaiver || false}
+                          disabled
+                          className="form-check-input"
+                          label= "Smart Waiver"
+                        />                   
+                      </Col>
+                      <Col lg={3} xs={12}>
+                        <Form.Check
+                          type='checkbox'
+                          checked = {this.state.huliDrill || false}
+                          disabled
+                          className="form-check-input"
+                          label="Huli Drill"
+                        />                    
+                      </Col>                  
+                    </Row>
                   </Card.Body>
                 </Card>
 
                 <Card text="dark" style={{fontSize:'2rem'}}  className="bg-white-3">
-                    <Card.Title className="text-white bg-primary display-4 d-flex justify-content-between">My Races<AddRaceToPaddler /></Card.Title>
+                    <Card.Title className="text-white bg-primary d-flex justify-content-between">My Races<AddRaceToPaddler /></Card.Title>
                     <Card.Body>
                       <CardDeck>
                       
@@ -126,7 +128,9 @@ class Dashboard extends React.Component {
                             name={name}
                             raceID={raceID}
                             shortCourseReq={shortCourseReq}
-                            changeRequirementForRace={changeRequirementForRace}/>
+                            changeRequirementForRace={changeRequirementForRace}
+                            currentPage = {this.props.location.pathname}
+                            />
                         )
                     })}
                     

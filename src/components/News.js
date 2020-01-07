@@ -136,7 +136,7 @@ class News extends React.Component {
                      
           )}
           </CardColumns>
-          <Modal show={this.state.showModal} onHide={this.handleClose} className="newsModal">
+          <Modal show={this.state.showModal} centered onHide={this.handleClose} className="newsModal">
             <Modal.Header closeButton>
                 <Modal.Title>{this.convertTitle(this.state.currNewsTitle)}</Modal.Title>
               </Modal.Header>

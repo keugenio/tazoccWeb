@@ -1,15 +1,5 @@
-.raceAdmin {
-  & .card {
-    font-size: 1.5rem;
-    & .card-title {
-      font-size: 2rem;
-      font-weight: 600;
-      padding: 0 .5rem 0 .5rem;
-    }
-  }
-}
 .addRaceModal {
-  background:orange ;
+  background:rgba($taz-blue, .5);
   font-size: 2rem;
   & .modal-title {
     font-size: 3rem;

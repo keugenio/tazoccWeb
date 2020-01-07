@@ -37,33 +37,33 @@ class EventInformation extends React.Component  {
     return (
       <React.Fragment>
         <Modal title={this.state.currentTitle}>
-        <table style={tableStyle}>
-          <tbody>
-            <tr>
-            <td colSpan='2'><img className="card-img-top img-fluid" src={this.state.currentEventImg} alt="event image"></img></td>
-            </tr>
-            <tr>
-              <td><label style={labelStyle}>Event:</label></td>
-              <td>{this.state.currentTitle}</td>
-            </tr>            
-            <tr>
-              <td><label style={labelStyle}>Description:</label></td>
-              <td>{this.state.currentDescription}</td>
-            </tr>
-            <tr>
-              <td><label style={labelStyle}>Date:</label></td>
-              <td>{this.state.currentDate}</td>
-            </tr>
+          <table style={tableStyle}>
+            <tbody>
               <tr>
-              <td><label style={labelStyle}>Location:</label></td>
-              <td>{this.state.currentLocation}</td>
-            </tr>
-            <tr>
-              <td colSpan='2' className="text-center"><a href={this.state.currentMore} rel="noopener noreferrer" target="_blank" className="btn btn-light btn-lg">More</a></td>
-            </tr>              
-          </tbody>
-        </table>
-      </Modal>      
+              <td colSpan='2'><img className="card-img-top img-fluid" src={this.state.currentEventImg} alt="event image"></img></td>
+              </tr>
+              <tr>
+                <td><label style={labelStyle}>Event:</label></td>
+                <td>{this.state.currentTitle}</td>
+              </tr>            
+              <tr>
+                <td><label style={labelStyle}>Description:</label></td>
+                <td>{this.state.currentDescription}</td>
+              </tr>
+              <tr>
+                <td><label style={labelStyle}>Date:</label></td>
+                <td>{this.state.currentDate}</td>
+              </tr>
+                <tr>
+                <td><label style={labelStyle}>Location:</label></td>
+                <td>{this.state.currentLocation}</td>
+              </tr>
+              <tr>
+                <td colSpan='2' className="text-center"><a href={this.state.currentMore} rel="noopener noreferrer" target="_blank" className="btn btn-light btn-lg">More</a></td>
+              </tr>              
+            </tbody>
+          </table>
+        </Modal>      
         <CardColumns>
           {this.state.events.map((event, i)=>(
             <button key={i} type="button" className="btn" data-toggle="modal" data-target="#theModal" onClick={() => this.openModal(event.title)} style={buttonStyle}>

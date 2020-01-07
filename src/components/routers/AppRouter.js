@@ -21,7 +21,7 @@ import Footer from '../Footer';
 import SuperAdmin from '../_SuperAdmin/SuperAdmin';
 import EditProfile from '../Auth/EditProfile';
 import "babel-polyfill";
-import { setUserName, setUserID, setUserImage, addRaceToPaddler, setUserRole, setUserAttendance, setAmountUnread, setUserReadNews, setSCORAInfo, setNewsArticles, setAmountOfNewsUserStillNeedsToRead } from '../../store/store';
+import { setUserName, setUserID, setUserImage, addRaceToPaddler, setUserRole, setUserAttendance, setSelectedPaddler, setUserReadNews, setSCORAInfo, setNewsArticles, setAmountOfNewsUserStillNeedsToRead } from '../../store/store';
 
 class AppRouter extends React.Component {
   constructor(){
@@ -62,7 +62,8 @@ class AppRouter extends React.Component {
             this.props.dispatch(setUserAttendance(paddler.attendance || []))  
             this.props.dispatch(setUserReadNews(paddler.readNews || []));
             this.props.dispatch(setAmountOfNewsUserStillNeedsToRead( newsAmount - (paddler.readNews? paddler.readNews.length: 0)));
-            this.props.dispatch(setSCORAInfo(paddler));          
+            this.props.dispatch(setSCORAInfo(paddler));    
+            this.props.dispatch(setSelectedPaddler(paddler))      
           } 
           else {
             dbAllPaddlers.doc(FBUser.uid).set({

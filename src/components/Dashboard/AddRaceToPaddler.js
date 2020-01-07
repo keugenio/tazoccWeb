@@ -75,10 +75,10 @@ class AddRaceToPaddler extends Component {
     return (
       <div className="addRaceToPaddler">
       <Button variant="primary" onClick={()=>{this.setState({showModal:true})}} className="border-primary">
-        <FontAwesomeIcon icon="plus-circle" className="fa-4x text-warning bg-primary"/>
+        <FontAwesomeIcon icon="plus-circle" className="fa-2x text-white bg-primary"/>
       </Button>
-        <Modal show={this.state.showModal && (availableRaces.length>0)} onHide={this.handleCloseModal} animation={false} className="addRaceToPaddler">
-          <Modal.Header closeButton>
+        <Modal centered show={this.state.showModal && (availableRaces.length>0)} onHide={this.handleCloseModal} className="addRaceToPaddler">
+          <Modal.Header className="bg-primary" closeButton>
             <Modal.Title>Add a Race to your profile</Modal.Title>
           </Modal.Header>
           <Modal.Body>

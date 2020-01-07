@@ -121,6 +121,10 @@ export const setSCORAInfo = (scoraInfo) => ({
   type: 'SET_SCORA_INFO',
   scoraInfo
 })
+export const setBirthday = (date) => ({
+  type:'SET_BIRTHDAY',
+  date
+})
 export const logUserOut = () => ({
   type: 'LOG_USER_OUT'
 })
@@ -145,13 +149,15 @@ const authenticatedUserReducer = (state = {}, action) => {
     case 'SET_SCORA_INFO':
       return { ...state, ...action.scoraInfo}
     case 'SET_AMOUNT_OF_NEWS_USERS_STILL_NEEDS_TO_READ':
-      return {...state, amountStillNeedsToRead:action.amount}      
+      return {...state, amountStillNeedsToRead:action.amount};  
+    case 'SET_BIRTHDAY':
+      return {...state, birthday:action.date}   
     case 'LOG_USER_OUT':  
       return {}
     case 'ADD_READ_NEWS_ARTICLE':
       return { ...state, readNews:[...state.readNews, action.articleID]}
     case 'SUBTRACT_AMOUNT_TO_BE_READ':
-      return { ...state, amountStillNeedsToRead:state.amountStillNeedsToRead - 1}
+      return { ...state, amountStillNeedsToRead:state.amountStillNeedsToRead - 1}``
     default:
       return state;
   }
@@ -232,7 +238,7 @@ const racesReducer = ( state=[], action ) => {
       return sortedRaces ;
     case 'UPDATE_RACE':
       //filter out the previous race from state and add the updated race to the state
-      const filteredRaces = state.filter( race=> race.id !== action.race.id)
+      const filteredRaces = state.filter( race=> race.id !== action.race.raceID)
       const updatedRaces = [...filteredRaces, action.race];
       updatedRaces.sort(function(a, b){return a.date - b.date});
       return updatedRaces 
@@ -252,10 +258,6 @@ export const addRaceToPaddler = (race) => ({
 export const removeRaceForPaddler = (raceID) => ({
   type: 'REMOVE_RACE_FOR_PADDLER',
   raceID
-})
-export const setRacesPaddlerSignedUpFor = (races) => ({
-  type: 'SET_RACES_PADDLER_SIGNED_UP_FOR',
-  races
 })
 export const clearRacesPaddlerSignedUpFor = () => ({
   type: 'CLEAR_RACES_PADDLER_SIGNED_UP_FOR'

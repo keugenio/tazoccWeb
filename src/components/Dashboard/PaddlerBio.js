@@ -1,13 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Card, Button, Row, Col, Image, Form } from 'react-bootstrap';
-import firebase, { dbAllPaddlers } from '../Firebase.js';
+import { dbAllPaddlers } from '../Firebase.js';
 import { setSelectedPaddler, editSelectedPaddler } from '../../store/store';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import moment from 'moment';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-
+import EditProfile from '../Auth/EditProfile';
 import Monogram from '../Monogram';
 
 class PaddlerBio extends React.Component{
@@ -88,15 +88,17 @@ class PaddlerBio extends React.Component{
   }    
 
   render (){
+    const {name, birthday, jerseySize, image, duesPaid, membershipType, role} = this.props.selectedPaddler
     return (
       <Card className="paddlerBio">
         <Card.Title  className="bg-success text-white d-flex justify-content-between">
           <div>About {this.props.selectedPaddler.name}</div>
-          <div>
+          {!role && (<EditProfile />) }
+          {((role=="admin") || (role=="superAdmin")) && (<div>
             {this.state.showEditable && (<Button onClick={this.toggleSave} className="btn-danger" ><FontAwesomeIcon icon="save" /></Button>)}
             {this.props.selectedPaddler && !this.state.showEditable && (<Button onClick={this.toggleEdit} className={this.state.showEdit}><FontAwesomeIcon icon="edit"/></Button>) }
             {this.state.showEditable && (<Button onClick={this.toggleCancel} className="btn-dark" >x</Button>)}               
-          </div>
+          </div>)}
         </Card.Title>
         <Card.Body>
           {!this.state.showEditable && (
@@ -126,13 +128,14 @@ class PaddlerBio extends React.Component{
                     <div name="jerseySize">{this.props.selectedPaddler.jerseySize || 'n/a'}</div>
                   </div>                  
                 </Col>
-                <Col lg={4} xs={3} className="flex-row">
+                
+                {role && (<Col lg={4} xs={3} className="flex-row">
                   <div className="form-check">
                     {this.props.selectedPaddler.image && (<div><Image src={this.props.selectedPaddler.image} fluid roundedCircle style={{width:"75px"}}/></div>)}
                     {!this.props.selectedPaddler.image && (<Monogram name={this.props.selectedPaddler.name} />)}
                     <div className="ml-4">{this.props.selectedPaddler.sex || 'no sex assigned yet'}</div>
                   </div>  
-                </Col>                             
+                </Col> )}                            
               </Row>
             </div>
           )}

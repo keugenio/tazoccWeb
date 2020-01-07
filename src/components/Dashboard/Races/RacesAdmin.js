@@ -30,10 +30,10 @@ class RacesAdmin extends Component {
   getRacesAndUpdateStore = () => {
     dbRaces.get().then(docs=>{
       docs.docs.forEach(doc => {
-        const raceData = doc.data();
-        const newRaceData = {...raceData, id:doc.id}
-        this.props.dispatch(addRace(newRaceData));
-        //this.setState({races: [...this.state.races, newRaceData]});
+        const raceData = doc.data();        
+        if (raceData.enabled!= false){
+          const newRaceData = {...raceData, id:doc.id}
+          this.props.dispatch(addRace(newRaceData));}
       });
     })    
   }
@@ -43,18 +43,22 @@ class RacesAdmin extends Component {
       this.getRacesAndUpdateStore()
      }
   }
-  handleChangeChecked = (e) => {
-    this.setState({[e.target.name]: e.target.checked })
-  }
-  handleChange = (e) => {
-    this.setState({[e.target.name]: e.target.value })
+
+  rotate = () => {
+    let newRotation = this.state.rotation + 180;
+    if(newRotation >= 360){
+      newRotation =- 360;
+    }
+    this.setState({
+      rotation: newRotation,
+    })
   }  
   handleShowModal = () => {
     this.setState({showModal:true})
   }
   handleCloseModal = () => {
     this.setState({showModal:false})
-  }
+  }  
   handleSaveNewRace = () => {
     // write the new race to firebase and update store 
     let newDocID = '';
@@ -87,16 +91,6 @@ class RacesAdmin extends Component {
         console.error("Error adding document: ", error);
     });
 
-    // clear the current races in the state and reload from the db
-    //this.setState({races:[]})
-    // dbRaces.get().then(docs=>{
-    //   docs.docs.forEach(doc => {
-    //     this.setState({races: [...this.state.races, doc.data()]});
-    //     this.store.dispatch(addRace(doc.data()))
-    //   });
-    // }) 
-    // this.getRacesAndUpdateStore();
-
     // clear the current state race info so the modal shows blank on next popup
     this.setState({
       name:'',
@@ -111,19 +105,7 @@ class RacesAdmin extends Component {
     // close the modal to see the updated state.
     this.handleCloseModal();
   }
-  handleCalendarChange = date => {
-    this.setState({date:date.valueOf()});
-  } 
-  rotate = () => {
-    let newRotation = this.state.rotation + 180;
-    if(newRotation >= 360){
-      newRotation =- 360;
-    }
-    this.setState({
-      rotation: newRotation,
-    })
-  }  
-      
+
   render() {    
     return (
       <div className="raceAdmin">
@@ -134,31 +116,35 @@ class RacesAdmin extends Component {
                 <span>Races</span>
                 <div className="d-flex">                  
                   <FontAwesomeIcon icon="angle-up" className="fa-2x text-warning bg-primary" style={{transform: `rotate(${this.state.rotation}deg)`}}/>                  
-                  <Button variant="primary" onClick={this.handleShowModal} className="bg-transparent border-0">
-                    <FontAwesomeIcon icon="plus-circle" className="fa-3x text-warning bg-primary"/>
-                  </Button>
                 </div>
               </Card.Title>
             </Accordion.Toggle>          
             <Accordion.Collapse eventKey='0'>
-              <Card.Body>
-                { this.props.races.length > 0 && (
-                      <CardGroup>
-                        {this.props.races.map((race,i)=>{
-                          const {id, name, host, location, date, longCourseReq, shortCourseReq, changeRequirement, internalInfo, info} = race
-                          return (
-                            <Race key={i} raceID={id} name={name} host={host} location={location} internalInfo={internalInfo} info={info} date={date} longCourseReq={longCourseReq} shortCourseReq={shortCourseReq} changeRequirement={changeRequirement} />
-                          )
-                        })}           
-                    </CardGroup>
-                )}
-              </Card.Body>
+              <div>
+                <Card.Title>
+                  <Button variant="primary" onClick={this.handleShowModal} className="bg-transparent border-0">
+                    <FontAwesomeIcon icon="plus-circle" className="fa-3x text-warning bg-primary"/>
+                  </Button>
+                </Card.Title>
+                <Card.Body>
+                  { this.props.races.length > 0 && (
+                        <CardGroup>
+                          {this.props.races.map((race,i)=>{
+                            const {id, name, host, location, date, longCourseReq, shortCourseReq, changeRequirement, internalInfo, info} = race
+                            return (
+                              <Race key={i} raceID={id} name={name} host={host} location={location} internalInfo={internalInfo} info={info} date={date} longCourseReq={longCourseReq} shortCourseReq={shortCourseReq} changeRequirement={changeRequirement} currentPage = {this.props.currentPage}/>
+                            )
+                          })}           
+                      </CardGroup>
+                  )}
+                </Card.Body>
+              </div>
             </Accordion.Collapse>          
           </Card>
         </Accordion>
 
-        <Modal show={this.state.showModal} onHide={this.handleCloseModal} animation={false} size="lg" centered className="addRaceModal">
-          <Modal.Header closeButton>
+        <Modal show={this.state.showModal} onHide={this.handleCloseModal} animation={false} size="lg" centered className="addRaceModal" >
+          <Modal.Header className="bg-warning" closeButton>
             <Modal.Title>Add a Race</Modal.Title>
           </Modal.Header>
           <Modal.Body>
@@ -221,7 +207,7 @@ class RacesAdmin extends Component {
                   <Form.Label>Short Course Req </Form.Label>
                 </Col>
                 <Col>                  
-                  <Form.Control type="text" name="shortCourseReq" placeholder="Short Course Time Requirement" value={this.state.shortCourseReq} onChange={this.handleChange} />
+                  <Form.Control type="text" name="shortCourseReq" placeholder="Short Course Time Requirement" defaultValue={this.state.shortCourseReq} onChange={this.handleChange} />
                 </Col>
               </Row>)}
 
@@ -233,6 +219,14 @@ class RacesAdmin extends Component {
                   <Form.Control type="text" name="info" placeholder="More Info" value={this.state.info} onChange={this.handleChange} />
                 </Col>
               </Row>
+              <Row>
+                <Col className="text-right" lg={4}>
+                  <Form.Label>Race Description </Form.Label>
+                </Col>
+                <Col>                  
+                  
+                </Col>
+              </Row>              
                           
             </Form>
           </Modal.Body>

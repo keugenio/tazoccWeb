@@ -163,7 +163,7 @@ class Attendance extends Component {
     return (
       <div className="attendance">
         <Accordion defaultActiveKey="0">      
-        <Card className="text-dark" bg={'primary'}>
+        <Card className="text-dark">
           <Accordion.Toggle as={Card.Title} eventKey="0" className="bg-warning" onClick={this.rotate}>
             <Card.Title className="d-flex justify-content-between align-items-center bg-warning text-dark">
               <span>Attendance</span>
@@ -176,7 +176,7 @@ class Attendance extends Component {
             <Card.Body>
               <Row>
                 <Col lg={6} xs={12}>
-                  <Card bg="light" text="white">
+                  <Card text="dark" border="dark">
                     <Card.Body className="d-flex justify-content-center">
                       <DatePicker
                         value={this.state.date}
@@ -190,12 +190,12 @@ class Attendance extends Component {
                   </Card>              
                 </Col>
                 <Col lg={6} xs={12} className="d-flex justify-content-center">
-                  <Card border="light" text="white" className="ml-3 bg-transparent dbListOfPaddlersWhoAttended">
-                    <Card.Header className="d-flex justify-content-start">
+                  <Card border="dark" text="dark" className="bg-transparent dbListOfPaddlersWhoAttended">
+                    <Card.Header className="d-flex justify-content-start text-dark">
                       <span className="ml-2">{moment(this.state.date).format("ddd MM-DD-YYYY")}</span>
                       <span className="ml-auto">
                         <Badge pill variant="warning" className="ml-3">{this.state.dBpaddlersWhoPracticed.length} attended</Badge>
-                        <Button className="bg-transparent border-0 ml-2" onClick={this.showModal}><FontAwesomeIcon icon="edit" className="fa-2x"/></Button>
+                        <Button className="bg-transparent border-0 ml-2 text-dark" onClick={this.showModal}><FontAwesomeIcon icon="edit" className="fa-2x"/></Button>
                       </span>
                     </Card.Header>
 

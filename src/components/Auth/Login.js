@@ -1,9 +1,7 @@
-
 import React, { Component } from 'react';
 import firebase, { GoogleProvider, FBProvider } from '../Firebase';
 import { connect } from 'react-redux';
 import {Row, Col, Card} from 'react-bootstrap';
-//import { setUserName, setUserID, setUserImage, setRacesPaddlerSignedUpFor } from '../../store/store';
 import { navigate, Link } from '@reach/router';
 import Swal from 'sweetalert2';
 
@@ -23,14 +21,12 @@ class Login extends Component {
 
     this.setState({ [itemName]: itemValue });
   }
-
   updateUserImage = (user) => {    
     const dbUsers = firebase.database().ref(`users/${user.uid}`);
     dbUsers.update({
       image:user.photoURL
     })
   }
-
   signInWithGoogle = () => {
     firebase
     .auth()
@@ -126,11 +122,9 @@ class Login extends Component {
         }
       });
   }
-
   handleGoToRegister = () => {
     navigate('/register')
   }
-
   render() {
     return (
         <div className="login">

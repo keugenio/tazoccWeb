@@ -1,3 +1,9 @@
+.editProfilePage {
+  & .card:not(:last-child) {
+    margin-bottom: 3rem;
+  }
+}
+
 .editProfile {
   font-size: 2rem;
   color: $dark;

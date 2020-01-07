@@ -9,6 +9,7 @@ import { Modal, Button, Navbar, NavDropdown } from 'react-bootstrap'
 import UnreadNewsBadge from './UnreadNewsBadge';
 import EmailUs from '../EmailUs';
 import Monogram from '../Monogram';
+import EditProfile from '../Auth/EditProfile';
 
 class Navigation extends Component {
   constructor() {
@@ -58,17 +59,17 @@ class Navigation extends Component {
                 <NavDropdown
                   className="border-0" 
                   title={(loggedIn) && (userImageURL) ? 
-                  (<span className="bg-warning"><img src={userImageURL} className="userProfileIcon" /></span>) :
+                  (<img src={userImageURL} className="userProfileIcon" />) :
                   (<span><Monogram name= {userName}/></span>) }
                   id="basic-nav-dropdown">
                   <NavDropdown.Item>
-                    <Button className="nav_link titleHoverMessage text-dark  bg-white border-0" onClick={()=>{navigate('/editprofile')}} title="Settings">
-                        Settings <FontAwesomeIcon icon="cog" />
-                    </Button>
+                  <div className="titleHoverMessage text-dark  bg-white border-0 d-flex align-items-center" title="Edit Profile">
+                    <EditProfile title="Settings"/>
+                  </div>                                    
                   </NavDropdown.Item>
                   <NavDropdown.Item>
-                    <Button className="nav_link titleHoverMessage text-dark bg-white border-0"  onClick={()=>{navigate("/login")}} onClick={this.logOutUser} title="Logout">
-                      Logout <FontAwesomeIcon icon="sign-out-alt" />
+                    <Button className="nav_link titleHoverMessage text-dark bg-white border-0 d-flex align-items-center" onClick={this.logOutUser} title="Logout">
+                      <h4>Logout</h4> <FontAwesomeIcon icon="sign-out-alt" className="ml-2 h4" />
                     </Button>
                   </NavDropdown.Item>
                 </NavDropdown>
