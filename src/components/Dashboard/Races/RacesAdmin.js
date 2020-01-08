@@ -4,7 +4,7 @@ import { dbRaces } from '../../Firebase';
 import { Row, Col, Card, CardGroup, Modal, Button, Form, Accordion} from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { addRace } from '../../../store/store';
-
+import events from '../../eventDescriptions';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Race from './Race';
@@ -13,7 +13,6 @@ class RacesAdmin extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      races:[],
       showModal:false,
       name:'',
       host:'',
@@ -22,6 +21,7 @@ class RacesAdmin extends Component {
       longCourseReq:0,
       shortCourseReq:0,
       info:'',
+      internalInfo: -1,
       changeRequirement:false,
       rotation:0
     }
@@ -70,6 +70,7 @@ class RacesAdmin extends Component {
       longCourseReq:this.state.longCourseReq,
       shortCourseReq:this.state.shortCourseReq,
       info:this.state.info,
+      internalInfo:((this.state.internalInfo!=-1) ? this.state.internalInfo: null),
       changeRequirement:this.state.changeRequirement     
     })
     .then((docRef) => {
@@ -84,6 +85,7 @@ class RacesAdmin extends Component {
         longCourseReq: newRaceInfo.longCourseReq,
         shortCourseReq: newRaceInfo.shortCourseReq,
         info: newRaceInfo.info,
+        internalInfo:((this.state.internalInfo!=-1) ? this.state.internalInfo: null),
         changeRequirement: newRaceInfo.changeRequirement         
       }))
     })
@@ -100,12 +102,18 @@ class RacesAdmin extends Component {
       longCourseReq:0,
       shortCourseReq:0,
       info:'',
+      internalInfo:-1,
       changeRequirement:false      
     })
     // close the modal to see the updated state.
     this.handleCloseModal();
   }
-
+  handleChange = (e) => {
+    this.setState({[e.target.name]: e.target.value }) 
+  }    
+  handleChangeCalendar = date => {
+    this.setState({date:date.valueOf()});
+  }   
   render() {    
     return (
       <div className="raceAdmin">
@@ -121,9 +129,9 @@ class RacesAdmin extends Component {
             </Accordion.Toggle>          
             <Accordion.Collapse eventKey='0'>
               <div>
-                <Card.Title>
+                <Card.Title className="text-right">
                   <Button variant="primary" onClick={this.handleShowModal} className="bg-transparent border-0">
-                    <FontAwesomeIcon icon="plus-circle" className="fa-3x text-warning bg-primary"/>
+                    <FontAwesomeIcon icon="plus-circle" className="fa-3x text-warning bg-transparent"/>
                   </Button>
                 </Card.Title>
                 <Card.Body>
@@ -154,7 +162,7 @@ class RacesAdmin extends Component {
                   <Form.Label>Race Name </Form.Label>
                 </Col>
                 <Col>
-                  <Form.Control type="text" name="name" placeholder="Name of Race" value={this.state.name} onChange={this.handleChange}/>
+                  <Form.Control type="text" name="name" placeholder="Name of Race" onChange={this.handleChange}/>
                 </Col>
               </Row>
               <Row>
@@ -162,7 +170,7 @@ class RacesAdmin extends Component {
                   <Form.Label>Race Host </Form.Label>
                 </Col>
                 <Col>              
-                  <Form.Control type="text" name="host" placeholder="Host Club" value={this.state.host} onChange={this.handleChange} />
+                  <Form.Control type="text" name="host" placeholder="Host Club" onChange={this.handleChange} />
                 </Col>
               </Row>
               <Row>
@@ -170,7 +178,7 @@ class RacesAdmin extends Component {
                   <Form.Label>Race Location </Form.Label>
                 </Col>
                 <Col>                  
-                  <Form.Control type="text" name="location" placeholder="Location" value={this.state.location} onChange={this.handleChange} />
+                  <Form.Control type="text" name="location" placeholder="Location" onChange={this.handleChange} />
                 </Col>
               </Row>               
               <Row>
@@ -179,9 +187,8 @@ class RacesAdmin extends Component {
                 </Col>
                 <Col>
                   <DatePicker
-                      value={this.state.date}
                       selected={this.state.date}
-                      onChange={this.handleCalendarChange}
+                      onChange={this.handleChangeCalendar}
                       minDate={new Date()}
                     />
                 </Col>
@@ -191,7 +198,7 @@ class RacesAdmin extends Component {
                   <Form.Label>Change Requirement</Form.Label>
                 </Col>
                 <Col>
-                  <Form.Check name="changeRequirement" checked={this.state.changeRequirement} onChange={this.handleChangeChecked} />
+                  <Form.Check name="changeRequirement" defaultValue={false} onChange={this.handleChangeChecked} />
                 </Col>
               </Row>               
               <Row>
@@ -199,7 +206,7 @@ class RacesAdmin extends Component {
                   <Form.Label>Long Course Req</Form.Label>
                 </Col>
                 <Col>
-                  <Form.Control type="number" name="longCourseReq" placeholder="Long Course Time Requirement" value={this.state.longCourseReq} onChange={this.handleChange} />
+                  <Form.Control type="text" name="longCourseReq" placeholder="Long Course Time Requirement" onChange={this.handleChange} />
                 </Col>
               </Row>
               {!this.state.changeRequirement && (<Row>
@@ -207,7 +214,7 @@ class RacesAdmin extends Component {
                   <Form.Label>Short Course Req </Form.Label>
                 </Col>
                 <Col>                  
-                  <Form.Control type="text" name="shortCourseReq" placeholder="Short Course Time Requirement" defaultValue={this.state.shortCourseReq} onChange={this.handleChange} />
+                  <Form.Control type="text" name="shortCourseReq" placeholder="Short Course Time Requirement" onChange={this.handleChange} />
                 </Col>
               </Row>)}
 
@@ -216,7 +223,7 @@ class RacesAdmin extends Component {
                   <Form.Label>More Info </Form.Label>
                 </Col>
                 <Col>                  
-                  <Form.Control type="text" name="info" placeholder="More Info" value={this.state.info} onChange={this.handleChange} />
+                  <Form.Control type="text" name="internalInfo" placeholder="More Info" onChange={this.handleChange} />
                 </Col>
               </Row>
               <Row>
@@ -224,7 +231,12 @@ class RacesAdmin extends Component {
                   <Form.Label>Race Description </Form.Label>
                 </Col>
                 <Col>                  
-                  
+                  <select name="internalInfo" onChange={this.handleChange}>
+                    <option value={-1} >none</option>
+                    { events.map((race, i)=> (
+                        <option key={i} value={i}>{race.title}</option>
+                    ))}
+                  </select>
                 </Col>
               </Row>              
                           

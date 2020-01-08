@@ -15,21 +15,6 @@ class Race extends React.Component{
   constructor(props) {
     super(props);
     this.state = {
-      raceID: props.raceID,
-      name:props.name,
-      host:props.host || '',
-      location: props.location || '',
-      info:props.info || '',
-      date:props.date || 0,
-      longCourseReq:props.longCourseReq || 0,
-      shortCourseReq:props.shortCourseReq || 0,
-      changeRequirement:props.changeRequirement || false,
-      internalInfo:props.internalInfo || -1,
-      showPaddlerReqs: (props.paddlerID == props.user.userID),
-      showRaceReqs: (props.paddlerID != props.user.userID),
-      showChangeReq: (props.changeRequirementForRace || false),
-      showModal: false,
-      showInternalInfoModal: false,
       attendance:[]
     }
   }
@@ -55,11 +40,11 @@ class Race extends React.Component{
   render(){   
     const dashboardPage =  this.props.currentPage == '/dashboard';
     const adminPage = this.props.currentPage == '/admin';
-    const {raceID, name, host, location, date, longCourseReq, shortCourseReq, changeRequirement, internalInfo, info} = this.props                       
+    const {raceID, name, host, location, date, longCourseReq, shortCourseReq, changeRequirement, internalInfo, info, user} = this.props                       
     return (
       <div>
 
-      { dashboardPage &&  (<UserRaceInfo raceID={this.props.raceID} paddlerID={this.props.user.uid} attendance={this.state.attendance}/>)}
+      { dashboardPage &&  (<UserRaceInfo raceID={raceID} paddlerID={user.uid} attendance={this.state.attendance}/>)}
 
       { adminPage && (<AdminRaceInfo raceID={raceID} name={name} host={host} location={location} internalInfo={internalInfo} info={info} date={date} longCourseReq={longCourseReq} shortCourseReq={shortCourseReq} changeRequirement={changeRequirement} currentPage = {this.props.currentPage} attendance={this.state.attendance}/>)}
       

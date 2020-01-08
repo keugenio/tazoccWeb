@@ -238,7 +238,7 @@ const racesReducer = ( state=[], action ) => {
       return sortedRaces ;
     case 'UPDATE_RACE':
       //filter out the previous race from state and add the updated race to the state
-      const filteredRaces = state.filter( race=> race.id !== action.race.raceID)
+      const filteredRaces = state.filter( race=> race.id !== action.race.id)
       const updatedRaces = [...filteredRaces, action.race];
       updatedRaces.sort(function(a, b){return a.date - b.date});
       return updatedRaces 

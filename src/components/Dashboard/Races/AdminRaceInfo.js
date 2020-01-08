@@ -22,13 +22,13 @@ class AdminRaceInfo extends Component {
     this.state = {
       editable: false,
       raceID: null,
-      name: null,
-      host: null,
-      location: null,
-      info: null,
+      name: '',
+      host: '',
+      location: '',
+      info: '',
       date: moment(),
-      longCourseReq: null,
-      shortCourseReq: null,
+      longCourseReq: '',
+      shortCourseReq: '',
       changeRequirement: false,
       internalInfo: -1,      
       attendance: [],      
@@ -39,23 +39,24 @@ class AdminRaceInfo extends Component {
 
   toggleEdit = () => {
     const  { raceID, name, host, location, info, internalInfo, date, longCourseReq, shortCourseReq, changeRequirement } = this.props
-    this.setState({...this.state, raceID, name, host, location, info, internalInfo:(internalInfo || -1), date, longCourseReq, shortCourseReq, changeRequirement, raceID, editable:true})
+    this.setState({...this.state, raceID, name:(name||''), host:(host||''), location:(location||''), info:(info||''), internalInfo:(internalInfo || -1), date, longCourseReq:(longCourseReq||''), shortCourseReq:(shortCourseReq||''), changeRequirement, editable:true})
   }  
   toggleCancel = () => {    
     const  { name, host, location, info, internalInfo, date, longCourseReq, shortCourseReq, changeRequirement, raceID } = this.props
     this.setState({...this.state, name, host, location, info, internalInfo, date, longCourseReq, shortCourseReq, changeRequirement, raceID, editable:false})
   }
-  toggleSave = () => {   
+  toggleSave = () => {
+    const longCourseReq=this.state.longCourseReq || null;
     dbRaces.doc(this.state.raceID).update( {
       name:this.state.name,
       host:this.state.host,
       location: this.state.location,
       info:this.state.info,
       date:this.state.date,
-      longCourseReq:this.state.longCourseReq,
+      longCourseReq,
       shortCourseReq:this.state.shortCourseReq,
       changeRequirement:this.state.changeRequirement,
-      internalInfo:((this.state.internalInfo || this.state.internalInfo==-1) ? this.state.internalInfo : null)
+      internalInfo: this.state.internalInfo
     })
     .then(() => { 
       this.setState({editable:false}) 
@@ -64,24 +65,24 @@ class AdminRaceInfo extends Component {
       // udpate this race in the store to the new values
       const {raceID, name, host, location, info, date, longCourseReq, shortCourseReq, changeRequirement, internalInfo} = this.state;
       //const updatedRace = {id:this.state.raceID, name:this.state.name, date:this.state.date, location:this.state.location, host:this.state.host, longCourseReq: this.state.longCourseReq, shortCourseReq:this.state.shortCourseReq, changeReq:this.state.changeReq, info:this.state.info}
-      this.props.dispatch(updateRace({raceID, name, host, location, info, date, longCourseReq, shortCourseReq, changeRequirement, internalInfo}))
+      this.props.dispatch(updateRace({id:raceID, name, host, location, info, date, longCourseReq, shortCourseReq, changeRequirement, internalInfo}))
     })
   }  
   handleChangeChecked = (e) => {
     this.setState({[e.target.name]: e.target.checked })
   }
-  handleChange = (e) => {
-    this.setState({[e.target.name]: e.target.value }) 
+  handleChange = (e) => {    
+    this.setState({[e.target.name]: e.target.value })   
   }  
   handleChangeCalendar = date => {
     this.setState({date:date.valueOf()});
   }   
   handleShowModal = (modalName) => {
     switch (modalName) {
-      case 'attendanceModal':
+      case 'attendance':
         this.setState({showAttendanceModal: true})
         break;
-      case 'internalInfoModal':
+      case 'internalInfo':
         this.setState({showInternalInfoModal: true})
         break;        
       default:
@@ -92,9 +93,8 @@ class AdminRaceInfo extends Component {
   handleCloseModal = () => {
     this.setState({showAttendanceModal:false, showInternalInfoModal:false})
   }
-
   handleRemoveRace = () => {
-    const {raceID} = this.props;
+    const {raceID} = this.state;
 
     Swal.fire({
       title: 'Are you sure?',
@@ -130,6 +130,7 @@ class AdminRaceInfo extends Component {
       }
     })
   }
+
   render() {
     return (
       <div>
@@ -156,16 +157,17 @@ class AdminRaceInfo extends Component {
                     onChange={this.handleChangeCalendar}
                   />
               </li>
-              <li>Long Course Req: <input type="text" name="longCourseReq" placeholder="long course requirement" value={this.state.longCourseReq} onChange={this.handleChange}/></li>
-              {!this.state.changeRequirement && (<li>Short Course Req: <input type="text" name="shortCourseReq" placeholder="short course requirement" value={this.state.shortCourseReq} onChange={this.handleChange}/></li>)}
-              <li>Change Req: <input type="checkbox" name="changeRequirement" placeholder="change requirement" defaultChecked={this.state.changeRequirement}  onChange={this.handleChangeChecked}/></li>
+              <li>Long Course Req: <input type="text" name="longCourseReq" value={this.state.longCourseReq} onChange={this.handleChange}/></li>
+              {!this.state.changeRequirement && (<li>Short Course Req: <input type="text" name="shortCourseReq" value={this.state.shortCourseReq} onChange={this.handleChange}/></li>)}
+              <li>Change Req: <input type="checkbox" name="changeRequirement" defaultChecked={this.state.changeRequirement}  onChange={this.handleChangeChecked}/></li>
               <li>Race Desc: 
                 <select name="internalInfo" onChange={this.handleChange} defaultValue={this.state.internalInfo}>
                   <option value={-1} >none</option>
                   { events.map((race, i)=> (
                       <option key={i} value={i}>{race.title}</option>
                   ))}
-                </select></li>
+                </select>
+              </li>
               <li>More info:<textarea name="info" rows="3" value={this.state.info}  placeholder="add more info" onChange={this.handleChange}/></li>
             </ul>
           </Card.Body>
@@ -174,7 +176,7 @@ class AdminRaceInfo extends Component {
       {!this.state.editable && (
         <Card border="info" className="text-dark border-1 m-3 box-shadow-primary raceInfo bg-white-3">
           <Card.Title className="bg-info text-dark d-flex justify-content-start ">
-            <div className="mr-auto">{this.props.name}</div>
+            <div className="mr-auto">{this.props.name} <span className="text-muted"><h5>{this.props.raceID}</h5></span></div>
             <div>
               <Button className="bg-transparent border-0 text-danger" onClick={this.handleRemoveRace}><FontAwesomeIcon icon="minus-circle" className="fa-2x"></FontAwesomeIcon></Button>            
               <Button className="bg-transparent border-0 text-muted" onClick={this.toggleEdit}><FontAwesomeIcon icon="edit"  className="fa-2x"/></Button>
@@ -190,12 +192,12 @@ class AdminRaceInfo extends Component {
               <li><b className="mr-3" >Change Req:</b> {this.props.changeRequirement ? ('yes'):('no')}</li>
               { this.props.internalInfo>=0 && (<li><b className="mr-3" >Race Desc:</b> <Button onClick={()=>{this.handleShowModal("internalInfo")}}>more</Button></li>)}
               <li><b className="mr-3" >More Info:</b>  {this.props.info}</li>
-              {this.props.attendance.length>0 && (<li><b className="mr-3" >practices attendances:</b><Button onClick={()=>{this.handleShowModal("attendanceModal")}}>show</Button></li>)}
+              {this.props.attendance.length>0 && (<li><b className="mr-3" >practices attendances:</b><Button onClick={()=>{this.handleShowModal("attendance")}}>show</Button></li>)}
             </ul>
           </Card.Body>
         </Card>         
       )}    
-        {this.props.internalInfo>=0 && (
+        {this.props.internalInfo && this.props.internalInfo>=0 && (
           <Modal show={this.state.showInternalInfoModal} onHide={this.handleCloseModal} animation={false} size="lg" centered >
               <Modal.Header closeButton />
               <Modal.Title className="pl-4"> {events[this.props.internalInfo].title}</Modal.Title>
