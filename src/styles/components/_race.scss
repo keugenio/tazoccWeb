@@ -28,3 +28,14 @@
 .event-tooltip-content:not(:last-child) {
   border-bottom: 1px solid #ccc;
 }
+
+.raceDashboard {
+  font-size: 2rem;
+  & :not(:last-child) {
+    margin-right: 1rem;
+  }
+  & .comma:not(:last-child):after{
+    content: ", ";
+  }
+  
+}

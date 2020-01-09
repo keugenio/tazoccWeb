@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {Card, Form, Col, Row, Button, Modal } from 'react-bootstrap';
 import firebase, { dbAllPaddlers } from '../Firebase';
-import { setUserName, setBirthday } from '../../store/store';
+import { setUserName, setBirthday, setSelectedPaddler } from '../../store/store';
 import Swal from 'sweetalert2';
 import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -76,6 +76,7 @@ class EditProfile extends Component {
           timer: 1500
         }) .then(()=>{
           this.props.dispatch(setBirthday(this.state.birthday))
+          this.props.dispatch(setSelectedPaddler(this.props.user))
           this.setState({birthday:''})
         })       
       })
