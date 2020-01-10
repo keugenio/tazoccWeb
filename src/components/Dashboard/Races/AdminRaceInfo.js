@@ -180,18 +180,22 @@ class AdminRaceInfo extends Component {
               </div>
             </Card.Title>
             <Card.Body>
-              <ul>
-                <li><b className="mr-3" >Location:</b>  {this.props.location}</li>
-                <li><b className="mr-3" >Host:</b>  {this.props.host}</li>
-                <li><b className="mr-3" >Date:</b> {moment(this.props.date).format('dddd MMM D, YYYY')}</li>         
-                {this.props.longCourseReq && (<li><b className="mr-3" >Long Course Req: </b>{this.props.longCourseReq} </li>)}
-                {this.props.shortCourseReq &&(<li><b className="mr-3" >Short Course Req:</b>{this.props.shortCourseReq}</li>)}
-                <li><b className="mr-3" >Change Req:</b> {this.props.changeRequirement ? ('yes'):('no')}</li>
-                { this.props.internalInfo && this.props.internalInfo>=0 && (<li><b className="mr-3" >Race Desc:</b> <Button onClick={()=>{this.handleShowModal("internalInfo")}}>more</Button></li>)}
-                <li><b className="mr-3" >More Info:</b>  {this.props.info}</li>
-                {this.props.attendance.length>0 && (<li><b className="mr-3" >practice attendances:</b><Button onClick={()=>{this.handleShowModal("attendance")}}>show</Button></li>)}
-                <li><b className="mr-3" >Race Dashboard:</b><Button onClick={()=>{this.handleShowModal("raceDashboard")}}>show</Button></li>
-              </ul>
+              <div className="border border-success p-3">
+
+                  <div><b>Location:</b>  {this.props.location}</div>
+                  <div><b>Host:</b>  {this.props.host}</div>
+                  <div><b>Date:</b> {moment(this.props.date).format('dddd MMM D, YYYY')}</div>         
+                  {this.props.longCourseReq && (<div><b>Long Course Req: </b>{this.props.longCourseReq} </div>)}
+                  {this.props.shortCourseReq &&(<div><b>Short Course Req:</b>{this.props.shortCourseReq}</div>)}
+                  <div><b>Change Req:</b> {this.props.changeRequirement ? ('yes'):('no')}</div>
+                  { this.props.internalInfo && this.props.internadivnfo>=0 && (<div><b>Race Desc:</b> <Button onClick={()=>{this.handleShowModal("internalInfo")}}>more</Button></div>)}
+                  <div><b>More Info:</b>  {this.props.info}</div>
+                  {this.props.attendance.length>0 && (<div><b className="mr-2">practice attendances:</b><Button onClick={()=>{this.handleShowModal("attendance")}}>show</Button></div>)}
+
+              </div>
+              <div className="d-flex p-3">
+                <Button variant="success" onClick={()=>{this.handleShowModal("raceDashboard")}} className="mx-auto">Race Dashboard</Button>
+              </div>
             </Card.Body>
           </Card>         
         )}    
@@ -256,7 +260,7 @@ class AdminRaceInfo extends Component {
           </Modal> 
         
         )}
-        <Modal show={this.state.showRaceDashboardModal} onHide={this.handleCloseModal} animation={false} size="lg" centered className="raceDashboard" >
+        <Modal show={this.state.showRaceDashboardModal} onHide={this.handleCloseModal} animation={false} centered className="raceDashboard" >
           <Modal.Header className="bg-info" closeButton>
             <Modal.Title>Dashboard for {this.props.name} </Modal.Title>
           </Modal.Header>

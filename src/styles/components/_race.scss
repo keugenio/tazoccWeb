@@ -31,11 +31,20 @@
 
 .raceDashboard {
   font-size: 2rem;
-  & :not(:last-child) {
+  & span:not(:last-child) {
     margin-right: 1rem;
   }
   & .comma:not(:last-child):after{
     content: ", ";
+  }
+  & section:not(:last-child) {
+    margin-bottom:3rem;
+  }
+  & .modal-dialog {
+    max-width:90vw;
+  }
+  & .nav-item {
+    border-left: $primary thick;
   }
   
 }
