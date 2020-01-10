@@ -7,6 +7,8 @@ $primary:#0d47a1;
 $dark:#212121;
 $gray:#3E4551;
 $white:#e3f2fd;
+$pink:#FFC0CB;
+$muted:#999999;
 $taz-blue:#01579b; 
 $primary-dark:#2559aa;
 $primary-light:#6d90c6;
@@ -36,4 +38,7 @@ $desktop-breakpoint: 45rem;
   &4 {
     background-color: rgba($white, .75)!important;
   }      
+}
+.bg-pink {
+  background-color:$pink;
 }

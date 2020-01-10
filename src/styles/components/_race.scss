@@ -43,8 +43,22 @@
   & .modal-dialog {
     max-width:90vw;
   }
-  & .nav-item {
-    border-left: $primary thick;
+  .nav-item{
+    border-bottom: thin solid $muted;
   }
+  .nav-link {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    & svg.fa-female {
+      color:$pink;
+    }
+    & .badge {
+      display: flex;
+      align-items: center;
+      padding:.25rem .5rem;      
+    }
+  }
+
   
 }
