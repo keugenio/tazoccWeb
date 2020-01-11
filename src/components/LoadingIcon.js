@@ -1,9 +1,9 @@
 import React from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-const LoadingIcon = () => (
+const LoadingIcon = (props) => (
   <div style={displayWaitingIconStyle}>
-  <FontAwesomeIcon icon="sync" spin={true} size="6x" />
+  <FontAwesomeIcon icon="sync" spin={true} size="6x" className={props.textColor}/>
 </div>
 )
 

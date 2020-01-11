@@ -4,6 +4,8 @@ import { dbRacesToPaddlers, dbAllPaddlers } from '../../Firebase';
 import moment from 'moment';
 import { Card, Col, Tab, Nav, Row, Badge } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import LoadingIcon from '../../LoadingIcon';
+import "babel-polyfill";
 
 function mapStateToProps({paddlers}) {
   return {
@@ -22,12 +24,12 @@ class RaceDashBoard extends Component {
       mastersCoedMaleCount:0, mastersCoedFemaleCount:0,
       srMastersCoedMaleCount:0, srMastersCoedFemaleCount:0,
       goldenMastersCoedMaleCount:0, goldenMastersCoedFemaleCount:0,
-      keiki:[]
+      keiki:[], ready:false
     }
   }
-  get
-  componentDidMount(){
-    dbRacesToPaddlers.where("raceID", "==", this.props.raceID)
+
+  async componentDidMount(){
+    await dbRacesToPaddlers.where("raceID", "==", this.props.raceID)
       .get()
       .then((querySnapshot)=>{
         let racers = [];
@@ -86,7 +88,8 @@ class RaceDashBoard extends Component {
           paddlers:[...racers.sort((a,b)=>(a.age > b.age) ? 1: -1)],
           openMen, openWomen, mastersMen, mastersWomen, srMastersMen, srMastersWomen, goldenMastersMen, goldenMastersWomen,
           openCoed, mastersCoed, srMastersCoed, goldenMastersCoed, openCoedMaleCount, openCoedFemaleCount, mastersCoedMaleCount, mastersCoedFemaleCount,
-          srMastersCoedMaleCount, srMastersCoedFemaleCount, goldenMastersCoedMaleCount, goldenMastersCoedFemaleCount,keiki
+          srMastersCoedMaleCount, srMastersCoedFemaleCount, goldenMastersCoedMaleCount, goldenMastersCoedFemaleCount,keiki,
+          ready:true
         })
       })    
   }
@@ -94,6 +97,8 @@ class RaceDashBoard extends Component {
   render() {
     return (
       <div className="raceDashboard p-2">
+      { !this.state.ready && <LoadingIcon textColor="text-dark"/>}
+
         <section>        
           <Card className="border border-success p-2">
             <Card.Title className="text-sucess">Paddlers attending race:</Card.Title>
@@ -235,7 +240,7 @@ class RaceDashBoard extends Component {
                               <Col>
                                 <div className="col w-100 d-flex flex-wrap">
                                   {this.state.openMen.map((paddler, i)=>(
-                                    <div key={i} className="border border-danger p-2 mr-2">{paddler.paddlerName}, {paddler.age}</div>)
+                                    <div key={i} className="border border-danger p-2 mr-2 bg-primary text-white">{paddler.paddlerName}, {paddler.age}</div>)
                                   )}          
                                 </div>            
                               </Col>
@@ -251,7 +256,7 @@ class RaceDashBoard extends Component {
                             <Col>
                               <div className="col w-100 d-flex flex-wrap">
                                 {this.state.openWomen.map((paddler, i)=>(
-                                  <div key={i} className="border border-danger p-2 mr-2">{paddler.paddlerName}, {paddler.age}</div>)
+                                  <div key={i} className="border border-danger p-2 mr-2 bg-pink">{paddler.paddlerName}, {paddler.age}</div>)
                                 )}          
                               </div>            
                             </Col>
@@ -267,7 +272,7 @@ class RaceDashBoard extends Component {
                             <Col>
                               <div className="col w-100 d-flex flex-wrap">
                                 {this.state.mastersMen.map((paddler, i)=>(
-                                  <div key={i} className="border border-danger p-2 mr-2">{paddler.paddlerName}, {paddler.age}</div>)
+                                  <div key={i} className="border border-danger p-2 mr-2 bg-primary text-white">{paddler.paddlerName}, {paddler.age}</div>)
                                 )}          
                               </div>            
                             </Col>
@@ -283,7 +288,7 @@ class RaceDashBoard extends Component {
                             <Col>
                               <div className="col w-100 d-flex flex-wrap">
                                 {this.state.mastersWomen.map((paddler, i)=>(
-                                  <div key={i} className="border border-danger p-2 mr-2">{paddler.paddlerName}, {paddler.age}</div>)
+                                  <div key={i} className="border border-danger p-2 mr-2 bg-pink">{paddler.paddlerName}, {paddler.age}</div>)
                                 )}          
                               </div>            
                             </Col>
@@ -299,7 +304,7 @@ class RaceDashBoard extends Component {
                             <Col>
                               <div className="col w-100 d-flex flex-wrap">
                                 {this.state.srMastersMen.map((paddler, i)=>(
-                                  <div key={i} className="border border-danger p-2 mr-2">{paddler.paddlerName}, {paddler.age}</div>)
+                                  <div key={i} className="border border-danger p-2 mr-2 bg-primary text-white">{paddler.paddlerName}, {paddler.age}</div>)
                                 )}          
                               </div>            
                             </Col>
@@ -315,7 +320,7 @@ class RaceDashBoard extends Component {
                             <Col>
                               <div className="col w-100 d-flex flex-wrap">
                                 {this.state.srMastersWomen.map((paddler, i)=>(
-                                  <div key={i} className="border border-danger p-2 mr-2">{paddler.paddlerName}, {paddler.age}</div>)
+                                  <div key={i} className="border border-danger p-2 mr-2 bg-pink">{paddler.paddlerName}, {paddler.age}</div>)
                                 )}          
                               </div>            
                             </Col>
@@ -331,7 +336,7 @@ class RaceDashBoard extends Component {
                             <Col>
                               <div className="col w-100 d-flex flex-wrap">
                                 {this.state.goldenMastersMen.map((paddler, i)=>(
-                                  <div key={i} className="border border-danger p-2 mr-2">{paddler.paddlerName}, {paddler.age}</div>)
+                                  <div key={i} className="border border-danger p-2 mr-2 bg-primary text-white">{paddler.paddlerName}, {paddler.age}</div>)
                                 )}          
                               </div>            
                             </Col>
@@ -347,7 +352,7 @@ class RaceDashBoard extends Component {
                             <Col>
                               <div className="col w-100 d-flex flex-wrap">
                                 {this.state.goldenMastersWomen.map((paddler, i)=>(
-                                  <div key={i} className="border border-danger p-2 mr-2">{paddler.paddlerName}, {paddler.age}</div>)
+                                  <div key={i} className="border border-danger p-2 mr-2 bg-pink">{paddler.paddlerName}, {paddler.age}</div>)
                                 )}          
                               </div>            
                             </Col>
@@ -363,7 +368,7 @@ class RaceDashBoard extends Component {
                             <Col>
                               <div className="col w-100 d-flex flex-wrap">
                                 {this.state.openCoed.map((paddler, i)=>(
-                                  <div key={i} className={`border border-danger p-2 mr-2 ${paddler.sex=="male" || paddler.sex=="kane" ? ('bg-primary'):('bg-pink')}`}>{paddler.paddlerName}, {paddler.age}</div>)
+                                  <div key={i} className={`border border-danger p-2 mr-2 ${paddler.sex=="male" || paddler.sex=="kane" ? ('bg-primary text-white'):('bg-pink')}`}>{paddler.paddlerName}, {paddler.age}</div>)
                                 )}          
                               </div>            
                             </Col>
@@ -379,7 +384,7 @@ class RaceDashBoard extends Component {
                             <Col>
                               <div className="col w-100 d-flex flex-wrap">
                                 {this.state.mastersCoed.map((paddler, i)=>(
-                                  <div key={i} className={`border border-danger p-2 mr-2 ${paddler.sex=="male" || paddler.sex=="kane" ? ('bg-primary'):('bg-pink')}`}>{paddler.paddlerName}, {paddler.age}</div>)
+                                  <div key={i} className={`border border-danger p-2 mr-2 ${paddler.sex=="male" || paddler.sex=="kane" ? ('bg-primary text-white'):('bg-pink')}`}>{paddler.paddlerName}, {paddler.age}</div>)
                                 )}          
                               </div>            
                             </Col>
@@ -395,7 +400,7 @@ class RaceDashBoard extends Component {
                             <Col>
                               <div className="col w-100 d-flex flex-wrap">
                                 {this.state.srMastersCoed.map((paddler, i)=>(
-                                  <div key={i} className={`border border-danger p-2 mr-2 ${paddler.sex=="male" || paddler.sex=="kane" ? ('bg-primary'):('bg-pink')}`}>{paddler.paddlerName}, {paddler.age}</div>)
+                                  <div key={i} className={`border border-danger p-2 mr-2 ${paddler.sex=="male" || paddler.sex=="kane" ? ('bg-primary text-white'):('bg-pink')}`}>{paddler.paddlerName}, {paddler.age}</div>)
                                 )}          
                               </div>            
                             </Col>
@@ -411,7 +416,7 @@ class RaceDashBoard extends Component {
                             <Col>
                               <div className="col w-100 d-flex flex-wrap">
                                 {this.state.goldenMastersCoed.map((paddler, i)=>(
-                                  <div key={i} className={`border border-danger p-2 mr-2 ${paddler.sex=="male" || paddler.sex=="kane" ? ('bg-primary'):('bg-pink')}`}>{paddler.paddlerName}, {paddler.age}</div>)
+                                  <div key={i} className={`border border-danger p-2 mr-2 ${paddler.sex=="male" || paddler.sex=="kane" ? ('bg-primary text-white'):('bg-pink')}`}>{paddler.paddlerName}, {paddler.age}</div>)
                                 )}          
                               </div>            
                             </Col>

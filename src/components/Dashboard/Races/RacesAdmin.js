@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { dbRaces } from '../../Firebase';
+import { dbRaces, dbRacesToPaddlers } from '../../Firebase';
 import { Row, Col, Card, CardGroup, Modal, Button, Form, Accordion} from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { addRace } from '../../../store/store';
+import { addRace, updateRace } from '../../../store/store';
 import events from '../../eventDescriptions';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -23,7 +23,8 @@ class RacesAdmin extends Component {
       info:'',
       internalInfo: -1,
       changeRequirement:false,
-      rotation:0
+      rotation:0,
+      ready:false
     }
   }
   
@@ -31,17 +32,26 @@ class RacesAdmin extends Component {
     dbRaces.get().then(docs=>{
       docs.docs.forEach(doc => {
         const raceData = doc.data();        
-        if (raceData.enabled!= false){
+        if (raceData.enabled!= false){         
           const newRaceData = {...raceData, id:doc.id}
           this.props.dispatch(addRace(newRaceData));}
       });
-    })    
+    })
+    .then(()=>{
+      this.props.races.forEach(race=>{
+        let paddlerCount=0;
+        dbRacesToPaddlers.where("raceID", "==", race.id).get().then( snapdata => {
+          this.props.dispatch(updateRace({...race, paddlerCount:snapdata.docs.length } ))                      
+        })        
+      })
+    })  
   }
   componentDidMount() {
     //if no races in the store, load races from firestore into store
     if (this.props.races.length<=0){
-      this.getRacesAndUpdateStore()
+      this.getRacesAndUpdateStore();
      }
+     this.setState({ready:true})
   }
 
   rotate = () => {
@@ -134,16 +144,16 @@ class RacesAdmin extends Component {
                     <FontAwesomeIcon icon="plus-circle" className="fa-3x text-warning bg-transparent"/>
                   </Button>
                 </Card.Title>
-                <Card.Body>
-                  { this.props.races.length > 0 && (
-                        <CardGroup>
-                          {this.props.races.map((race,i)=>{
-                            const {id, name, host, location, date, longCourseReq, shortCourseReq, changeRequirement, internalInfo, info} = race
-                            return (
-                              <Race key={i} raceID={id} name={name} host={host} location={location} internalInfo={internalInfo} info={info} date={date} longCourseReq={longCourseReq} shortCourseReq={shortCourseReq} changeRequirement={changeRequirement} currentPage = {this.props.currentPage}/>
-                            )
-                          })}           
-                      </CardGroup>
+                <Card.Body>                
+                  { this.props.races.length > 0 && ( 
+                    <CardGroup>
+                      {this.props.races.map((race,i)=>{
+                        const {id, name, host, location, date, longCourseReq, shortCourseReq, changeRequirement, internalInfo, info} = race
+                        return (
+                          <Race key={i} raceID={id} name={name} host={host} location={location} internalInfo={internalInfo} info={info} date={date} longCourseReq={longCourseReq} shortCourseReq={shortCourseReq} changeRequirement={changeRequirement} currentPage = {this.props.currentPage} />
+                        )
+                      })}           
+                    </CardGroup>
                   )}
                 </Card.Body>
               </div>

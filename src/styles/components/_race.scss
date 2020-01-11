@@ -19,6 +19,9 @@
     height: 25px;
     width: 25px;
   }
+  & .btnDashboard {
+    font-size: 2rem;
+  }
 }
 
 .event-tooltip-content {
@@ -59,6 +62,8 @@
       padding:.25rem .5rem;      
     }
   }
-
+  & .modal-title {
+    font-size: 2rem;
+  }
   
 }

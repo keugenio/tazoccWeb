@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Card, Button, Modal } from 'react-bootstrap';
+import { connect } from 'react-redux';
+import { Card, Button, Modal, Badge } from 'react-bootstrap';
 import moment from 'moment'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import DatePicker from "react-datepicker";
@@ -28,10 +29,15 @@ class AdminRaceInfo extends Component {
       attendance: [],      
       showInternalInfoModal: false,
       showAttendanceModal: false,
-      showRaceDashboardModal:false
+      showRaceDashboardModal:false,
+      paddlerCount:0
     }  
   }
 
+  static getDerivedStateFromProps(props, state) {
+    const raceInfo = props.races.find(race=>race.id==props.raceID)
+    return{paddlerCount:raceInfo.paddlerCount}
+  }
   toggleEdit = () => {
     const  { raceID, name, host, location, info, internalInfo, date, longCourseReq, shortCourseReq, changeRequirement } = this.props
     this.setState({...this.state, raceID, name:(name||''), host:(host||''), location:(location||''), info:(info||''), internalInfo:(internalInfo || -1), date, longCourseReq:(longCourseReq||''), shortCourseReq:(shortCourseReq||''), changeRequirement, editable:true})
@@ -181,7 +187,6 @@ class AdminRaceInfo extends Component {
             </Card.Title>
             <Card.Body>
               <div className="border border-success p-3">
-
                   <div><b>Location:</b>  {this.props.location}</div>
                   <div><b>Host:</b>  {this.props.host}</div>
                   <div><b>Date:</b> {moment(this.props.date).format('dddd MMM D, YYYY')}</div>         
@@ -191,10 +196,12 @@ class AdminRaceInfo extends Component {
                   { this.props.internalInfo && this.props.internadivnfo>=0 && (<div><b>Race Desc:</b> <Button onClick={()=>{this.handleShowModal("internalInfo")}}>more</Button></div>)}
                   <div><b>More Info:</b>  {this.props.info}</div>
                   {this.props.attendance.length>0 && (<div><b className="mr-2">practice attendances:</b><Button onClick={()=>{this.handleShowModal("attendance")}}>show</Button></div>)}
-
               </div>
               <div className="d-flex p-3">
-                <Button variant="success" onClick={()=>{this.handleShowModal("raceDashboard")}} className="mx-auto">Race Dashboard</Button>
+                <Button variant="success" onClick={()=>{this.handleShowModal("raceDashboard")}} className="mx-auto btnDashboard">
+                Race Dashboard
+                <Badge variant="warning" className="ml-3">{this.state.paddlerCount}</Badge>
+                </Button>
               </div>
             </Card.Body>
           </Card>         
@@ -257,12 +264,11 @@ class AdminRaceInfo extends Component {
                 Close
               </Button>
             </Modal.Footer>
-          </Modal> 
-        
+          </Modal>          
         )}
         <Modal show={this.state.showRaceDashboardModal} onHide={this.handleCloseModal} animation={false} centered className="raceDashboard" >
           <Modal.Header className="bg-info" closeButton>
-            <Modal.Title>Dashboard for {this.props.name} </Modal.Title>
+            <Modal.Title>Dashboard for {this.props.name} - {moment(this.props.date).format("MMMM DD, YYYY")} </Modal.Title>
           </Modal.Header>
           <Modal.Body className="">
             <RaceDashBoard raceID={this.props.raceID} />
@@ -284,4 +290,7 @@ const labelStyle = {
 const tableStyle = {
   fontSize:'1.5rem'
 }
-export default AdminRaceInfo;
+const MapStateToProps = ({ races }) => ({
+  races
+})
+export default connect(MapStateToProps)(AdminRaceInfo);
