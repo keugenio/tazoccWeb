@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { dbRacesToPaddlers, dbAllPaddlers } from '../../Firebase';
 import moment from 'moment';
-import { Card, Col, Tab, Nav, Row, Badge } from 'react-bootstrap';
+import { Card, Col, Tab, Nav, Row, Badge, Form, Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import LoadingIcon from '../../LoadingIcon';
 import "babel-polyfill";
@@ -24,7 +24,9 @@ class RaceDashBoard extends Component {
       mastersCoedMaleCount:0, mastersCoedFemaleCount:0,
       srMastersCoedMaleCount:0, srMastersCoedFemaleCount:0,
       goldenMastersCoedMaleCount:0, goldenMastersCoedFemaleCount:0,
-      keiki:[], ready:false
+      keiki:[], ready:false,
+      showEditTimeTrial:false,
+      ttBeingEdited:false
     }
   }
 
@@ -43,9 +45,9 @@ class RaceDashBoard extends Component {
         querySnapshot.forEach((race)=>{
           const raceToPaddlerInfo = race.data();
           const aRacer = this.props.paddlers.find(paddler=>paddler.uid==raceToPaddlerInfo.paddlerID)
-          racers.push({raceToPaddlerID: race.id, paddlerID:raceToPaddlerInfo.paddlerID, paddlerName:(aRacer ? aRacer.name:''), timeTrial:raceToPaddlerInfo.timeTrial, age:moment().diff(moment(aRacer.birthday), 'years'), sex:aRacer.sex})          
+            if (aRacer)
+              racers.push({raceToPaddlerID: race.id, paddlerID:raceToPaddlerInfo.paddlerID, paddlerName:aRacer.name, timeTrial:raceToPaddlerInfo.timeTrial, age:moment().diff(moment(aRacer.birthday), 'years'), sex:aRacer.sex})          
         })
-
         racers.forEach(paddler=> {
           if (paddler.sex == "kane" || paddler.sex=="male"){
             openMen.push(paddler);
@@ -91,22 +93,61 @@ class RaceDashBoard extends Component {
           srMastersCoedMaleCount, srMastersCoedFemaleCount, goldenMastersCoedMaleCount, goldenMastersCoedFemaleCount,keiki,
           ready:true
         })
+        this.setState(state=>{
+          const updatedPaddlersTT = state.paddlers.map(paddler=>{
+            if (!paddler.timeTrial)
+              return {...paddler, timeTrial:0}
+            else 
+              return {...paddler}
+          })
+          return {paddlers:updatedPaddlersTT}
+        })
       })    
   }
-
+  showEditTimeTrial = () => {
+    this.setState({showEditTimeTrial:true, ttBeingEdited:true})
+  }
+  saveTimeTrials = () => {
+    this.setState({showEditTimeTrial:false, ttBeingEdited:false})
+  }
   render() {
+
+    let sortedRacersByTT=this.state.paddlers.sort((a,b)=>(a.timeTrial < b.timeTrial) ? 1: -1);
+    
     return (
       <div className="raceDashboard p-2">
       { !this.state.ready && <LoadingIcon textColor="text-dark"/>}
-
         <section>        
           <Card className="border border-success p-2">
-            <Card.Title className="text-sucess">Paddlers attending race:</Card.Title>
+            <Card.Title className="text-success">Paddlers attending race:</Card.Title>
             <Card.Body className="row">
               {this.state.paddlers.map((paddler, i)=>{
-                return (<span key={i} className="paddler comma">{paddler.paddlerName}</span>)
+                <span key={i} className="paddler comma">{paddler.paddlerName}</span>
               })}         
             </Card.Body>        
+          </Card>
+        </section>
+        <section>
+          <Card className="border border-success">
+            <Card.Title className="text-dark p-2 d-flex justify-content-end border border-success">
+              <div className="mr-auto">Time Trials</div>
+              {this.state.showEditTimeTrial && (<Button variant="danger" onClick={this.saveTimeTrials} className="mr-3"><FontAwesomeIcon icon="save" className="fa-2x"/></Button>)} 
+              {!this.state.showEditTimeTrial && (<Button variant="muted" onClick={this.showEditTimeTrial}><FontAwesomeIcon icon="edit" className="fa-2x"/></Button> )}
+              {this.state.showEditTimeTrial && this.state.ttBeingEdited && (<Button variant="dark" onClick={this.saveTimeTrials}>X</Button>)}               
+            </Card.Title>
+            <Card.Body className="flex-column">
+              <ul>
+              { sortedRacersByTT.map((paddler,i)=>{
+                return (
+                  <li key={i} className={`d-flex align-items-center ${paddler.timeTrial<=0 ? 'text-danger font-weight-bold':''}`}>
+                    {paddler.paddlerName} | 
+                    {!this.state.showEditTimeTrial && paddler.timeTrial}
+                    {this.state.showEditTimeTrial && (<Col lg={1}><Form.Control type="text" defaultValue={paddler.timeTrial} onSubmit={this.setEditTimeTrial} className="border border-dark text-right" style={{fontSize:'1.5rem'}}></Form.Control></Col>)}
+                    <span>m</span>
+                  </li>)
+              })}
+              </ul>
+            </Card.Body>
           </Card>
         </section>
         <section>
