@@ -176,6 +176,10 @@ export const addPaddlerToAllPaddlers = (paddler) => ({
   type: 'ADD_PADDLER_TO_ALL_PADDLERS',
   paddler
 })
+export const updatePaddler = (paddler) => ({
+  type:'UPDATE_PADDLER',
+  paddler
+})
 const allPaddlersReducer = (state = [], action) => {
   switch (action.type) {
     case 'SET_PADDLERS':
@@ -183,7 +187,10 @@ const allPaddlersReducer = (state = [], action) => {
       case 'ADD_PADDLER':
         return [...state, action.newPaddler]   
       case 'ADD_PADDLER_TO_ALL_PADDLERS':
-        return [...state, action.paddler]   
+        return [...state, action.paddler]
+      case 'UPDATE_PADDLER':
+        const filteredPaddlers = this.state.filter(paddler=>paddler.uid!=action.paddler.uid);
+        return [...filteredPaddlers, action.paddler ]   
     default:
       return state;
   }

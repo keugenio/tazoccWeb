@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { dbRacesToPaddlers, dbAllPaddlers } from '../../Firebase';
+import { updatePaddler} from '../../../store/store'
 import moment from 'moment';
 import { Card, Col, Tab, Nav, Row, Badge, Form, Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -26,7 +27,9 @@ class RaceDashBoard extends Component {
       goldenMastersCoedMaleCount:0, goldenMastersCoedFemaleCount:0,
       keiki:[], ready:false,
       showEditTimeTrial:false,
-      ttBeingEdited:false
+      ttBeingEdited:false,
+      paddlerTTBeingEdited:null,
+      newTimeTrialValue:0
     }
   }
 
@@ -104,11 +107,34 @@ class RaceDashBoard extends Component {
         })
       })    
   }
-  showEditTimeTrial = () => {
-    this.setState({showEditTimeTrial:true, ttBeingEdited:true})
+  handleChange = (e) =>{
+    this.setState({newTimeTrialValue:e.target.value})
+  }
+  showEditTimeTrial = (e) => {
+    const paddler = this.state.paddlers.find(paddler=>paddler.paddlerID == e.target.id);
+    this.setState({showEditTimeTrial:true, ttBeingEdited:true, paddlerTTBeingEdited:e.target.id, newTimeTrialValue:paddler.timeTrial});
   }
   saveTimeTrials = () => {
-    this.setState({showEditTimeTrial:false, ttBeingEdited:false})
+    // get raceToPaddlerID record number to edit
+    const raceToPaddlerID = this.state.paddlers.find(paddler=>paddler.paddlerID == this.state.paddlerTTBeingEdited)
+    // update firebase
+    dbRacesToPaddlers.doc(raceToPaddlerID.raceToPaddlerID).update({
+      timeTrial:this.state.newTimeTrialValue
+    })
+    // update paddler in state. No need to update store, timeTrial only being used here. 
+    this.setState(state=>{
+      const editedPaddler = state.paddlers.find(paddler => paddler.paddlerID == state.paddlerTTBeingEdited);
+      const filteredPaddlers = state.paddlers.filter(paddler => paddler.paddlerID != state.paddlerTTBeingEdited)
+      return {
+        showEditTimeTrial:false, ttBeingEdited:false, paddlerTTBeingEdited:null,
+        paddlers:[...filteredPaddlers, {...editedPaddler, timeTrial:state.newTimeTrialValue}]
+      }
+    }) 
+    this.setState({})
+
+  }
+  cancelEditTimeTrial = () => {
+    this.setState({showEditTimeTrial:false, ttBeingEdited:false, paddlerTTBeingEdited:null})
   }
   render() {
 
@@ -119,31 +145,33 @@ class RaceDashBoard extends Component {
       { !this.state.ready && <LoadingIcon textColor="text-dark"/>}
         <section>        
           <Card className="border border-success p-2">
-            <Card.Title className="text-success">Paddlers attending race:</Card.Title>
-            <Card.Body className="row">
-              {this.state.paddlers.map((paddler, i)=>{
+            <Card.Title className="text-success">{this.state.paddlers.length} paddlers attending race:</Card.Title>
+            <Card.Body className="row">    
+                     
+              {this.state.paddlers.map((paddler, i)=>(               
                 <span key={i} className="paddler comma">{paddler.paddlerName}</span>
-              })}         
+              ))}         
             </Card.Body>        
           </Card>
         </section>
         <section>
           <Card className="border border-success">
-            <Card.Title className="text-dark p-2 d-flex justify-content-end border border-success">
-              <div className="mr-auto">Time Trials</div>
-              {this.state.showEditTimeTrial && (<Button variant="danger" onClick={this.saveTimeTrials} className="mr-3"><FontAwesomeIcon icon="save" className="fa-2x"/></Button>)} 
-              {!this.state.showEditTimeTrial && (<Button variant="muted" onClick={this.showEditTimeTrial}><FontAwesomeIcon icon="edit" className="fa-2x"/></Button> )}
-              {this.state.showEditTimeTrial && this.state.ttBeingEdited && (<Button variant="dark" onClick={this.saveTimeTrials}>X</Button>)}               
+            <Card.Title className="text-dark p-2 d-flex justify-content-start">
+              <div className="mr-auto">Time Trials</div>             
             </Card.Title>
             <Card.Body className="flex-column">
               <ul>
               { sortedRacersByTT.map((paddler,i)=>{
                 return (
-                  <li key={i} className={`d-flex align-items-center ${paddler.timeTrial<=0 ? 'text-danger font-weight-bold':''}`}>
-                    {paddler.paddlerName} | 
-                    {!this.state.showEditTimeTrial && paddler.timeTrial}
-                    {this.state.showEditTimeTrial && (<Col lg={1}><Form.Control type="text" defaultValue={paddler.timeTrial} onSubmit={this.setEditTimeTrial} className="border border-dark text-right" style={{fontSize:'1.5rem'}}></Form.Control></Col>)}
+                  
+                  <li key={i} className="d-flex align-items-center">
+                    <a href="#" onClick={this.showEditTimeTrial} id={paddler.paddlerID} className="mr-3">{paddler.paddlerName}</a>
+                    <span className="mx-3">|</span>
+                    <span className={`${paddler.timeTrial<=0 ? 'text-danger font-weight-bold':''}`}>{paddler.paddlerID!=this.state.paddlerTTBeingEdited && paddler.timeTrial}</span>
+                    {this.state.showEditTimeTrial && paddler.paddlerID==this.state.paddlerTTBeingEdited && (<Col lg={1}><Form.Control type="text" value={this.state.newTimeTrialValue} onSubmit={this.setEditTimeTrial} onChange={this.handleChange} className="border border-dark text-right" style={{fontSize:'1.5rem'}}></Form.Control></Col>)}
                     <span>m</span>
+                    {this.state.showEditTimeTrial && paddler.paddlerID==this.state.paddlerTTBeingEdited && (<Button variant="danger" onClick={this.saveTimeTrials} className="mr-3"><FontAwesomeIcon icon="save" className="fa-2x"/></Button>)} 
+                    {this.state.showEditTimeTrial && paddler.paddlerID==this.state.paddlerTTBeingEdited && (<Button variant="muted" onClick={this.cancelEditTimeTrial}>X</Button> )}                    
                   </li>)
               })}
               </ul>
