@@ -145,7 +145,7 @@ class RaceDashBoard extends Component {
       { !this.state.ready && <LoadingIcon textColor="text-dark"/>}
         <section>        
           <Card className="border border-success p-2">
-            <Card.Title className="text-success">{this.state.paddlers.length} paddlers attending race:</Card.Title>
+            <Card.Title className="bg-success text-white">{this.state.paddlers.length} paddlers attending race:</Card.Title>
             <Card.Body className="row">    
                      
               {this.state.paddlers.map((paddler, i)=>(               
@@ -165,9 +165,13 @@ class RaceDashBoard extends Component {
                 return (
                   
                   <li key={i} className="d-flex align-items-center">
-                    <a href="#" onClick={this.showEditTimeTrial} id={paddler.paddlerID} className="mr-3">{paddler.paddlerName}</a>
+                    {paddler.paddlerName}
                     <span className="mx-3">|</span>
-                    <span className={`${paddler.timeTrial<=0 ? 'text-danger font-weight-bold':''}`}>{paddler.paddlerID!=this.state.paddlerTTBeingEdited && paddler.timeTrial}</span>
+                    <span className={`${paddler.timeTrial<=0 ? 'text-danger font-weight-bold':''}`}>
+                      <u><a href="#" onClick={this.showEditTimeTrial} id={paddler.paddlerID} className="mr-3">
+                        {paddler.paddlerID!=this.state.paddlerTTBeingEdited && paddler.timeTrial}
+                      </a></u>
+                    </span>  
                     {this.state.showEditTimeTrial && paddler.paddlerID==this.state.paddlerTTBeingEdited && (<Col lg={1}><Form.Control type="text" value={this.state.newTimeTrialValue} onSubmit={this.setEditTimeTrial} onChange={this.handleChange} className="border border-dark text-right" style={{fontSize:'1.5rem'}}></Form.Control></Col>)}
                     <span>m</span>
                     {this.state.showEditTimeTrial && paddler.paddlerID==this.state.paddlerTTBeingEdited && (<Button variant="danger" onClick={this.saveTimeTrials} className="mr-3"><FontAwesomeIcon icon="save" className="fa-2x"/></Button>)} 
