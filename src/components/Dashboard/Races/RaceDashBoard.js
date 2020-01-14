@@ -1,16 +1,17 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { dbRacesToPaddlers, dbAllPaddlers } from '../../Firebase';
-import { updatePaddler} from '../../../store/store'
+import { dbRacesToPaddlers } from '../../Firebase';
 import moment from 'moment';
+import { setRaceForPaddlersToRace, addPaddlerToRace, updatePaddlerTT, clearPaddlersToRace } from '../../../store/store';
 import { Card, Col, Tab, Nav, Row, Badge, Form, Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import LoadingIcon from '../../LoadingIcon';
+import AddPaddler from './AddPaddler';
 import "babel-polyfill";
 
-function mapStateToProps({paddlers}) {
+function mapStateToProps({paddlers, races, paddlersForCurrentRace}) {
   return {
-    paddlers
+    paddlers, races, paddlersForCurrentRace
   };
 }
 
@@ -33,79 +34,82 @@ class RaceDashBoard extends Component {
     }
   }
 
-  async componentDidMount(){
-    await dbRacesToPaddlers.where("raceID", "==", this.props.raceID)
+  static getDerivedStateFromProps(props, state){
+    const racers = props.paddlersForCurrentRace;
+
+    let openMen=[]; let openWomen=[]; let mastersMen=[]; let mastersWomen=[]; let srMastersMen=[]; let srMastersWomen=[]; let goldenMastersMen=[]; let goldenMastersWomen=[]; 
+    let openCoed=[]; let mastersCoed=[]; let srMastersCoed=[]; let goldenMastersCoed=[]; 
+    let openCoedMaleCount=0; let openCoedFemaleCount=0;
+    let mastersCoedMaleCount=0; let mastersCoedFemaleCount=0;
+    let srMastersCoedMaleCount=0; let srMastersCoedFemaleCount=0;
+    let goldenMastersCoedMaleCount=0; let goldenMastersCoedFemaleCount=0;        
+    let keiki=[];    
+    
+    racers.forEach(paddler=> {
+      if (paddler.sex == "kane" || paddler.sex=="male"){
+        openMen.push(paddler);
+        openCoed.push(paddler);
+        openCoedMaleCount ++;
+      }
+        
+      if (paddler.sex == "wahine" || paddler.sex=="female"){
+        openWomen.push(paddler);
+        openCoed.push(paddler);
+        openCoedFemaleCount++;
+      }          
+      if ( (paddler.sex == "kane" || paddler.sex=="male") && paddler.age>=40){
+        mastersMen.push(paddler); mastersCoed.push(paddler);
+        mastersCoedMaleCount++;
+      }
+      if ( (paddler.sex == "wahine" || paddler.sex=="female") && paddler.age>=40 ){
+        mastersWomen.push(paddler); mastersCoed.push(paddler);
+        mastersCoedFemaleCount++;
+      }
+      if ( (paddler.sex == "kane" || paddler.sex=="male") && paddler.age>=50){
+        srMastersMen.push(paddler); srMastersCoed.push(paddler);
+        srMastersCoedMaleCount++;
+      }
+      if ( (paddler.sex == "wahine" || paddler.sex=="female") && paddler.age>=50 ){ 
+        srMastersWomen.push(paddler); srMastersCoed.push(paddler);
+        srMastersCoedFemaleCount++;
+      }
+      if ( (paddler.sex == "kane" || paddler.sex=="male") && paddler.age>=60){
+        goldenMastersMen.push(paddler); goldenMastersCoed.push(paddler)};
+        goldenMastersCoedMaleCount++;
+      if ( (paddler.sex == "wahine" || paddler.sex=="female") && paddler.age>=60 ){ 
+        goldenMastersWomen.push(paddler); goldenMastersCoed.push(paddler)};
+        goldenMastersCoedFemaleCount++;
+      if (paddler.age <=18)
+        keiki.push(paddler) 
+    })
+    const updatedRacers = racers.map(paddler=>{
+      const tt = paddler.timeTrial? paddler.timeTrial:0;
+      return {...paddler, timeTrial:tt}
+    })
+    return {
+      paddlers:[...updatedRacers.sort((a,b)=>(a.age > b.age) ? 1: -1)],
+      openMen, openWomen, mastersMen, mastersWomen, srMastersMen, srMastersWomen, goldenMastersMen, goldenMastersWomen,
+      openCoed, mastersCoed, srMastersCoed, goldenMastersCoed, openCoedMaleCount, openCoedFemaleCount, mastersCoedMaleCount, mastersCoedFemaleCount,
+      srMastersCoedMaleCount, srMastersCoedFemaleCount, goldenMastersCoedMaleCount, goldenMastersCoedFemaleCount,keiki,
+      ready:true
+    }      
+  }
+  componentDidMount(){
+    dbRacesToPaddlers.where("raceID", "==", this.props.raceID)
       .get()
       .then((querySnapshot)=>{
-        let racers = [];
-        let openMen=[]; let openWomen=[]; let mastersMen=[]; let mastersWomen=[]; let srMastersMen=[]; let srMastersWomen=[]; let goldenMastersMen=[]; let goldenMastersWomen=[]; 
-        let openCoed=[]; let mastersCoed=[]; let srMastersCoed=[]; let goldenMastersCoed=[]; 
-        let openCoedMaleCount=0; let openCoedFemaleCount=0;
-        let mastersCoedMaleCount=0; let mastersCoedFemaleCount=0;
-        let srMastersCoedMaleCount=0; let srMastersCoedFemaleCount=0;
-        let goldenMastersCoedMaleCount=0; let goldenMastersCoedFemaleCount=0;        
-        let keiki=[];
         querySnapshot.forEach((race)=>{
           const raceToPaddlerInfo = race.data();
           const aRacer = this.props.paddlers.find(paddler=>paddler.uid==raceToPaddlerInfo.paddlerID)
-            if (aRacer)
-              racers.push({raceToPaddlerID: race.id, paddlerID:raceToPaddlerInfo.paddlerID, paddlerName:aRacer.name, timeTrial:raceToPaddlerInfo.timeTrial, age:moment().diff(moment(aRacer.birthday), 'years'), sex:aRacer.sex})          
+            if (aRacer){
+              const paddler = {raceToPaddlerID: race.id, paddlerID:raceToPaddlerInfo.paddlerID, paddlerName:aRacer.name, timeTrial:raceToPaddlerInfo.timeTrial, age:moment().diff(moment(aRacer.birthday), 'years'), sex:aRacer.sex}
+              this.props.dispatch(addPaddlerToRace(paddler))                     
+            }
         })
-        racers.forEach(paddler=> {
-          if (paddler.sex == "kane" || paddler.sex=="male"){
-            openMen.push(paddler);
-            openCoed.push(paddler);
-            openCoedMaleCount ++;
-          }
-            
-          if (paddler.sex == "wahine" || paddler.sex=="female"){
-            openWomen.push(paddler);
-            openCoed.push(paddler);
-            openCoedFemaleCount++;
-          }          
-          if ( (paddler.sex == "kane" || paddler.sex=="male") && paddler.age>=40){
-            mastersMen.push(paddler); mastersCoed.push(paddler);
-            mastersCoedMaleCount++;
-          }
-          if ( (paddler.sex == "wahine" || paddler.sex=="female") && paddler.age>=40 ){
-            mastersWomen.push(paddler); mastersCoed.push(paddler);
-            mastersCoedFemaleCount++;
-          }
-          if ( (paddler.sex == "kane" || paddler.sex=="male") && paddler.age>=50){
-            srMastersMen.push(paddler); srMastersCoed.push(paddler);
-            srMastersCoedMaleCount++;
-          }
-          if ( (paddler.sex == "wahine" || paddler.sex=="female") && paddler.age>=50 ){ 
-            srMastersWomen.push(paddler); srMastersCoed.push(paddler);
-            srMastersCoedFemaleCount++;
-          }
-          if ( (paddler.sex == "kane" || paddler.sex=="male") && paddler.age>=60){
-            goldenMastersMen.push(paddler); goldenMastersCoed.push(paddler)};
-            goldenMastersCoedMaleCount++;
-          if ( (paddler.sex == "wahine" || paddler.sex=="female") && paddler.age>=60 ){ 
-            goldenMastersWomen.push(paddler); goldenMastersCoed.push(paddler)};
-            goldenMastersCoedFemaleCount++;
-          if (paddler.age <=18)
-            keiki.push(paddler) 
-        })
-
-        this.setState({
-          paddlers:[...racers.sort((a,b)=>(a.age > b.age) ? 1: -1)],
-          openMen, openWomen, mastersMen, mastersWomen, srMastersMen, srMastersWomen, goldenMastersMen, goldenMastersWomen,
-          openCoed, mastersCoed, srMastersCoed, goldenMastersCoed, openCoedMaleCount, openCoedFemaleCount, mastersCoedMaleCount, mastersCoedFemaleCount,
-          srMastersCoedMaleCount, srMastersCoedFemaleCount, goldenMastersCoedMaleCount, goldenMastersCoedFemaleCount,keiki,
-          ready:true
-        })
-        this.setState(state=>{
-          const updatedPaddlersTT = state.paddlers.map(paddler=>{
-            if (!paddler.timeTrial)
-              return {...paddler, timeTrial:0}
-            else 
-              return {...paddler}
-          })
-          return {paddlers:updatedPaddlersTT}
-        })
-      })    
+    })   
+  }
+  componentWillUnmount(){
+    this.props.dispatch(clearPaddlersToRace())
   }
   handleChange = (e) =>{
     this.setState({newTimeTrialValue:e.target.value})
@@ -121,36 +125,39 @@ class RaceDashBoard extends Component {
     dbRacesToPaddlers.doc(raceToPaddlerID.raceToPaddlerID).update({
       timeTrial:this.state.newTimeTrialValue
     })
-    // update paddler in state. No need to update store, timeTrial only being used here. 
-    this.setState(state=>{
-      const editedPaddler = state.paddlers.find(paddler => paddler.paddlerID == state.paddlerTTBeingEdited);
-      const filteredPaddlers = state.paddlers.filter(paddler => paddler.paddlerID != state.paddlerTTBeingEdited)
-      return {
-        showEditTimeTrial:false, ttBeingEdited:false, paddlerTTBeingEdited:null,
-        paddlers:[...filteredPaddlers, {...editedPaddler, timeTrial:state.newTimeTrialValue}]
-      }
-    }) 
-    this.setState({})
-
+    // update paddler in state. Find the paddler in paddlersForCurrentRace and update timeTrial. 
+    
+    const editedPaddler = this.state.paddlers.find(paddler=>paddler.paddlerID==this.state.paddlerTTBeingEdited)
+    this.props.dispatch(updatePaddlerTT({...editedPaddler, timeTrial:this.state.newTimeTrialValue}))
+    // update local state
+    const filteredPaddlers = this.state.paddlers.filter(paddler => paddler.paddlerID != this.state.paddlerTTBeingEdited)
+    this.setState({
+      showEditTimeTrial:false, ttBeingEdited:false, paddlerTTBeingEdited:null,
+      paddlers:[...filteredPaddlers, {...editedPaddler, timeTrial:this.state.newTimeTrialValue}]
+    })
   }
   cancelEditTimeTrial = () => {
     this.setState({showEditTimeTrial:false, ttBeingEdited:false, paddlerTTBeingEdited:null})
   }
   render() {
 
-    let sortedRacersByTT=this.state.paddlers.sort((a,b)=>(a.timeTrial < b.timeTrial) ? 1: -1);
-    
+    //let sortedRacersByTT=this.state.paddlers.sort((a,b)=>(a.timeTrial < b.timeTrial) ? 1: -1);
+    let sortedRacersByTT=this.props.paddlersForCurrentRace.sort((a,b)=>(a.timeTrial < b.timeTrial) ? 1: -1);
     return (
       <div className="raceDashboard p-2">
       { !this.state.ready && <LoadingIcon textColor="text-dark"/>}
         <section>        
           <Card className="border border-success p-2">
-            <Card.Title className="bg-success text-white">{this.state.paddlers.length} paddlers attending race:</Card.Title>
+            <Card.Title className="bg-success text-white">{this.props.paddlersForCurrentRace.length} paddlers attending race:</Card.Title>
             <Card.Body className="row">    
-                     
-              {this.state.paddlers.map((paddler, i)=>(               
-                <span key={i} className="paddler comma">{paddler.paddlerName}</span>
-              ))}         
+             <Col lg={7}>       
+                {this.state.paddlers.map((paddler, i)=>(               
+                  <span key={i} className="paddler comma">{paddler.paddlerName}</span>
+                ))}
+              </Col> 
+              <Col lg={5}>
+                <AddPaddler raceID={this.props.raceID} />
+              </Col>         
             </Card.Body>        
           </Card>
         </section>
@@ -166,10 +173,10 @@ class RaceDashBoard extends Component {
                   
                   <li key={i} className="d-flex align-items-center">
                     {paddler.paddlerName}
-                    <span className="mx-3">|</span>
+                    <span className="ml-3">|</span>
                     <span className={`${paddler.timeTrial<=0 ? 'text-danger font-weight-bold':''}`}>
-                      <u><a href="#" onClick={this.showEditTimeTrial} id={paddler.paddlerID} className="mr-3">
-                        {paddler.paddlerID!=this.state.paddlerTTBeingEdited && paddler.timeTrial}
+                      <u><a href="#" onClick={this.showEditTimeTrial} id={paddler.paddlerID}>
+                        {paddler.paddlerID!=this.state.paddlerTTBeingEdited && (paddler.timeTrial || 'n/a')}
                       </a></u>
                     </span>  
                     {this.state.showEditTimeTrial && paddler.paddlerID==this.state.paddlerTTBeingEdited && (<Col lg={1}><Form.Control type="text" value={this.state.newTimeTrialValue} onSubmit={this.setEditTimeTrial} onChange={this.handleChange} className="border border-dark text-right" style={{fontSize:'1.5rem'}}></Form.Control></Col>)}

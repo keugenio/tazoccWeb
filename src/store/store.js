@@ -284,6 +284,39 @@ const racesPaddlerSignedUpForReducer = ( state=[], action ) =>{
       return state;
   }
 }
+
+/*****  paddlers to races actions and reducer *******/
+export const addPaddlerToRace = (paddler) => ({
+  type: 'ADD_PADDLER_TO_RACE',
+  paddler
+})
+export const removePaddlerFromRace = (paddler) => ({
+  type: 'REMOVE_PADDLER_FROM_RACE',
+  paddler
+})
+export const updatePaddlerTT = (paddler) => ({
+  type:'UPDATE_PADDLER_TT',
+  paddler
+})
+export const clearPaddlersToRace= () => ({
+  type:'CLEAR_PADDLERS_TO_RACE'
+})
+const paddlersToRaceReducer = (state=[], action) =>{
+  switch (action.type) {
+    case 'ADD_PADDLER_TO_RACE':
+      return [...state, action.paddler]
+    case 'UPDATE_PADDLER_TT':
+      const filteredPaddlers = state.filter(paddler=>paddler.paddlerID!=action.paddler.paddlerID)
+      return [...filteredPaddlers, action.paddler]      
+    case 'REMOVE_PADDLER_FROM_RACE':
+      const filteredPaddlers2 = state.filter(paddler=>paddler.uid==action.paddler.uid);
+      return [...filteredPaddlers2]
+    case 'CLEAR_PADDLERS_TO_RACE':
+      return [];
+    default:
+      return state;
+  }
+}
 /********* create a store by combining reducers ********************** */
 //create store by assigning expenses reducer to expenses property using combineReducer
 
@@ -298,7 +331,8 @@ export default () => {
         paddlers: allPaddlersReducer,
         selectedPaddlerEditable: selectedPaddlerEditableReducer,
         races: racesReducer,
-        racesPaddlerSignedUpFor: racesPaddlerSignedUpForReducer
+        racesPaddlerSignedUpFor: racesPaddlerSignedUpForReducer,
+        paddlersForCurrentRace: paddlersToRaceReducer
       }
     ),
     window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
