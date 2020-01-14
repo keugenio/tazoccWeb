@@ -40,7 +40,7 @@ class RacesAdmin extends Component {
     .then(()=>{
       this.props.races.forEach(race=>{
         let paddlerCount=0;
-        dbRacesToPaddlers.where("raceID", "==", race.id).get().then( snapdata => {
+        dbRacesToPaddlers.where("raceID", "==", race.id).where("enabled", "==", true).get().then( snapdata => {
           this.props.dispatch(updateRace({...race, paddlerCount:snapdata.docs.length } ))                      
         })        
       })

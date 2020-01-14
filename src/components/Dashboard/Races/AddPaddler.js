@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Button, Modal, Form} from 'react-bootstrap'
 import { dbRacesToPaddlers } from '../../Firebase';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { addPaddlerToRace } from '../../../store/store';
+import { addPaddlerToRace, updateRace } from '../../../store/store';
 import moment from 'moment';
 
 function mapStateToProps({races, paddlers, paddlersForCurrentRace}) {
@@ -38,7 +38,7 @@ class AddPaddler extends Component {
     // check to see if the paddler already signed up (enabled==false)
     // if so, update firestore, update store.
     
-    dbRacesToPaddlers.where("paddlerID", "==", this.state.currentPaddler).where('raceID', "==", this.props.raceID).where("enabled", "==", false)
+    dbRacesToPaddlers.where("paddlerID", "==", this.state.currentPaddler.uid).where('raceID', "==", this.props.raceID).where("enabled", "==", false)
       .get()
       .then((docs)=>{
         if (docs.docs.length<=0)
@@ -46,14 +46,17 @@ class AddPaddler extends Component {
           dbRacesToPaddlers.add({paddlerID: this.state.currentPaddler.uid, raceID: this.props.raceID, enabled:true})
            .then(doc=>{
             // update the store
-              this.props.dispatch(addPaddlerToRace({raceToPaddlerID:doc.id, paddlerID:this.state.currentPaddler.uid, paddlerName:this.state.currentPaddler.name, timeTrial:0, sex:this.state.currentPaddler.sex, age:moment().diff(moment(this.state.currentPaddler.birthday), 'years')}))
-            // remove the add button
-              this.setState({showAddPaddlerButton:false})             
+              this.props.dispatch(addPaddlerToRace({raceToPaddlerID:doc.id, paddlerID:this.state.currentPaddler.uid, paddlerName:this.state.currentPaddler.name, timeTrial:0, sex:this.state.currentPaddler.sex, age:moment().diff(moment(this.state.currentPaddler.birthday), 'years')}))            
            })
         else {
           dbRacesToPaddlers.doc(docs.docs[0].id).update({enabled:true})
+          const docID = docs.docs[0].id
+          this.props.dispatch(addPaddlerToRace({raceToPaddlerID:docID, paddlerID:this.state.currentPaddler.uid, paddlerName:this.state.currentPaddler.name, timeTrial:0, sex:this.state.currentPaddler.sex, age:moment().diff(moment(this.state.currentPaddler.birthday), 'years')}))            
         }
-
+        const currRace = this.props.races.find(race=>race.id == this.props.raceID)
+        this.props.dispatch(updateRace({...currRace, paddlerCount: currRace.paddlerCount++}))
+        // remove the add button
+        this.setState({showAddPaddlerButton:false})         
       })
   }
   render() {

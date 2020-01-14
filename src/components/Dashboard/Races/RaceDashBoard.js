@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { dbRacesToPaddlers } from '../../Firebase';
 import moment from 'moment';
-import { setRaceForPaddlersToRace, addPaddlerToRace, updatePaddlerTT, clearPaddlersToRace } from '../../../store/store';
+import { addPaddlerToRace, updatePaddlerTT, clearPaddlersToRace, removePaddlerFromRace, updateRace } from '../../../store/store';
 import { Card, Col, Tab, Nav, Row, Badge, Form, Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import LoadingIcon from '../../LoadingIcon';
@@ -100,11 +100,12 @@ class RaceDashBoard extends Component {
       .then((querySnapshot)=>{
         querySnapshot.forEach((race)=>{
           const raceToPaddlerInfo = race.data();
-          const aRacer = this.props.paddlers.find(paddler=>paddler.uid==raceToPaddlerInfo.paddlerID)
-            if (aRacer){
-              const paddler = {raceToPaddlerID: race.id, paddlerID:raceToPaddlerInfo.paddlerID, paddlerName:aRacer.name, timeTrial:raceToPaddlerInfo.timeTrial, age:moment().diff(moment(aRacer.birthday), 'years'), sex:aRacer.sex}
-              this.props.dispatch(addPaddlerToRace(paddler))                     
-            }
+          if (raceToPaddlerInfo.enabled){
+            const aRacer = this.props.paddlers.find(paddler=>paddler.uid==raceToPaddlerInfo.paddlerID)
+              if (aRacer){
+                const paddler = {raceToPaddlerID: race.id, paddlerID:raceToPaddlerInfo.paddlerID, paddlerName:aRacer.name, timeTrial:raceToPaddlerInfo.timeTrial, age:moment().diff(moment(aRacer.birthday), 'years'), sex:aRacer.sex}
+                this.props.dispatch(addPaddlerToRace(paddler))                     
+              }}
         })
     })   
   }
@@ -139,6 +140,22 @@ class RaceDashBoard extends Component {
   cancelEditTimeTrial = () => {
     this.setState({showEditTimeTrial:false, ttBeingEdited:false, paddlerTTBeingEdited:null})
   }
+  deletePaddlerFromRace = (paddlerID) => {
+    const currPaddler = this.props.paddlersForCurrentRace.find(paddler=>paddler.paddlerID==paddlerID)
+   
+    // disable in firestore
+    dbRacesToPaddlers.doc(currPaddler.raceToPaddlerID)
+      .update({enabled:false})
+      .then(()=>{
+        // remove from paddlersToRace
+        this.props.dispatch(removePaddlerFromRace(paddlerID))
+        // update paddlerCount for race
+        const currRace = this.props.races.find(race=>race.id==this.props.raceID)
+        this.props.dispatch(updateRace({...currRace, paddlerCount:currRace.paddlerCount--}))
+
+      })   
+       
+  }
   render() {
 
     //let sortedRacersByTT=this.state.paddlers.sort((a,b)=>(a.timeTrial < b.timeTrial) ? 1: -1);
@@ -152,7 +169,10 @@ class RaceDashBoard extends Component {
             <Card.Body className="row">    
              <Col lg={7}>       
                 {this.state.paddlers.map((paddler, i)=>(               
-                  <span key={i} className="paddler comma">{paddler.paddlerName}</span>
+                  <span key={i} className="paddler border border-successp p-2">
+                    {paddler.paddlerName}                    
+                      <Button className="bg-transparent text-danger mx-2 border-0" onClick={()=>this.deletePaddlerFromRace(paddler.paddlerID)} value={paddler.paddlerID}><FontAwesomeIcon icon="minus-circle"/></Button>
+                  </span>
                 ))}
               </Col> 
               <Col lg={5}>

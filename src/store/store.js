@@ -290,9 +290,9 @@ export const addPaddlerToRace = (paddler) => ({
   type: 'ADD_PADDLER_TO_RACE',
   paddler
 })
-export const removePaddlerFromRace = (paddler) => ({
+export const removePaddlerFromRace = (paddlerID) => ({
   type: 'REMOVE_PADDLER_FROM_RACE',
-  paddler
+  paddlerID
 })
 export const updatePaddlerTT = (paddler) => ({
   type:'UPDATE_PADDLER_TT',
@@ -309,7 +309,7 @@ const paddlersToRaceReducer = (state=[], action) =>{
       const filteredPaddlers = state.filter(paddler=>paddler.paddlerID!=action.paddler.paddlerID)
       return [...filteredPaddlers, action.paddler]      
     case 'REMOVE_PADDLER_FROM_RACE':
-      const filteredPaddlers2 = state.filter(paddler=>paddler.uid==action.paddler.uid);
+      const filteredPaddlers2 = state.filter(paddler=>paddler.paddlerID!=action.paddlerID)
       return [...filteredPaddlers2]
     case 'CLEAR_PADDLERS_TO_RACE':
       return [];
