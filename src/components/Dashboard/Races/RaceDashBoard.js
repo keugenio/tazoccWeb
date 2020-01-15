@@ -194,7 +194,7 @@ class RaceDashBoard extends Component {
               </Nav.Item>                        
             </Nav>
 
-            <Tab.Content  className="currentTab border-0">
+            <Tab.Content  className="currentTab">
               <Tab.Pane eventKey="timeTrials">
                 <Card>
                   <Card.Body className="flex-column">
@@ -223,7 +223,7 @@ class RaceDashBoard extends Component {
               <Tab.Pane eventKey="setCrews">
                 no set crews yet
               </Tab.Pane>
-              <Tab.Pane eventKey="possibleCrews">
+              <Tab.Pane eventKey="possibleCrews" className="possibleCrews">
                 <Card>
                   <Card.Body >
                       <Tab.Container defaultActiveKey="openMen">
@@ -343,7 +343,7 @@ class RaceDashBoard extends Component {
                             </Nav.Item>)}                                                                                                                                                                          
                           </Nav>
                         </Col>  
-                        <Col sm={9} className="bg-info pt-4">
+                        <Col sm={9} className="possibleCrewsTabInfo pt-4">
                           <Tab.Content>
                             {this.state.openMen.length>0 && (
                               <Tab.Pane eventKey="openMen">

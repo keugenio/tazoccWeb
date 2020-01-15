@@ -45,29 +45,51 @@
   & section:not(:last-child) {
     margin-bottom:3rem;
   }
+  .card {
+    border: none;
+  }
   .tabbedInfo {
     height:50vh;
-    .card-header-tabs {
-      margin: 0px;
-    }
-    .tab-content{
-      min-height: 100%;
-    }
-    .nav-tabs {
+    .nav-tabs{
+      border-bottom: thin solid $info;
       .nav-item {
-        margin-bottom: -.75rem;
+        margin-bottom: -2.11px;
       }
     }
-    .nav-link.active{
-      background-color: $info;
-      color:$white;
-      border:none
+    .tab-content{
+      min-height: 100%;     
     }
-    .currentTab {
-      background: $info;
+    .nav-tabs {
+      .nav-link.active{
+        border: thin solid $info;
+        border-bottom: 0;
+        font-weight: 500;
+        text-transform: uppercase;
+      }
     }
     .tab-pane{
       padding:2rem;
+    }
+    .possibleCrews {
+      .nav-link.active{
+        color:$dark;
+        border:thin solid $info;
+        border-right: none;
+        font-weight: 500;
+        background: none;
+        text-transform: uppercase;
+        padding-left: 1.5rem;
+      }
+      .nav-link {
+        border-right: thin solid $info;
+      }
+      .possibleCrewsTabInfo{
+        border:thin solid $info;
+        border-left:0;
+      }
+      .card-header-pills{
+        margin: 0;
+      }
     }
   }
   & .modal-dialog {
