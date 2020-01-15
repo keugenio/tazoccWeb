@@ -34,21 +34,46 @@
 
 .raceDashboard {
   font-size: 2rem;
+  min-height: 75vh;
   & span:not(:last-child) {
     margin-right: 1rem;
   }
   & .comma:not(:last-child):after{
     content: ", ";
   }
+
   & section:not(:last-child) {
     margin-bottom:3rem;
+  }
+  .tabbedInfo {
+    height:50vh;
+    .card-header-tabs {
+      margin: 0px;
+    }
+    .tab-content{
+      min-height: 100%;
+    }
+    .nav-tabs {
+      .nav-item {
+        margin-bottom: -.75rem;
+      }
+    }
+    .nav-link.active{
+      background-color: $info;
+      color:$white;
+      border:none
+    }
+    .currentTab {
+      background: $info;
+    }
+    .tab-pane{
+      padding:2rem;
+    }
   }
   & .modal-dialog {
     max-width:90vw;
   }
-  .nav-item{
-    border-bottom: thin solid $muted;
-  }
+
   .nav-link {
     display: flex;
     justify-content: end;
@@ -65,5 +90,10 @@
   & .modal-title {
     font-size: 2rem;
   }
-  
+  & .line-height-4rem {
+    line-height:4rem;
+  }
+  & .border-left-2 {
+    border-left:thin solid $dark
+  }
 }

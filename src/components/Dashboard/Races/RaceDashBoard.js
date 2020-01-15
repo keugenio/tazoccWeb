@@ -152,7 +152,6 @@ class RaceDashBoard extends Component {
         // update paddlerCount for race
         const currRace = this.props.races.find(race=>race.id==this.props.raceID)
         this.props.dispatch(updateRace({...currRace, paddlerCount:currRace.paddlerCount--}))
-
       })   
        
   }
@@ -163,388 +162,408 @@ class RaceDashBoard extends Component {
     return (
       <div className="raceDashboard p-2">
       { !this.state.ready && <LoadingIcon textColor="text-dark"/>}
-        <section>        
+        <section className="paddlerInfo">        
           <Card className="border border-success p-2">
             <Card.Title className="bg-success text-white">{this.props.paddlersForCurrentRace.length} paddlers attending race:</Card.Title>
             <Card.Body className="row">    
-             <Col lg={7}>       
+            <Col lg={7} className="line-height-4rem">       
                 {this.state.paddlers.map((paddler, i)=>(               
-                  <span key={i} className="paddler border border-successp p-2">
+                  <span key={i} className="paddler border border-success border-2 p-2 d-inline text-nowrap">
                     {paddler.paddlerName}                    
                       <Button className="bg-transparent text-danger mx-2 border-0" onClick={()=>this.deletePaddlerFromRace(paddler.paddlerID)} value={paddler.paddlerID}><FontAwesomeIcon icon="minus-circle"/></Button>
                   </span>
                 ))}
               </Col> 
-              <Col lg={5}>
+              <Col lg={5} sm={12} className="border-left-2 d-flex align-items-center justify-content-end">
                 <AddPaddler raceID={this.props.raceID} />
               </Col>         
             </Card.Body>        
           </Card>
         </section>
-        <section>
-          <Card className="border border-success">
-            <Card.Title className="text-dark p-2 d-flex justify-content-start">
-              <div className="mr-auto">Time Trials</div>             
-            </Card.Title>
-            <Card.Body className="flex-column">
-              <ul>
-              { sortedRacersByTT.map((paddler,i)=>{
-                return (
-                  
-                  <li key={i} className="d-flex align-items-center">
-                    {paddler.paddlerName}
-                    <span className="ml-3">|</span>
-                    <span className={`${paddler.timeTrial<=0 ? 'text-danger font-weight-bold':''}`}>
-                      <u><a href="#" onClick={this.showEditTimeTrial} id={paddler.paddlerID}>
-                        {paddler.paddlerID!=this.state.paddlerTTBeingEdited && (paddler.timeTrial || 'n/a')}
-                      </a></u>
-                    </span>  
-                    {this.state.showEditTimeTrial && paddler.paddlerID==this.state.paddlerTTBeingEdited && (<Col lg={1}><Form.Control type="text" value={this.state.newTimeTrialValue} onSubmit={this.setEditTimeTrial} onChange={this.handleChange} className="border border-dark text-right" style={{fontSize:'1.5rem'}}></Form.Control></Col>)}
-                    <span>m</span>
-                    {this.state.showEditTimeTrial && paddler.paddlerID==this.state.paddlerTTBeingEdited && (<Button variant="danger" onClick={this.saveTimeTrials} className="mr-3"><FontAwesomeIcon icon="save" className="fa-2x"/></Button>)} 
-                    {this.state.showEditTimeTrial && paddler.paddlerID==this.state.paddlerTTBeingEdited && (<Button variant="muted" onClick={this.cancelEditTimeTrial}>X</Button> )}                    
-                  </li>)
-              })}
-              </ul>
-            </Card.Body>
-          </Card>
+        <section className="tabbedInfo">
+          <Tab.Container defaultActiveKey="possibleCrews">
+            <Nav variant="tabs">
+              <Nav.Item>
+                <Nav.Link eventKey="timeTrials">Time Trials</Nav.Link>
+              </Nav.Item>
+              <Nav.Item>
+                <Nav.Link eventKey="setCrews">Set Crews</Nav.Link>
+              </Nav.Item> 
+              <Nav.Item>
+                <Nav.Link eventKey="possibleCrews">Possible Crews</Nav.Link>
+              </Nav.Item>                        
+            </Nav>
+
+            <Tab.Content  className="currentTab border-0">
+              <Tab.Pane eventKey="timeTrials">
+                <Card>
+                  <Card.Body className="flex-column">
+                    <ul>
+                    { sortedRacersByTT.map((paddler,i)=>{
+                      return (
+                        
+                        <li key={i} className="d-flex align-items-center">
+                          {paddler.paddlerName}
+                          <span className="ml-3">|</span>
+                          <span className={`${paddler.timeTrial<=0 ? 'text-danger font-weight-bold':''}`}>
+                            <u><a href="#" onClick={this.showEditTimeTrial} id={paddler.paddlerID}>
+                              {paddler.paddlerID!=this.state.paddlerTTBeingEdited && (paddler.timeTrial || 'n/a')}
+                            </a></u>
+                          </span>  
+                          {this.state.showEditTimeTrial && paddler.paddlerID==this.state.paddlerTTBeingEdited && (<Col lg={1}><Form.Control type="text" value={this.state.newTimeTrialValue} onSubmit={this.setEditTimeTrial} onChange={this.handleChange} className="border border-dark text-right" style={{fontSize:'1.5rem'}}></Form.Control></Col>)}
+                          <span>m</span>
+                          {this.state.showEditTimeTrial && paddler.paddlerID==this.state.paddlerTTBeingEdited && (<Button variant="danger" onClick={this.saveTimeTrials} className="mr-3"><FontAwesomeIcon icon="save" className="fa-2x"/></Button>)} 
+                          {this.state.showEditTimeTrial && paddler.paddlerID==this.state.paddlerTTBeingEdited && (<Button variant="muted" onClick={this.cancelEditTimeTrial}>X</Button> )}                    
+                        </li>)
+                    })}
+                    </ul>
+                  </Card.Body>
+                </Card>
+              </Tab.Pane>
+              <Tab.Pane eventKey="setCrews">
+                no set crews yet
+              </Tab.Pane>
+              <Tab.Pane eventKey="possibleCrews">
+                <Card>
+                  <Card.Body >
+                      <Tab.Container defaultActiveKey="openMen">
+                      <Row className="p-4">
+                        <Col sm={3} className="pr-0">
+                          <Nav variant="pills" className="flex-column">
+                            {this.state.openMen.length>0 && (<Nav.Item>
+                              <Nav.Link eventKey="openMen">
+                                <div className="mr-auto">Open Men</div>
+                                <FontAwesomeIcon icon="male"/>
+                                <Badge pill variant="warning">{this.state.openMen.length}</Badge>
+                              </Nav.Link>
+                            </Nav.Item>)}
+                            {this.state.openWomen.length>0 && (<Nav.Item>
+                              <Nav.Link eventKey="openWomen">
+                                <div className="mr-auto">Open Women</div>
+                                <FontAwesomeIcon icon="female"/>
+                                <Badge pill variant="warning">{this.state.openWomen.length}</Badge>
+                              </Nav.Link>
+                            </Nav.Item>)}
+                            {this.state.mastersMen.length>0 && (<Nav.Item>
+                              <Nav.Link eventKey="mastersMen">
+                                <div className="mr-auto">Master's Men</div>
+                                <FontAwesomeIcon icon="male"/>
+                                <Badge pill variant="warning">{this.state.mastersMen.length}</Badge>
+                              </Nav.Link>                       
+                            </Nav.Item>)}
+                            {this.state.mastersWomen.length>0 && (<Nav.Item>
+                              <Nav.Link eventKey="mastersWomen">
+                                <div className="mr-auto">Master's Women</div>
+                                <FontAwesomeIcon icon="female"/>
+                                <Badge pill variant="warning">{this.state.mastersWomen.length}</Badge>
+                              </Nav.Link>
+                            </Nav.Item>)}
+                            {this.state.srMastersMen.length>0 && (<Nav.Item>
+                              <Nav.Link eventKey="srMastersMen">
+                                <div className="mr-auto">Sr Master's Men</div>
+                                <FontAwesomeIcon icon="male"/>
+                                <Badge pill variant="warning">{this.state.srMastersMen.length}</Badge>
+                              </Nav.Link>
+                            </Nav.Item>)}
+                            {this.state.srMastersWomen.length>0 && (<Nav.Item>
+                              <Nav.Link eventKey="srMastersWomen">
+                                <div className="mr-auto">Sr Master's Women</div>
+                                <FontAwesomeIcon icon="female"/>
+                                <Badge pill variant="warning">{this.state.srMastersWomen.length}</Badge>
+                              </Nav.Link>
+                            </Nav.Item> ) }
+                            {this.state.goldenMastersMen.length>0 && (<Nav.Item>
+                              <Nav.Link eventKey="goldenMastersMen">
+                                <div className="mr-auto">Golden Master's Men</div>
+                                <FontAwesomeIcon icon="male"/>
+                                <Badge pill variant="warning">{this.state.goldenMastersMen.length}</Badge>                        
+                              </Nav.Link>
+                            </Nav.Item>)}
+                            {this.state.goldenMastersWomen.length>0 && (<Nav.Item>
+                              <Nav.Link eventKey="goldenMastersWomen">
+                                <div className="mr-auto">Golden Master's Women</div>
+                                <FontAwesomeIcon icon="female"/>
+                                <Badge pill variant="warning">{this.state.goldenMastersWomen.length}</Badge>                         
+                              </Nav.Link>
+                            </Nav.Item>)}  
+                            {this.state.openCoed.length>0 && (<Nav.Item>
+                              <Nav.Link eventKey="openCoed">
+                                <div className="mr-auto">Open Coed</div>
+                                <div className="pr-3 d-flex">
+                                  <FontAwesomeIcon icon="male"/>
+                                  <Badge pill variant="warning">{this.state.openCoedMaleCount}</Badge>                         
+                                </div>
+                                <div className="d-flex">
+                                  <FontAwesomeIcon icon="female"/>
+                                  <Badge pill variant="warning">{this.state.openCoedFemaleCount}</Badge>                         
+                                </div>
+                              </Nav.Link>
+                            </Nav.Item>)}
+                            {this.state.mastersCoed.length>0 && (<Nav.Item>
+                              <Nav.Link eventKey="mastersCoed">
+                                <div className="mr-auto">Masters Coed</div>
+                                <div className="pr-3 d-flex">
+                                  <FontAwesomeIcon icon="male"/>
+                                  <Badge pill variant="warning">{this.state.mastersCoedMaleCount}</Badge>                         
+                                </div>
+                                <div className="d-flex">
+                                  <FontAwesomeIcon icon="female"/>
+                                  <Badge pill variant="warning">{this.state.mastersCoedFemaleCount}</Badge>                         
+                                </div>                        
+                              </Nav.Link>
+                            </Nav.Item>)} 
+                            {this.state.srMastersCoed.length>0 && (<Nav.Item>
+                              <Nav.Link eventKey="srMastersCoed">
+                                <div className="mr-auto">Sr Masters Coed</div>
+                                <div className="pr-3 d-flex">
+                                  <FontAwesomeIcon icon="male"/>
+                                  <Badge pill variant="warning">{this.state.srMastersCoedMaleCount}</Badge>                         
+                                </div>
+                                <div className="d-flex">
+                                  <FontAwesomeIcon icon="female"/>
+                                  <Badge pill variant="warning">{this.state.srMastersCoedFemaleCount}</Badge>                         
+                                </div>                        
+                              </Nav.Link>
+                            </Nav.Item>)}
+                            {this.state.goldenMastersCoed.length>0 && (<Nav.Item>
+                              <Nav.Link eventKey="goldenMastersCoed">
+                                <div className="mr-auto">Golden Masters Coed</div>
+                                <div className="pr-3 d-flex">
+                                  <FontAwesomeIcon icon="male"/>
+                                  <Badge pill variant="warning">{this.state.goldenMastersCoedMaleCount}</Badge>                         
+                                </div>
+                                <div className="d-flex">
+                                  <FontAwesomeIcon icon="female"/>
+                                  <Badge pill variant="warning">{this.state.goldenMastersCoedFemaleCount}</Badge>                         
+                                </div>                        
+                              </Nav.Link>
+                            </Nav.Item> )}     
+                            {this.state.keiki.length>0 && (<Nav.Item>
+                              <Nav.Link eventKey="keiki">Keiki</Nav.Link>
+                            </Nav.Item>)}                                                                                                                                                                          
+                          </Nav>
+                        </Col>  
+                        <Col sm={9} className="bg-info pt-4">
+                          <Tab.Content>
+                            {this.state.openMen.length>0 && (
+                              <Tab.Pane eventKey="openMen">
+                                <Card className="text-dark border border-dark p-2">
+                                  <Card.Title>Open Men</Card.Title>
+                                    <Card.Body>
+                                      <Col>
+                                        <div className="col w-100 d-flex flex-wrap">
+                                          {this.state.openMen.map((paddler, i)=>(
+                                            <div key={i} className="border border-danger p-2 mr-2 bg-primary text-white">{paddler.paddlerName}, {paddler.age}</div>)
+                                          )}          
+                                        </div>            
+                                      </Col>
+                                    </Card.Body>
+                                </Card>                      
+                              </Tab.Pane>
+                            )}
+                            {this.state.openWomen.length>0 && (
+                              <Tab.Pane eventKey="openWomen">
+                                <Card className="text-dark border border-dark p-2">
+                                  <Card.Title>Open Women</Card.Title>
+                                  <Card.Body>
+                                    <Col>
+                                      <div className="col w-100 d-flex flex-wrap">
+                                        {this.state.openWomen.map((paddler, i)=>(
+                                          <div key={i} className="border border-danger p-2 mr-2 bg-pink">{paddler.paddlerName}, {paddler.age}</div>)
+                                        )}          
+                                      </div>            
+                                    </Col>
+                                  </Card.Body>
+                                </Card>                                  
+                              </Tab.Pane>
+                            )}
+                            {this.state.mastersMen.length>0 && (
+                              <Tab.Pane eventKey="mastersMen">
+                                <Card className="text-dark border border-dark p-2">
+                                  <Card.Title>Masters Men</Card.Title>
+                                  <Card.Body>
+                                    <Col>
+                                      <div className="col w-100 d-flex flex-wrap">
+                                        {this.state.mastersMen.map((paddler, i)=>(
+                                          <div key={i} className="border border-danger p-2 mr-2 bg-primary text-white">{paddler.paddlerName}, {paddler.age}</div>)
+                                        )}          
+                                      </div>            
+                                    </Col>
+                                  </Card.Body>
+                                </Card>                    
+                              </Tab.Pane>
+                            )}
+                            {this.state.mastersWomen.length>0 && (
+                              <Tab.Pane eventKey="mastersWomen">
+                                <Card className="text-dark border border-dark p-2">
+                                  <Card.Title>Masters Women</Card.Title>
+                                  <Card.Body>
+                                    <Col>
+                                      <div className="col w-100 d-flex flex-wrap">
+                                        {this.state.mastersWomen.map((paddler, i)=>(
+                                          <div key={i} className="border border-danger p-2 mr-2 bg-pink">{paddler.paddlerName}, {paddler.age}</div>)
+                                        )}          
+                                      </div>            
+                                    </Col>
+                                  </Card.Body>
+                                </Card>                    
+                              </Tab.Pane> 
+                            )}
+                            {this.state.mastersMen.length>0 && (
+                              <Tab.Pane eventKey="srMastersMen">
+                                <Card className="text-dark border border-dark p-2">
+                                  <Card.Title>Sr. Masters Men</Card.Title>
+                                  <Card.Body>
+                                    <Col>
+                                      <div className="col w-100 d-flex flex-wrap">
+                                        {this.state.srMastersMen.map((paddler, i)=>(
+                                          <div key={i} className="border border-danger p-2 mr-2 bg-primary text-white">{paddler.paddlerName}, {paddler.age}</div>)
+                                        )}          
+                                      </div>            
+                                    </Col>
+                                  </Card.Body>
+                                </Card>                       
+                              </Tab.Pane>
+                            )}
+                            {this.state.srMastersWomen.length>0 && (
+                              <Tab.Pane eventKey="srMastersWomen">
+                                <Card className="text-dark border border-dark p-2">
+                                  <Card.Title>Sr. Masters Women</Card.Title>
+                                  <Card.Body>
+                                    <Col>
+                                      <div className="col w-100 d-flex flex-wrap">
+                                        {this.state.srMastersWomen.map((paddler, i)=>(
+                                          <div key={i} className="border border-danger p-2 mr-2 bg-pink">{paddler.paddlerName}, {paddler.age}</div>)
+                                        )}          
+                                      </div>            
+                                    </Col>
+                                  </Card.Body>
+                                </Card>
+                              </Tab.Pane>
+                            )}              
+                            {this.state.goldenMastersMen.length>0 && (
+                              <Tab.Pane eventKey="goldenMastersMen">
+                                <Card className="text-dark border border-dark p-2">
+                                  <Card.Title>Golden Masters Men</Card.Title>
+                                  <Card.Body>
+                                    <Col>
+                                      <div className="col w-100 d-flex flex-wrap">
+                                        {this.state.goldenMastersMen.map((paddler, i)=>(
+                                          <div key={i} className="border border-danger p-2 mr-2 bg-primary text-white">{paddler.paddlerName}, {paddler.age}</div>)
+                                        )}          
+                                      </div>            
+                                    </Col>
+                                  </Card.Body>
+                                </Card> 
+                              </Tab.Pane>
+                            )}
+                            {this.state.goldenMastersWomen.length>0 && (
+                              <Tab.Pane eventKey="goldenMastersWomen">
+                                <Card className="text-dark border border-dark p-2">
+                                  <Card.Title>Golden Masters Women</Card.Title>
+                                  <Card.Body>
+                                    <Col>
+                                      <div className="col w-100 d-flex flex-wrap">
+                                        {this.state.goldenMastersWomen.map((paddler, i)=>(
+                                          <div key={i} className="border border-danger p-2 mr-2 bg-pink">{paddler.paddlerName}, {paddler.age}</div>)
+                                        )}          
+                                      </div>            
+                                    </Col>
+                                  </Card.Body>
+                                </Card>
+                              </Tab.Pane>
+                            )}
+                            {this.state.openCoed.length>0 && (
+                              <Tab.Pane eventKey="openCoed">
+                                <Card className="text-dark border border-dark p-2">
+                                  <Card.Title>Open Coed</Card.Title>
+                                  <Card.Body>
+                                    <Col>
+                                      <div className="col w-100 d-flex flex-wrap">
+                                        {this.state.openCoed.map((paddler, i)=>(
+                                          <div key={i} className={`border border-danger p-2 mr-2 ${paddler.sex=="male" || paddler.sex=="kane" ? ('bg-primary text-white'):('bg-pink')}`}>{paddler.paddlerName}, {paddler.age}</div>)
+                                        )}          
+                                      </div>            
+                                    </Col>
+                                  </Card.Body>
+                                </Card>
+                              </Tab.Pane>
+                            )}
+                            {this.state.mastersCoed.length>0 && (
+                              <Tab.Pane eventKey="mastersCoed">
+                                <Card className="text-dark border border-dark p-2">
+                                  <Card.Title>Masters Coed</Card.Title>
+                                  <Card.Body>
+                                    <Col>
+                                      <div className="col w-100 d-flex flex-wrap">
+                                        {this.state.mastersCoed.map((paddler, i)=>(
+                                          <div key={i} className={`border border-danger p-2 mr-2 ${paddler.sex=="male" || paddler.sex=="kane" ? ('bg-primary text-white'):('bg-pink')}`}>{paddler.paddlerName}, {paddler.age}</div>)
+                                        )}          
+                                      </div>            
+                                    </Col>
+                                  </Card.Body>
+                                </Card> 
+                              </Tab.Pane>
+                            )}
+                            {this.state.srMastersCoed.length>0 && (
+                              <Tab.Pane eventKey="srMastersCoed">
+                                <Card className="text-dark border border-dark p-2">
+                                  <Card.Title>Sr Masters Coed</Card.Title>
+                                  <Card.Body>
+                                    <Col>
+                                      <div className="col w-100 d-flex flex-wrap">
+                                        {this.state.srMastersCoed.map((paddler, i)=>(
+                                          <div key={i} className={`border border-danger p-2 mr-2 ${paddler.sex=="male" || paddler.sex=="kane" ? ('bg-primary text-white'):('bg-pink')}`}>{paddler.paddlerName}, {paddler.age}</div>)
+                                        )}          
+                                      </div>            
+                                    </Col>
+                                  </Card.Body>
+                                </Card> 
+                              </Tab.Pane>
+                            )}
+                            {this.state.goldenMastersCoed.length>0 && (
+                              <Tab.Pane eventKey="goldenMastersCoed">
+                                <Card className="text-dark border border-dark p-2">
+                                  <Card.Title>Golden Masters Coed</Card.Title>
+                                  <Card.Body>
+                                    <Col>
+                                      <div className="col w-100 d-flex flex-wrap">
+                                        {this.state.goldenMastersCoed.map((paddler, i)=>(
+                                          <div key={i} className={`border border-danger p-2 mr-2 ${paddler.sex=="male" || paddler.sex=="kane" ? ('bg-primary text-white'):('bg-pink')}`}>{paddler.paddlerName}, {paddler.age}</div>)
+                                        )}          
+                                      </div>            
+                                    </Col>
+                                  </Card.Body>
+                                </Card> 
+                              </Tab.Pane>
+                            )}
+                            {this.state.keiki.length>0 && (
+                              <Tab.Pane eventKey="keiki">
+                                <Card className="text-dark border border-dark p-2">
+                                  <Card.Title>keiki</Card.Title>
+                                  <Card.Body>
+                                    <Col>
+                                      <div className="col w-100 d-flex flex-wrap">
+                                        {this.state.keiki.map((paddler, i)=>(
+                                          <div key={i} className={`border border-danger p-2 mr-2 ${paddler.sex=="male" || paddler.sex=="kane" ? ('bg-primary'):('bg-pink')}`}>{paddler.paddlerName}, {paddler.age}</div>)
+                                        )}          
+                                      </div>            
+                                    </Col>
+                                  </Card.Body>
+                                </Card> 
+                              </Tab.Pane>
+                            )}
+                          </Tab.Content>                                                                                                                                                                
+                        </Col>              
+                      </Row>
+                    </Tab.Container>                                                                     
+                  </Card.Body>
+                </Card>            
+              </Tab.Pane>
+            </Tab.Content>
+          </Tab.Container>
         </section>
         <section>
-          <Card className="border border-success">
-            <Card.Header className=""/>
-            <Card.Title className="text-dark p-2">Possible Crews:</Card.Title>
-            <Card.Body >
-              <Tab.Container defaultActiveKey="openMen">
-                <Row>
-                  <Col sm={3} className="pr-0">
-                    <Nav variant="pills" className="flex-column">
-                      {this.state.openMen.length>0 && (<Nav.Item>
-                        <Nav.Link eventKey="openMen">
-                          <div className="mr-auto">Open Men</div>
-                          <FontAwesomeIcon icon="male"/>
-                          <Badge pill variant="warning">{this.state.openMen.length}</Badge>
-                        </Nav.Link>
-                      </Nav.Item>)}
-                      {this.state.openWomen.length>0 && (<Nav.Item>
-                        <Nav.Link eventKey="openWomen">
-                          <div className="mr-auto">Open Women</div>
-                          <FontAwesomeIcon icon="female"/>
-                          <Badge pill variant="warning">{this.state.openWomen.length}</Badge>
-                        </Nav.Link>
-                      </Nav.Item>)}
-                      {this.state.mastersMen.length>0 && (<Nav.Item>
-                        <Nav.Link eventKey="mastersMen">
-                          <div className="mr-auto">Master's Men</div>
-                          <FontAwesomeIcon icon="male"/>
-                          <Badge pill variant="warning">{this.state.mastersMen.length}</Badge>
-                        </Nav.Link>                       
-                      </Nav.Item>)}
-                      {this.state.mastersWomen.length>0 && (<Nav.Item>
-                        <Nav.Link eventKey="mastersWomen">
-                          <div className="mr-auto">Master's Women</div>
-                          <FontAwesomeIcon icon="female"/>
-                          <Badge pill variant="warning">{this.state.mastersWomen.length}</Badge>
-                        </Nav.Link>
-                      </Nav.Item>)}
-                      {this.state.srMastersMen.length>0 && (<Nav.Item>
-                        <Nav.Link eventKey="srMastersMen">
-                          <div className="mr-auto">Sr Master's Men</div>
-                          <FontAwesomeIcon icon="male"/>
-                          <Badge pill variant="warning">{this.state.srMastersMen.length}</Badge>
-                        </Nav.Link>
-                      </Nav.Item>)}
-                      {this.state.srMastersWomen.length>0 && (<Nav.Item>
-                        <Nav.Link eventKey="srMastersWomen">
-                          <div className="mr-auto">Sr Master's Women</div>
-                          <FontAwesomeIcon icon="female"/>
-                          <Badge pill variant="warning">{this.state.srMastersWomen.length}</Badge>
-                        </Nav.Link>
-                      </Nav.Item> ) }
-                      {this.state.goldenMastersMen.length>0 && (<Nav.Item>
-                        <Nav.Link eventKey="goldenMastersMen">
-                          <div className="mr-auto">Golden Master's Men</div>
-                          <FontAwesomeIcon icon="male"/>
-                          <Badge pill variant="warning">{this.state.goldenMastersMen.length}</Badge>                        
-                        </Nav.Link>
-                      </Nav.Item>)}
-                      {this.state.goldenMastersWomen.length>0 && (<Nav.Item>
-                        <Nav.Link eventKey="goldenMastersWomen">
-                          <div className="mr-auto">Golden Master's Women</div>
-                          <FontAwesomeIcon icon="female"/>
-                          <Badge pill variant="warning">{this.state.goldenMastersWomen.length}</Badge>                         
-                        </Nav.Link>
-                      </Nav.Item>)}  
-                      {this.state.openCoed.length>0 && (<Nav.Item>
-                        <Nav.Link eventKey="openCoed">
-                          <div className="mr-auto">Open Coed</div>
-                          <div className="pr-3 d-flex">
-                            <FontAwesomeIcon icon="male"/>
-                            <Badge pill variant="warning">{this.state.openCoedMaleCount}</Badge>                         
-                          </div>
-                          <div className="d-flex">
-                            <FontAwesomeIcon icon="female"/>
-                            <Badge pill variant="warning">{this.state.openCoedFemaleCount}</Badge>                         
-                          </div>
-                        </Nav.Link>
-                      </Nav.Item>)}
-                      {this.state.mastersCoed.length>0 && (<Nav.Item>
-                        <Nav.Link eventKey="mastersCoed">
-                          <div className="mr-auto">Masters Coed</div>
-                          <div className="pr-3 d-flex">
-                            <FontAwesomeIcon icon="male"/>
-                            <Badge pill variant="warning">{this.state.mastersCoedMaleCount}</Badge>                         
-                          </div>
-                          <div className="d-flex">
-                            <FontAwesomeIcon icon="female"/>
-                            <Badge pill variant="warning">{this.state.mastersCoedFemaleCount}</Badge>                         
-                          </div>                        
-                        </Nav.Link>
-                      </Nav.Item>)} 
-                      {this.state.srMastersCoed.length>0 && (<Nav.Item>
-                        <Nav.Link eventKey="srMastersCoed">
-                          <div className="mr-auto">Sr Masters Coed</div>
-                          <div className="pr-3 d-flex">
-                            <FontAwesomeIcon icon="male"/>
-                            <Badge pill variant="warning">{this.state.srMastersCoedMaleCount}</Badge>                         
-                          </div>
-                          <div className="d-flex">
-                            <FontAwesomeIcon icon="female"/>
-                            <Badge pill variant="warning">{this.state.srMastersCoedFemaleCount}</Badge>                         
-                          </div>                        
-                        </Nav.Link>
-                      </Nav.Item>)}
-                      {this.state.goldenMastersCoed.length>0 && (<Nav.Item>
-                        <Nav.Link eventKey="goldenMastersCoed">
-                          <div className="mr-auto">Golden Masters Coed</div>
-                          <div className="pr-3 d-flex">
-                            <FontAwesomeIcon icon="male"/>
-                            <Badge pill variant="warning">{this.state.goldenMastersCoedMaleCount}</Badge>                         
-                          </div>
-                          <div className="d-flex">
-                            <FontAwesomeIcon icon="female"/>
-                            <Badge pill variant="warning">{this.state.goldenMastersCoedFemaleCount}</Badge>                         
-                          </div>                        
-                        </Nav.Link>
-                      </Nav.Item> )}     
-                      {this.state.keiki.length>0 && (<Nav.Item>
-                        <Nav.Link eventKey="keiki">Keiki</Nav.Link>
-                      </Nav.Item>)}                                                                                                                                                                          
-                    </Nav>
-                  </Col>  
-                  <Col sm={9} className="bg-primary pt-4">
-                    {this.state.openMen.length>0 && (<Tab.Content>
-                      <Tab.Pane eventKey="openMen">
-                        <Card className="text-dark border border-dark p-2">
-                          <Card.Title>Open Men</Card.Title>
-                            <Card.Body>
-                              <Col>
-                                <div className="col w-100 d-flex flex-wrap">
-                                  {this.state.openMen.map((paddler, i)=>(
-                                    <div key={i} className="border border-danger p-2 mr-2 bg-primary text-white">{paddler.paddlerName}, {paddler.age}</div>)
-                                  )}          
-                                </div>            
-                              </Col>
-                            </Card.Body>
-                        </Card>                      
-                      </Tab.Pane>
-                    </Tab.Content>)}
-                    {this.state.openWomen.length>0 && (<Tab.Content>
-                      <Tab.Pane eventKey="openWomen">
-                        <Card className="text-dark border border-dark p-2">
-                          <Card.Title>Open Women</Card.Title>
-                          <Card.Body>
-                            <Col>
-                              <div className="col w-100 d-flex flex-wrap">
-                                {this.state.openWomen.map((paddler, i)=>(
-                                  <div key={i} className="border border-danger p-2 mr-2 bg-pink">{paddler.paddlerName}, {paddler.age}</div>)
-                                )}          
-                              </div>            
-                            </Col>
-                          </Card.Body>
-                        </Card>                                  
-                      </Tab.Pane>
-                    </Tab.Content>)}
-                    {this.state.mastersMen.length>0 && (<Tab.Content>
-                      <Tab.Pane eventKey="mastersMen">
-                        <Card className="text-dark border border-dark p-2">
-                          <Card.Title>Masters Men</Card.Title>
-                          <Card.Body>
-                            <Col>
-                              <div className="col w-100 d-flex flex-wrap">
-                                {this.state.mastersMen.map((paddler, i)=>(
-                                  <div key={i} className="border border-danger p-2 mr-2 bg-primary text-white">{paddler.paddlerName}, {paddler.age}</div>)
-                                )}          
-                              </div>            
-                            </Col>
-                          </Card.Body>
-                        </Card>                    
-                      </Tab.Pane>
-                    </Tab.Content>)}
-                    {this.state.mastersWomen.length>0 && (<Tab.Content>
-                      <Tab.Pane eventKey="mastersWomen">
-                        <Card className="text-dark border border-dark p-2">
-                          <Card.Title>Masters Women</Card.Title>
-                          <Card.Body>
-                            <Col>
-                              <div className="col w-100 d-flex flex-wrap">
-                                {this.state.mastersWomen.map((paddler, i)=>(
-                                  <div key={i} className="border border-danger p-2 mr-2 bg-pink">{paddler.paddlerName}, {paddler.age}</div>)
-                                )}          
-                              </div>            
-                            </Col>
-                          </Card.Body>
-                        </Card>                    
-                      </Tab.Pane> 
-                    </Tab.Content>)}
-                    {this.state.mastersMen.length>0 && (<Tab.Content>
-                      <Tab.Pane eventKey="srMastersMen">
-                        <Card className="text-dark border border-dark p-2">
-                          <Card.Title>Sr. Masters Men</Card.Title>
-                          <Card.Body>
-                            <Col>
-                              <div className="col w-100 d-flex flex-wrap">
-                                {this.state.srMastersMen.map((paddler, i)=>(
-                                  <div key={i} className="border border-danger p-2 mr-2 bg-primary text-white">{paddler.paddlerName}, {paddler.age}</div>)
-                                )}          
-                              </div>            
-                            </Col>
-                          </Card.Body>
-                        </Card>                       
-                      </Tab.Pane>
-                    </Tab.Content>)}
-                    {this.state.srMastersWomen.length>0 && (<Tab.Content>
-                      <Tab.Pane eventKey="srMastersWomen">
-                        <Card className="text-dark border border-dark p-2">
-                          <Card.Title>Sr. Masters Women</Card.Title>
-                          <Card.Body>
-                            <Col>
-                              <div className="col w-100 d-flex flex-wrap">
-                                {this.state.srMastersWomen.map((paddler, i)=>(
-                                  <div key={i} className="border border-danger p-2 mr-2 bg-pink">{paddler.paddlerName}, {paddler.age}</div>)
-                                )}          
-                              </div>            
-                            </Col>
-                          </Card.Body>
-                        </Card>
-                      </Tab.Pane>
-                    </Tab.Content>)}              
-                    {this.state.goldenMastersMen.length>0 && (<Tab.Content>
-                      <Tab.Pane eventKey="goldenMastersMen">
-                        <Card className="text-dark border border-dark p-2">
-                          <Card.Title>Golden Masters Men</Card.Title>
-                          <Card.Body>
-                            <Col>
-                              <div className="col w-100 d-flex flex-wrap">
-                                {this.state.goldenMastersMen.map((paddler, i)=>(
-                                  <div key={i} className="border border-danger p-2 mr-2 bg-primary text-white">{paddler.paddlerName}, {paddler.age}</div>)
-                                )}          
-                              </div>            
-                            </Col>
-                          </Card.Body>
-                        </Card> 
-                      </Tab.Pane>
-                    </Tab.Content>)}
-                    {this.state.goldenMastersWomen.length>0 && (<Tab.Content>
-                      <Tab.Pane eventKey="goldenMastersWomen">
-                        <Card className="text-dark border border-dark p-2">
-                          <Card.Title>Golden Masters Women</Card.Title>
-                          <Card.Body>
-                            <Col>
-                              <div className="col w-100 d-flex flex-wrap">
-                                {this.state.goldenMastersWomen.map((paddler, i)=>(
-                                  <div key={i} className="border border-danger p-2 mr-2 bg-pink">{paddler.paddlerName}, {paddler.age}</div>)
-                                )}          
-                              </div>            
-                            </Col>
-                          </Card.Body>
-                        </Card>
-                      </Tab.Pane>
-                    </Tab.Content>)}
-                    {this.state.openCoed.length>0 && (<Tab.Content>
-                      <Tab.Pane eventKey="openCoed">
-                        <Card className="text-dark border border-dark p-2">
-                          <Card.Title>Open Coed</Card.Title>
-                          <Card.Body>
-                            <Col>
-                              <div className="col w-100 d-flex flex-wrap">
-                                {this.state.openCoed.map((paddler, i)=>(
-                                  <div key={i} className={`border border-danger p-2 mr-2 ${paddler.sex=="male" || paddler.sex=="kane" ? ('bg-primary text-white'):('bg-pink')}`}>{paddler.paddlerName}, {paddler.age}</div>)
-                                )}          
-                              </div>            
-                            </Col>
-                          </Card.Body>
-                        </Card>
-                      </Tab.Pane>
-                    </Tab.Content>)}
-                    {this.state.mastersCoed.length>0 && (<Tab.Content>
-                      <Tab.Pane eventKey="mastersCoed">
-                        <Card className="text-dark border border-dark p-2">
-                          <Card.Title>Masters Coed</Card.Title>
-                          <Card.Body>
-                            <Col>
-                              <div className="col w-100 d-flex flex-wrap">
-                                {this.state.mastersCoed.map((paddler, i)=>(
-                                  <div key={i} className={`border border-danger p-2 mr-2 ${paddler.sex=="male" || paddler.sex=="kane" ? ('bg-primary text-white'):('bg-pink')}`}>{paddler.paddlerName}, {paddler.age}</div>)
-                                )}          
-                              </div>            
-                            </Col>
-                          </Card.Body>
-                        </Card> 
-                      </Tab.Pane>
-                    </Tab.Content>)}
-                    {this.state.srMastersCoed.length>0 && (<Tab.Content>
-                      <Tab.Pane eventKey="srMastersCoed">
-                        <Card className="text-dark border border-dark p-2">
-                          <Card.Title>Sr Masters Coed</Card.Title>
-                          <Card.Body>
-                            <Col>
-                              <div className="col w-100 d-flex flex-wrap">
-                                {this.state.srMastersCoed.map((paddler, i)=>(
-                                  <div key={i} className={`border border-danger p-2 mr-2 ${paddler.sex=="male" || paddler.sex=="kane" ? ('bg-primary text-white'):('bg-pink')}`}>{paddler.paddlerName}, {paddler.age}</div>)
-                                )}          
-                              </div>            
-                            </Col>
-                          </Card.Body>
-                        </Card> 
-                      </Tab.Pane>
-                    </Tab.Content>)}
-                    {this.state.goldenMastersCoed.length>0 && (<Tab.Content>
-                      <Tab.Pane eventKey="goldenMastersCoed">
-                        <Card className="text-dark border border-dark p-2">
-                          <Card.Title>Golden Masters Coed</Card.Title>
-                          <Card.Body>
-                            <Col>
-                              <div className="col w-100 d-flex flex-wrap">
-                                {this.state.goldenMastersCoed.map((paddler, i)=>(
-                                  <div key={i} className={`border border-danger p-2 mr-2 ${paddler.sex=="male" || paddler.sex=="kane" ? ('bg-primary text-white'):('bg-pink')}`}>{paddler.paddlerName}, {paddler.age}</div>)
-                                )}          
-                              </div>            
-                            </Col>
-                          </Card.Body>
-                        </Card> 
-                      </Tab.Pane>
-                    </Tab.Content>)}
-                    {this.state.keiki.length>0 && (<Tab.Content>
-                      <Tab.Pane eventKey="keiki">
-                        <Card className="text-dark border border-dark p-2">
-                          <Card.Title>keiki</Card.Title>
-                          <Card.Body>
-                            <Col>
-                              <div className="col w-100 d-flex flex-wrap">
-                                {this.state.keiki.map((paddler, i)=>(
-                                  <div key={i} className={`border border-danger p-2 mr-2 ${paddler.sex=="male" || paddler.sex=="kane" ? ('bg-primary'):('bg-pink')}`}>{paddler.paddlerName}, {paddler.age}</div>)
-                                )}          
-                              </div>            
-                            </Col>
-                          </Card.Body>
-                        </Card> 
-                      </Tab.Pane>
-                    </Tab.Content>)}                                                                                                                                                                
-                  </Col>              
-                </Row>
-              </Tab.Container>                                                                     
-            </Card.Body>
-          </Card>
         </section>
 
       </div>
