@@ -333,7 +333,7 @@ const crewsReducer = (state=[], action) =>{
     case 'ADD_CREW':
       return [...state, action.crew];
     case 'UPDATE_CREW':
-      const filteredCrews = state.filter(crew => crew.raceID==action.raceID)
+      const filteredCrews = state.filter(crew => crew.raceID!=action.raceID)
       return [...filteredCrews, action.crew]
     case 'CLEAR_CREWS':
       return [];

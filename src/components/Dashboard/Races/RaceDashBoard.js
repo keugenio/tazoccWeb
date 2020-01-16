@@ -169,7 +169,6 @@ class RaceDashBoard extends Component {
   }
   render() {
 
-    //let sortedRacersByTT=this.state.paddlers.sort((a,b)=>(a.timeTrial < b.timeTrial) ? 1: -1);
     let sortedRacersByTT=this.props.paddlersForCurrentRace.sort((a,b)=>(a.timeTrial < b.timeTrial) ? 1: -1);
     return (
       <div className="raceDashboard p-2">
