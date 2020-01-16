@@ -17,11 +17,22 @@ const RaceCrews = (props)=> {
   const [showAddCrewModal, setShowAddCrewModal] = useState(false);
   const [crewID, setCrewID] = useState('');
   const [crewPaddlers, setCrewPaddlers] = useState([]);
-
+  const [sortedPaddlers, setSortedPaddlers] = useState([]);
   const setFields = (crewID, paddlers) => {
     setShowModal(true);
     setCrewID(crewID);
     setCrewPaddlers(paddlers)
+    const fp = [];
+    props.paddlers.map((paddler)=>{
+      if (paddlers.some(p=>p.paddlerID == paddler.uid)){
+        let x=0;
+        x++;
+        console.log(`${paddler.name} included`);}
+      else
+        fp.push(paddler)
+    })
+    const sorted = fp.sort((a,b)=>(a.name.toUpperCase() < b.name.toUpperCase() ) ? -1: 1);
+    setSortedPaddlers([...sorted])
   }
   const addPaddlerToCrew = (e) => {
     setShowModal(false)
@@ -79,13 +90,20 @@ const RaceCrews = (props)=> {
             'success'
           )           
         })
+        .catch((error)=>{
+          Swal.fire(
+            'Error!',
+            error,
+            'error'
+          )                    
+        })
       }
 
     })    
     
   }
 
-  const sortedPaddlers = props.paddlers.sort((a,b)=>(a.name.toUpperCase() < b.name.toUpperCase() ) ? -1: 1);
+  // const sortedPaddlers = props.paddlers.sort((a,b)=>(a.name.toUpperCase() < b.name.toUpperCase() ) ? -1: 1);
   return (
     <div>
       <Row className="d-flex justify-content-end">
@@ -97,10 +115,10 @@ const RaceCrews = (props)=> {
             <Card>
               <Card.Title className="d-flex justify-content-start bg-info text-white">
                 <span>{raceCrew.division}</span>
-                <div className="ml-auto d-flex">
-                  {props.user.role=="superAdmin" && (<Button className="bg-transparent text-danger" onClick={()=>{removeCrew(raceCrew.crewID)}}><FontAwesomeIcon icon="minus-circle" className="fa fa-2x" /></Button>  )}
-                  {props.user.role=="superAdmin" && (<Button className="bg-transparent text-muted"  onClick={()=>{setFields(raceCrew.crewID, raceCrew.paddlers)}}><FontAwesomeIcon icon="edit" className="fa fa-2x" /></Button>  )}
-                </div>
+                {props.user.role=="superAdmin" && (<div className="ml-auto d-flex">
+                  <Button className="bg-transparent text-danger" onClick={()=>{removeCrew(raceCrew.crewID)}}><FontAwesomeIcon icon="minus-circle" className="fa fa-2x" /></Button>
+                  <Button className="bg-transparent text-muted"  onClick={()=>{setFields(raceCrew.crewID, raceCrew.paddlers)}}><FontAwesomeIcon icon="edit" className="fa fa-2x" /></Button>
+                </div>)}
               </Card.Title>
               <Card.Body>
                 <ListGroup>
