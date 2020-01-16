@@ -168,8 +168,8 @@ class RaceDashBoard extends Component {
        
   }
   render() {
-
     let sortedRacersByTT=this.props.paddlersForCurrentRace.sort((a,b)=>(a.timeTrial < b.timeTrial) ? 1: -1);
+    const currRace = this.props.races.find(race=>race.id==this.props.raceID)
     return (
       <div className="raceDashboard p-2">
       { !this.state.ready && <LoadingIcon textColor="text-dark"/>}
@@ -232,7 +232,7 @@ class RaceDashBoard extends Component {
                 </Card>
               </Tab.Pane>
               <Tab.Pane eventKey="setCrews">
-                <RaceCrews raceID={this.props.raceID}/>
+                <RaceCrews raceID={this.props.raceID} raceName={currRace.name}/>
               </Tab.Pane>
               <Tab.Pane eventKey="possibleCrews" className="possibleCrews">
                 <Card>

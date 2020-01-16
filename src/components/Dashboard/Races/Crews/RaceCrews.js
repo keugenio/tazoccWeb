@@ -1,10 +1,11 @@
 import React, {useState} from 'react';
 import { connect } from 'react-redux';
-import { Card, ListGroup, ListGroupItem, Col, Button, Modal, Form, FormControl} from 'react-bootstrap';
+import { Card, ListGroup, ListGroupItem, Col, Button, Modal, Row, FormControl, InputGroup} from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { dbCrews } from '../../../Firebase';
 import moment from 'moment';
-import { updateCrew } from '../../../../store/store';
+import { updateCrew, addCrew } from '../../../../store/store';
+import uuid from 'uuid';
 
 function mapStateToProps({crews, user, paddlers}) {
   return { crews, user, paddlers };
@@ -12,13 +13,13 @@ function mapStateToProps({crews, user, paddlers}) {
 
 const RaceCrews = (props)=> {
   const [showModal, setShowModal] = useState(false);
+  const [showAddCrewModal, setShowAddCrewModal] = useState(false);
   const [crewID, setCrewID] = useState('');
   const [crewPaddlers, setCrewPaddlers] = useState([]);
 
   const setFields = (crewID, paddlers) => {
     setShowModal(true);
     setCrewID(crewID);
-
     setCrewPaddlers(paddlers)
   }
   const addPaddlerToCrew = (e) => {
@@ -45,30 +46,44 @@ const RaceCrews = (props)=> {
     //remove from store
     props.dispatch(updateCrew({...currCrew, paddlers:[...filteredPaddlers]}))
   }
+  const addNewCrew = (e) => {
+    setShowAddCrewModal(false)
+    const newCrew = {crewID:uuid(), race:{raceID:props.raceID, raceName:props.raceName}, paddlers:[], division:e.target.value}
+
+    //create a new crew on firebase
+    dbCrews.doc(newCrew.crewID).set(newCrew)
+    // update store
+    props.dispatch(addCrew(newCrew))
+  }
 
   const sortedPaddlers = props.paddlers.sort((a,b)=>(a.name.toUpperCase() < b.name.toUpperCase() ) ? -1: 1);
   return (
     <div>
-      {props.crews.map((raceCrew, i)=>(
-        <Col key={i} lg={3} sm={12} className="border border-success py-4">
-          <Card>
-            <Card.Title className="d-flex justify-content-start bg-info text-white">
-              <span>{raceCrew.division}</span>
-              {props.user.role=="superAdmin" && (<Button variant="muted" className="ml-auto" onClick={()=>{setFields(raceCrew.crewID, raceCrew.paddlers)}}><FontAwesomeIcon icon="edit" /></Button>  )}
-            </Card.Title>
-            <Card.Body>
-              <ListGroup>
-              {raceCrew.paddlers.map((paddler, j)=>(
-                <ListGroupItem key={j} style={{textTransform:'capitalize'}}>
-                {`${paddler.paddlerName} | ${paddler.age}`}
-                <Button className="bg-transparent border-0" onClick = {()=>removePaddlerFromCrew(raceCrew.crewID, paddler.paddlerID)}><FontAwesomeIcon icon="minus-circle" className="ml-2 text-danger"/></Button> 
-                </ListGroupItem>
-              ))}
-              </ListGroup>
-            </Card.Body>
-          </Card>
-        </Col>
-      ))}
+      <Row className="d-flex justify-content-end">
+        <Button className="border-0 bg-transparent text-warning" onClick={()=>setShowAddCrewModal(true)}><FontAwesomeIcon icon="plus-circle" className="fa-3x"/></Button>
+      </Row>
+      <Row>
+        {props.crews.map((raceCrew, i)=>(
+          <Col key={i} lg={3} sm={12} className="border border-success py-4">
+            <Card>
+              <Card.Title className="d-flex justify-content-start bg-info text-white">
+                <span>{raceCrew.division}</span>
+                {props.user.role=="superAdmin" && (<Button variant="muted" className="ml-auto" onClick={()=>{setFields(raceCrew.crewID, raceCrew.paddlers)}}><FontAwesomeIcon icon="edit" /></Button>  )}
+              </Card.Title>
+              <Card.Body>
+                <ListGroup>
+                {raceCrew.paddlers.map((paddler, j)=>(
+                  <ListGroupItem key={j} style={{textTransform:'capitalize'}}>
+                  {`${paddler.paddlerName} | ${paddler.age}`}
+                  <Button className="bg-transparent border-0" onClick = {()=>removePaddlerFromCrew(raceCrew.crewID, paddler.paddlerID)}><FontAwesomeIcon icon="minus-circle" className="ml-2 text-danger"/></Button> 
+                  </ListGroupItem>
+                ))}
+                </ListGroup>
+              </Card.Body>
+            </Card>
+          </Col>
+        ))}
+      </Row>
       <Modal show={showModal} onHide={()=>setShowModal(false)} animation={false} size={'lg'} centered  className="addPaddlerToCrewModal">
         <Modal.Header className="bg-info" closeButton>
           <Modal.Title>Add Paddler</Modal.Title>
@@ -87,6 +102,39 @@ const RaceCrews = (props)=> {
           </Button>
         </Modal.Footer>
       </Modal>
+      <Modal show={showAddCrewModal} onHide={()=>setShowAddCrewModal(false)} animation={false} size={'lg'} centered  className="addPaddlerToCrewModal">
+        <Modal.Header className="bg-info" closeButton>
+          <Modal.Title>Select Division</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <FormControl as="select" onChange={addNewCrew} value={-1}>
+            <option value={-1} disabled >select division</option>
+            <option value={"Novice Men"} >Novice Men</option>
+            <option value={"Novice Women"} >Novice Women</option> 
+            <option value={"Novice Coed"} >Novice Coed</option>            
+            <option value={"Short Course Men"} >Short Course Men</option>
+            <option value={"Short Course Women"} >Short Course Women</option>
+            <option value={"Open Men"} >Open Men</option>
+            <option value={"Masters Men"} >Masters Men</option>
+            <option value={"Sr Masters Men"} >Sr Masters Men</option>
+            <option value={"Golden Masters Men"} >Golden Masters Men</option>
+            <option value={"Open Women"} >Open Women</option>
+            <option value={"Masters Women"} >Masters Women</option>
+            <option value={"Sr Masters Women"} >Sr Masters Women</option>
+            <option value={"Golden Masters Women"} >Golden Masters Women</option>            
+            <option value={"Open Coed"} >Open Coed</option>
+            <option value={"Masters Coed"} >Masters Coed</option>
+            <option value={"Sr Masters Coed"} >Sr Masters Coed</option>
+            <option value={"Golden Masters Coed"} >Golden Masters Coed</option>
+            <option value={"Keiki"} >Keiki</option>
+          </FormControl>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={()=>setShowAddCrewModal(false)} className="btn-lg">
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>      
     </div>
   );
 
