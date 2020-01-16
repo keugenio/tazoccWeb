@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { dbRacesToPaddlers } from '../../Firebase';
+import { dbRacesToPaddlers, dbCrews } from '../../Firebase';
 import moment from 'moment';
-import { addPaddlerToRace, updatePaddlerTT, clearPaddlersToRace, removePaddlerFromRace, updateRace } from '../../../store/store';
+import { addPaddlerToRace, updatePaddlerTT, clearPaddlersToRace, removePaddlerFromRace, updateRace, addCrew, clearCrews } from '../../../store/store';
 import { Card, Col, Tab, Nav, Row, Badge, Form, Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import LoadingIcon from '../../LoadingIcon';
 import AddPaddler from './AddPaddler';
+import RaceCrews from './Crews/RaceCrews';
+
 import "babel-polyfill";
 
 function mapStateToProps({paddlers, races, paddlersForCurrentRace}) {
@@ -107,10 +109,20 @@ class RaceDashBoard extends Component {
                 this.props.dispatch(addPaddlerToRace(paddler))                     
               }}
         })
-    })   
+    })
+    // retrieve crews for race and update store
+    dbCrews.where("race.raceID", "==", this.props.raceID).get()
+      .then((docs)=>{
+        if (!docs.empty)
+          docs.forEach(doc =>{
+            const crewData = doc.data();
+            this.props.dispatch(addCrew({...crewData, crewID:doc.id}))
+          })
+      })
   }
   componentWillUnmount(){
     this.props.dispatch(clearPaddlersToRace())
+    this.props.dispatch(clearCrews())
   }
   handleChange = (e) =>{
     this.setState({newTimeTrialValue:e.target.value})
@@ -221,7 +233,7 @@ class RaceDashBoard extends Component {
                 </Card>
               </Tab.Pane>
               <Tab.Pane eventKey="setCrews">
-                no set crews yet
+                <RaceCrews raceID={this.props.raceID}/>
               </Tab.Pane>
               <Tab.Pane eventKey="possibleCrews" className="possibleCrews">
                 <Card>

@@ -317,6 +317,30 @@ const paddlersToRaceReducer = (state=[], action) =>{
       return state;
   }
 }
+
+/******  crews actions and reducer *************/
+export const addCrew = (crew) => ({
+  type: 'ADD_CREW', crew
+})
+export const updateCrew = (crew) =>({
+  type:'UPDATE_CREW', crew
+})
+export const clearCrews = () => ({
+  type:'CLEAR_CREWS'
+})
+const crewsReducer = (state=[], action) =>{
+  switch (action.type) {
+    case 'ADD_CREW':
+      return [...state, action.crew];
+    case 'UPDATE_CREW':
+      const filteredCrews = state.filter(crew => crew.raceID==action.raceID)
+      return [...filteredCrews, action.crew]
+    case 'CLEAR_CREWS':
+      return [];
+    default:
+      return state;
+  }
+}
 /********* create a store by combining reducers ********************** */
 //create store by assigning expenses reducer to expenses property using combineReducer
 
@@ -332,7 +356,8 @@ export default () => {
         selectedPaddlerEditable: selectedPaddlerEditableReducer,
         races: racesReducer,
         racesPaddlerSignedUpFor: racesPaddlerSignedUpForReducer,
-        paddlersForCurrentRace: paddlersToRaceReducer
+        paddlersForCurrentRace: paddlersToRaceReducer,
+        crews: crewsReducer
       }
     ),
     window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
