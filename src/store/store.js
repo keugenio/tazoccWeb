@@ -325,6 +325,9 @@ export const addCrew = (crew) => ({
 export const updateCrew = (crew) =>({
   type:'UPDATE_CREW', crew
 })
+export const deleteCrew = (crewID) =>({
+  type:'DELETE_CREW', crewID
+})
 export const clearCrews = () => ({
   type:'CLEAR_CREWS'
 })
@@ -333,8 +336,11 @@ const crewsReducer = (state=[], action) =>{
     case 'ADD_CREW':
       return [...state, action.crew];
     case 'UPDATE_CREW':
-      const filteredCrews = state.filter(crew => crew.raceID!=action.raceID)
+      const filteredCrews = state.filter(crew => crew.crewID!=action.crew.crewID)
       return [...filteredCrews, action.crew]
+    case 'DELETE_CREW':
+      const filteredCrews2 = state.filter(crew => crew.crewID!=action.crewID)
+      return [...filteredCrews2]      
     case 'CLEAR_CREWS':
       return [];
     default:

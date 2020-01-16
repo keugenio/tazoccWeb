@@ -4,8 +4,9 @@ import { Card, ListGroup, ListGroupItem, Col, Button, Modal, Row, FormControl, I
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { dbCrews } from '../../../Firebase';
 import moment from 'moment';
-import { updateCrew, addCrew } from '../../../../store/store';
+import { updateCrew, addCrew, deleteCrew } from '../../../../store/store';
 import uuid from 'uuid';
+import Swal from 'sweetalert2';
 
 function mapStateToProps({crews, user, paddlers}) {
   return { crews, user, paddlers };
@@ -55,6 +56,34 @@ const RaceCrews = (props)=> {
     // update store
     props.dispatch(addCrew(newCrew))
   }
+  const removeCrew = (crewID) => {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+      if (result.value) {
+        // delete from firestore
+        dbCrews.doc(crewID).delete()
+        .then(()=>{
+          props.dispatch(deleteCrew(crewID))
+        })
+        .then(()=>{
+          Swal.fire(
+            'Deleted!',
+            'crew has been deleted.',
+            'success'
+          )           
+        })
+      }
+
+    })    
+    
+  }
 
   const sortedPaddlers = props.paddlers.sort((a,b)=>(a.name.toUpperCase() < b.name.toUpperCase() ) ? -1: 1);
   return (
@@ -68,7 +97,10 @@ const RaceCrews = (props)=> {
             <Card>
               <Card.Title className="d-flex justify-content-start bg-info text-white">
                 <span>{raceCrew.division}</span>
-                {props.user.role=="superAdmin" && (<Button variant="muted" className="ml-auto" onClick={()=>{setFields(raceCrew.crewID, raceCrew.paddlers)}}><FontAwesomeIcon icon="edit" /></Button>  )}
+                <div className="ml-auto d-flex">
+                  {props.user.role=="superAdmin" && (<Button className="bg-transparent text-danger" onClick={()=>{removeCrew(raceCrew.crewID)}}><FontAwesomeIcon icon="minus-circle" className="fa fa-2x" /></Button>  )}
+                  {props.user.role=="superAdmin" && (<Button className="bg-transparent text-muted"  onClick={()=>{setFields(raceCrew.crewID, raceCrew.paddlers)}}><FontAwesomeIcon icon="edit" className="fa fa-2x" /></Button>  )}
+                </div>
               </Card.Title>
               <Card.Body>
                 <ListGroup>
