@@ -232,7 +232,7 @@ class RaceDashBoard extends Component {
                 </Card>
               </Tab.Pane>
               <Tab.Pane eventKey="setCrews">
-                <RaceCrews raceID={this.props.raceID} raceName={currRace.name}/>
+                <RaceCrews raceID={this.props.raceID} raceName={currRace.name} paddlersForCurrentRace={this.props.paddlersForCurrentRace}/>
               </Tab.Pane>
               <Tab.Pane eventKey="possibleCrews" className="possibleCrews">
                 <Card>

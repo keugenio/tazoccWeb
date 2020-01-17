@@ -19,7 +19,8 @@ const RaceCrews = (props)=> {
   const [crewID, setCrewID] = useState('');
   const [crewPaddlers, setCrewPaddlers] = useState([]);
   const [sortedPaddlers, setSortedPaddlers] = useState([]);
-
+  const [availableDivisions, setAvailableDivisions] = useState([]);
+  
   const ageIsCorrectDivision = (age, crewID) => {
     const currCrew = props.crews.find(crew=>crew.crewID == crewID)
     switch(currCrew.division){
@@ -147,12 +148,38 @@ const RaceCrews = (props)=> {
     })    
     
   }
+  const setAllAvailableDivisions = () => {
+    const availableDivisions = [];
+    const divisions = [
+      {name:"Novice Men",sex:"male", lowerAge:18, upperAge:100},{name:"Novice Women", sex:"female", lowerAge:18, upperAge:100},{name:"Novice Coed", sex:"coed", lowerAge:18, upperAge:100},
+      {name:"Open Men", lowerAge: 18 , upperAge:100, sex:"male"},{name:"Masters Men", lowerAge:40 , upperAge:49, sex:"male"},{name:"Sr Masters Men", lowerAge: 50, upperAge:59, sex:"male"},{name:"Golden Masters Men", lowerAge: 60, upperAge:100, sex:"male"},
+      {name:"Open Women", lowerAge: 18 , upperAge:100, sex:"female"},{name:"Masters Women", lowerAge:40 , upperAge:49, sex:"female"},{name:"Sr Masters Women", lowerAge: 50, upperAge:59, sex:"female"},{name:"Golden Masters Women", lowerAge: 60, upperAge:100, sex:"female"},
+      {name:"Open Coed", lowerAge: 18 , upperAge:100, sex:"coed"},{name:"Masters Coed", lowerAge:40 , upperAge:49, sex:"coed"},{name:"Sr Masters Coed", lowerAge: 50, upperAge:59, sex:"coed"},{name:"Golden Masters Coed", lowerAge: 60, upperAge:100, sex:"coed"},
+      {name:"keiki", sex:"coed", lowerAge:10, upperAge:17}]
 
+    // for all divisions and for all avaialble paddlers, if age and race match division, set the available divisions
+    props.paddlersForCurrentRace.map(paddler=>{
+      divisions.map((division, i)=>{
+        if ((paddler.age>=division.lowerAge && paddler.age<=division.upperAge)){
+          // double check here for dupes
+          if (!availableDivisions.some(d=>d.name==division.name)){
+            if (paddler.sex == division.sex || division.sex=="coed"){
+              availableDivisions.push({name:division.name, order:i })
+            }
+          }
+        }
+      })
+    })
+    //sort according novice, men, women coeds then keikis
+    const orderedDivisions = availableDivisions.sort((a,b)=>a.order < b.order? -1:1);
+    setAvailableDivisions([...orderedDivisions]);
+    setShowAddCrewModal(true);
+  }
   // const sortedPaddlers = props.paddlers.sort((a,b)=>(a.name.toUpperCase() < b.name.toUpperCase() ) ? -1: 1);
   return (
     <div>
       <Row className="d-flex justify-content-end">
-        <Button className="border-0 bg-transparent text-warning" onClick={()=>setShowAddCrewModal(true)}><FontAwesomeIcon icon="plus-circle" className="fa-3x"/></Button>
+        <Button className="border-0 bg-transparent text-warning" onClick={()=>setAllAvailableDivisions()}><FontAwesomeIcon icon="plus-circle" className="fa-3x"/></Button>
       </Row>
       <Row>
         {props.crews.map((raceCrew, i)=>(
@@ -204,29 +231,14 @@ const RaceCrews = (props)=> {
         <Modal.Body>
           <FormControl as="select" onChange={addNewCrew} value={-1}>
             <option value={-1} disabled >select division</option>
-            <option value={"Novice Men"} >Novice Men</option>
-            <option value={"Novice Women"} >Novice Women</option> 
-            <option value={"Novice Coed"} >Novice Coed</option>            
-            <option value={"Short Course Men"} >Short Course Men</option>
-            <option value={"Short Course Women"} >Short Course Women</option>
-            <option value={"Open Men"} >Open Men</option>
-            <option value={"Masters Men"} >Masters Men</option>
-            <option value={"Sr Masters Men"} >Sr Masters Men</option>
-            <option value={"Golden Masters Men"} >Golden Masters Men</option>
-            <option value={"Open Women"} >Open Women</option>
-            <option value={"Masters Women"} >Masters Women</option>
-            <option value={"Sr Masters Women"} >Sr Masters Women</option>
-            <option value={"Golden Masters Women"} >Golden Masters Women</option>            
-            <option value={"Open Coed"} >Open Coed</option>
-            <option value={"Masters Coed"} >Masters Coed</option>
-            <option value={"Sr Masters Coed"} >Sr Masters Coed</option>
-            <option value={"Golden Masters Coed"} >Golden Masters Coed</option>
-            <option value={"Keiki"} >Keiki</option>
+            { availableDivisions.map((division, i)=>(
+              <option key={i} value={division.name}>{division.name}</option>
+            )) }
           </FormControl>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={()=>{()=>{setShowAddCrewModal(false);setCrewID('')}}} className="btn-lg">
-            Close
+            Close this
           </Button>
         </Modal.Footer>
       </Modal>      
