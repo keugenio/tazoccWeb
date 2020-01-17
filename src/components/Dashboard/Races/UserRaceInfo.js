@@ -8,6 +8,7 @@ import { removeRaceForPaddler } from '../../../store/store';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Swal from 'sweetalert2';
 import Calendar from 'rc-year-calendar';
+import "babel-polyfill";
 
 function mapStateToProps({races, user, racesPaddlerSignedUpFor}) {
   return {

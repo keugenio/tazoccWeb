@@ -7,6 +7,7 @@ import moment from 'moment';
 import { updateCrew, addCrew, deleteCrew } from '../../../../store/store';
 import uuid from 'uuid';
 import Swal from 'sweetalert2';
+import "babel-polyfill";
 
 function mapStateToProps({crews, user, paddlers}) {
   return { crews, user, paddlers };
@@ -18,17 +19,61 @@ const RaceCrews = (props)=> {
   const [crewID, setCrewID] = useState('');
   const [crewPaddlers, setCrewPaddlers] = useState([]);
   const [sortedPaddlers, setSortedPaddlers] = useState([]);
+
+  const ageIsCorrectDivision = (age, crewID) => {
+    const currCrew = props.crews.find(crew=>crew.crewID == crewID)
+    switch(currCrew.division){
+      case "Open Men":
+          return (age>=18)
+      case "Masters Men":
+          return (age>=40)
+      case "Sr Masters Men":
+        return (age>=50) 
+      case "Golden Masters Men":
+        return (age>=60)
+      case "Open Women":
+          return (age>=18)
+      case "Masters Women":
+          return (age>=40)
+      case "Sr Masters Women":
+        return (age>=50) 
+      case "Golden Masters Women":
+        return (age>=60)  
+      case "Keiki":
+        return (age<18)                          
+      default:
+        return false
+    }
+  }
+  const sexIsCorrectDivision = (sex, crewID) => {
+    const currCrew = props.crews.find(crew=>crew.crewID == crewID)
+    switch(currCrew.division){
+      case "Open Men":
+      case "Masters Men":
+      case "Sr Masters Men":
+      case "Golden Masters Men":
+        return (sex=="male" || sex=="kane")
+      case "Open Women":
+      case "Masters Women":
+      case "Sr Masters Women":
+      case "Golden Masters Women":  
+      case "Keiki":
+        return (sex=="female" || sex=="wahine")                          
+      default:
+        return false
+    }
+  }
+
   const setFields = (crewID, paddlers) => {
     setShowModal(true);
     setCrewID(crewID);
     setCrewPaddlers(paddlers)
     const fp = [];
     props.paddlers.map((paddler)=>{
-      if (paddlers.some(p=>p.paddlerID == paddler.uid)){
-        let x=0;
-        x++;
-        console.log(`${paddler.name} included`);}
-      else
+      if (
+        !paddlers.some(p=>p.paddlerID == paddler.uid) && 
+        ageIsCorrectDivision(moment().diff(moment(paddler.birthday), "years"), crewID) && 
+        sexIsCorrectDivision(paddler.sex, crewID) )
         fp.push(paddler)
     })
     const sorted = fp.sort((a,b)=>(a.name.toUpperCase() < b.name.toUpperCase() ) ? -1: 1);
@@ -58,17 +103,17 @@ const RaceCrews = (props)=> {
     //remove from store
     props.dispatch(updateCrew({...currCrew, paddlers:[...filteredPaddlers]}))
   }
-  const addNewCrew = (e) => {
+  const addNewCrew = async (e) => {
     setShowAddCrewModal(false)
     const newCrew = {crewID:uuid(), race:{raceID:props.raceID, raceName:props.raceName}, paddlers:[], division:e.target.value}
 
     //create a new crew on firebase
-    dbCrews.doc(newCrew.crewID).set(newCrew)
+    await dbCrews.doc(newCrew.crewID).set(newCrew)
     // update store
     props.dispatch(addCrew(newCrew))
   }
-  const removeCrew = (crewID) => {
-    Swal.fire({
+  const removeCrew = async (crewID) => {
+    await Swal.fire({
       title: 'Are you sure?',
       text: "You won't be able to revert this!",
       icon: 'warning',
@@ -79,7 +124,7 @@ const RaceCrews = (props)=> {
     }).then((result) => {
       if (result.value) {
         // delete from firestore
-        dbCrews.doc(crewID).delete()
+         dbCrews.doc(crewID).delete()
         .then(()=>{
           props.dispatch(deleteCrew(crewID))
         })
@@ -152,7 +197,7 @@ const RaceCrews = (props)=> {
           </Button>
         </Modal.Footer>
       </Modal>
-      <Modal show={showAddCrewModal} onHide={()=>setShowAddCrewModal(false)} animation={false} size={'lg'} centered  className="addPaddlerToCrewModal">
+      <Modal show={showAddCrewModal} onHide={()=>{setShowAddCrewModal(false);setCrewID('')}} animation={false} size={'lg'} centered  className="addPaddlerToCrewModal">
         <Modal.Header className="bg-info" closeButton>
           <Modal.Title>Select Division</Modal.Title>
         </Modal.Header>
@@ -180,7 +225,7 @@ const RaceCrews = (props)=> {
           </FormControl>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={()=>setShowAddCrewModal(false)} className="btn-lg">
+          <Button variant="secondary" onClick={()=>{()=>{setShowAddCrewModal(false);setCrewID('')}}} className="btn-lg">
             Close
           </Button>
         </Modal.Footer>
