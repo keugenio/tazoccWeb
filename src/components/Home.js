@@ -25,7 +25,7 @@ class Home extends React.Component {
   async componentDidMount() {
     // get wordpress articles
     // await axios.get(`http://tazocc.com/wp-json/wp/v2/posts?after=${beginningOfThisYear}`)  
-    await axios.get(`http://tazocc.com/wp-json/wp/v2/posts?per_page=10`)       
+    await fetch(`http://tazocc.com/wp-json/wp/v2/posts?per_page=10`)       
       .then(res => {
         const newNews = res.data;
         this.setState({ showSpinner:false});

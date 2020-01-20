@@ -71,7 +71,7 @@ class News extends React.Component {
     const permanentToken=fbToken.key;
 
     // get facebook pictures 
-    await axios.get(`http://graph.facebook.com/tazocc?fields=posts{full_picture}&access_token=${permanentToken}`)
+    await fetch(`http://graph.facebook.com/tazocc?fields=posts{full_picture}&access_token=${permanentToken}`)
     .then(res => {      
       var filtered = [];
       for (var i = 0; i < res.data.posts.data.length; i++) {
