@@ -23,7 +23,6 @@ class AdminControl extends React.Component{
 
   await dbAllPaddlers.get()
     .then(paddlers=>{
-      const arrayOfPaddlers = [];
       paddlers.forEach(paddler=>{
         dbAllPaddlers.doc(paddler.id).get().then(doc=>{
           this.props.dispatch(addPaddlerToAllPaddlers(doc.data()))

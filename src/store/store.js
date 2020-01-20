@@ -347,6 +347,42 @@ const crewsReducer = (state=[], action) =>{
       return state;
   }
 }
+
+/****** time trials actions and reducer ***********************/
+export const addTimeTrial = ({raceID, paddlerID, timeTrial}) => ({
+  type: 'ADD_TIME_TRIAL', raceID, paddlerID, timeTrial
+})
+export const clearTimeTrials = () => ({
+  type: 'CLEAR_TIME_TRIALS'
+})
+const timeTrialsReducer = (state=[], action) =>{
+  switch (action.type) {
+    case 'ADD_TIME_TRIAL':
+      return [...state, {raceID:action.raceID, paddlerID:action.paddlerID, timeTrial:action.timeTrial}]
+    case 'CLEAR_TIME_TRIALS':
+      return [];
+    default:
+      return state;
+  }
+}
+
+/****** crew trials actions and reducer ***********************/
+export const addCrewTimeTrial = ({crewID, division, raceID, paddlerID, timeTrial}) => ({
+  type: 'ADD_CREW_TIME_TRIAL', crewID, division, raceID, paddlerID, timeTrial
+})
+export const clearCrewTimeTrials = () => ({
+  type: 'CLEAR_CREW_TIME_TRIALS'
+})
+const crewTimeTrialsReducer = (state=[], action) =>{
+  switch (action.type) {
+    case 'ADD_CREW_TIME_TRIAL':
+      return [...state, {crewID:action.crewID, division:action.division, raceID:action.raceID, paddlerID:action.paddlerID, timeTrial:action.timeTrial}]
+    case 'CLEAR_CREW_TIME_TRIALS':
+      return [];
+    default:
+      return state;
+  }
+}
 /********* create a store by combining reducers ********************** */
 //create store by assigning expenses reducer to expenses property using combineReducer
 
@@ -363,7 +399,9 @@ export default () => {
         races: racesReducer,
         racesPaddlerSignedUpFor: racesPaddlerSignedUpForReducer,
         paddlersForCurrentRace: paddlersToRaceReducer,
-        crews: crewsReducer
+        crews: crewsReducer,
+        timeTrials: timeTrialsReducer,
+        crewTrials: crewTimeTrialsReducer
       }
     ),
     window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()

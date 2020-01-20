@@ -18,15 +18,12 @@ class AddPaddler extends Component {
     super(props)
     this.state={
       showAddNewPaddlerModal:false,
-      currentPaddler:-1,
+      currentPaddler:{uid:-1},
       showAddPaddlerButton:false
     }
   }
   addNewPaddler = () =>{
     this.setState({showAddNewPaddlerModal:true})
-  }
-  saveNewPaddler = () => {
-    
   }
   handleCloseModal = () => {
     this.setState({showAddNewPaddlerModal:false})
@@ -57,7 +54,7 @@ class AddPaddler extends Component {
         const currRace = this.props.races.find(race=>race.id == this.props.raceID)
         this.props.dispatch(updateRace({...currRace, paddlerCount: currRace.paddlerCount++}))
         // remove the add button
-        this.setState({showAddPaddlerButton:false})         
+        this.setState({showAddPaddlerButton:false, currentPaddler:{uid:-1}})         
       })
   }
   render() {
@@ -67,7 +64,7 @@ class AddPaddler extends Component {
         <Form.Group className="d-flex justify-content-end my-auto border border-success p-3">
           <Form.Label className="my-auto">Add Paddler</Form.Label>
           <InputGroup>          
-              <Form.Control as="select" onChange={this.handleChange} className="ml-2" value={this.state.currentPaddler}>
+              <Form.Control as="select" onChange={this.handleChange} className="ml-2" value={this.state.currentPaddler.uid}>
                 <option value={-1} disabled >select paddler</option>
                 { sortedPaddlers.map((paddler, i)=>{
                   if (!this.props.paddlersForCurrentRace.find(p=>p.paddlerID == paddler.uid))

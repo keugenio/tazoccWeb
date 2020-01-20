@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { connect } from 'react-redux';
 import { Card , Table, Button, Modal} from 'react-bootstrap';
 import moment from 'moment';
@@ -8,14 +8,16 @@ import { removeRaceForPaddler } from '../../../store/store';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Swal from 'sweetalert2';
 import Calendar from 'rc-year-calendar';
+import TimeTrials from './TimeTrials/TimeTrials';
+import CrewTrials from './TimeTrials/CrewTrials';
+
 import "babel-polyfill";
 
-function mapStateToProps({races, user, racesPaddlerSignedUpFor}) {
+function mapStateToProps({races, user, racesPaddlerSignedUpFor, paddlers}) {
   return {
-    races, paddler:user, racesPaddlerSignedUpFor
+    races, paddler:user, racesPaddlerSignedUpFor, paddlers
   };
 }
-
 
 const UserRaceInfo = (props) => {
   const { races, paddler, racesPaddlerSignedUpFor, attendance, raceID, paddlerID } = props
@@ -26,7 +28,7 @@ const UserRaceInfo = (props) => {
   const internalInfo = race.internalInfo || -1;
   const currRace = racesPaddlerSignedUpFor.find(race=>race.raceID == props.raceID)
   const timeTrial =  currRace ? currRace.timeTrial : null;
-
+  
   const openModal = (modalName) => {
     if (modalName == "internalInfo")
       setShowInternalInfoModal(true);
@@ -68,11 +70,12 @@ const UserRaceInfo = (props) => {
       }
     })
   }
+
   return (
     <div>
       <Card text="dark" >
         <Card.Title className="d-flex justify-content-between">
-          <h2>{race.name}</h2>
+          <h2>{race.name} <span className="text-muted">{race.id}</span></h2>
           <Button onClick={handleRemoveRace} variant="danger">
             <FontAwesomeIcon icon="minus-circle"/>
           </Button>
@@ -104,6 +107,16 @@ const UserRaceInfo = (props) => {
                 <td className="text-danger font-weight-bold">Time Trial</td>
                 <td className="text-danger font-weight-bold"> {timeTrial ? `${timeTrial} m` : 'no trial yet'}</td>
               </tr>
+
+              {timeTrial && (<tr>
+                <td>Ranking for Race</td>
+                <td> <TimeTrials paddler={{...props.paddler, timeTrial}} raceID={props.raceID}/></td>
+              </tr>)} 
+              {timeTrial && (<tr>
+                <td>Crew Rank</td>
+                <td><CrewTrials paddler={{...props.paddler, timeTrial}} raceID={props.raceID}/></td>
+              </tr>)}                            
+
               <tr>
                 <td>Change Req</td>
                 <td>{race.changeRequirement ? ('yes'):('no')}</td>
@@ -124,6 +137,7 @@ const UserRaceInfo = (props) => {
                   </Button>
                 </td>
               </tr>
+
             </tbody>           
           </Table>
         </Card.Body>

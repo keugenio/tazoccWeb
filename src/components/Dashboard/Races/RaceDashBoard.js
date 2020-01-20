@@ -105,7 +105,7 @@ class RaceDashBoard extends Component {
           if (raceToPaddlerInfo.enabled){
             const aRacer = this.props.paddlers.find(paddler=>paddler.uid==raceToPaddlerInfo.paddlerID)
               if (aRacer){
-                const paddler = {raceToPaddlerID: race.id, paddlerID:raceToPaddlerInfo.paddlerID, paddlerName:aRacer.name, timeTrial:raceToPaddlerInfo.timeTrial, age:moment().diff(moment(aRacer.birthday), 'years'), sex:aRacer.sex}
+                const paddler = {raceToPaddlerID: race.id, paddlerID:raceToPaddlerInfo.paddlerID, paddlerName:aRacer.name, timeTrial:raceToPaddlerInfo.timeTrial, age:moment().diff(moment(aRacer.birthday), 'years'), sex:aRacer.sex, novice:aRacer.novice}
                 this.props.dispatch(addPaddlerToRace(paddler))                     
               }}
         })
@@ -180,7 +180,8 @@ class RaceDashBoard extends Component {
             <Col lg={7} className="line-height-4rem">       
                 {this.state.paddlers.map((paddler, i)=>(               
                   <span key={i} className="paddler border border-success border-2 p-2 d-inline text-nowrap">
-                    {paddler.paddlerName}                    
+                    {paddler.novice && (<span className="text-success font-weight-bold">{paddler.paddlerName}</span>)}
+                    {!paddler.novice && (paddler.paddlerName)}                    
                       <Button className="bg-transparent text-danger mx-2 border-0" onClick={()=>this.deletePaddlerFromRace(paddler.paddlerID)} value={paddler.paddlerID}><FontAwesomeIcon icon="minus-circle"/></Button>
                   </span>
                 ))}
