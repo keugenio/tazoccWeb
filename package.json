@@ -7,7 +7,8 @@
   "description": "team arizona spa",
   "scripts": {
     "start": "live-server public/",
-    "build": "webpack",
+    "build-dev": "webpack",
+    "build-prod": "webpack -p --env production",
     "dev-server": "webpack-dev-server"
   },
   "dependencies": {
@@ -30,6 +31,7 @@
     "bootstrap": "^4.3.1",
     "css-loader": "^3.2.0",
     "emailjs-com": "^2.4.1",
+    "extract-text-webpack-plugin": "^4.0.0-beta.0",
     "firebase": "^7.5.0",
     "firebase-admin": "^8.8.0",
     "form-error": "^0.1.0",

@@ -69,12 +69,7 @@ const  NavigationOverlay = (props) => {
                 <span>09</span>Admin
               </Link>
             </li>
-          )}
-          {loggedIn && (<li className="navigation__item">  
-            <Link className="navigation__link" to="/editprofile" onClick={closeNavOverlay}>
-            Settings
-            </Link>
-          </li> )}                   
+          )}                  
         </ol>
       </nav>
     </div>
