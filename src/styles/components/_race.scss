@@ -47,6 +47,9 @@
   }
   .card {
     border: none;
+    & .card-body {
+      color:$dark
+    }
   }
   .tabbedInfo {
     height:50vh;
