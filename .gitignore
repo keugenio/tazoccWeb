@@ -2,6 +2,7 @@ node_modules
 component/keys
 keys
 playground
+package-lock.json
 public/bundle.js
 public/bundle.js.map
 public/styles.css
