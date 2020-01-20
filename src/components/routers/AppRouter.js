@@ -37,12 +37,12 @@ class AppRouter extends React.Component {
 
   async componentDidMount() {
     // get the last 10 articles from tazocc.com
-    let newsAmount = 0;
-    await fetch(`http://tazocc.com/wp-json/wp/v2/posts?per_page=10`)       
-      .then(res => {
-          this.props.dispatch(setNewsArticles([...res.data]))  
-          newsAmount = res.data.length;
-      }) 
+    // let newsAmount = 0;
+    // await fetch(`http://tazocc.com/wp-json/wp/v2/posts?per_page=10`)       
+    //   .then(res => {
+    //       this.props.dispatch(setNewsArticles([...res.data]))  
+    //       newsAmount = res.data.length;
+    //   }) 
 
     firebase.auth().onAuthStateChanged(FBUser => {      
       if (FBUser) {

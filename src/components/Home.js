@@ -25,34 +25,34 @@ class Home extends React.Component {
   async componentDidMount() {
     // get wordpress articles
     // await axios.get(`http://tazocc.com/wp-json/wp/v2/posts?after=${beginningOfThisYear}`)  
-    await fetch(`http://tazocc.com/wp-json/wp/v2/posts?per_page=10`)       
-      .then(res => {
-        const newNews = res.data;
-        this.setState({ showSpinner:false});
+    // await fetch(`http://tazocc.com/wp-json/wp/v2/posts?per_page=10`)       
+    //   .then(res => {
+    //     const newNews = res.data;
+    //     this.setState({ showSpinner:false});
 
-        // get locally stored articles
-        const localStorageArray = ls('news') ? ls('news') : [];
-        let newArticless= [];
+    //     // get locally stored articles
+    //     const localStorageArray = ls('news') ? ls('news') : [];
+    //     let newArticless= [];
         
-        // if there were no previous articles, locally store all the articles that were returned from the axios call
-        if (localStorageArray.length<=0){
-          newArticless = [...newNews];
-          console.log("loading all news for the first time");
-        } else {
-          // else filter OUT all old articles from the new ones
-          newArticless = newNews.filter((article)=>(
-            !localStorageArray.find(ls => ls.id=== article.id)
-          ))
-        }
-        // if there are any new articles to add, add them to local storage and the store
-        if (newArticless.length>0) {
-          ls.set('news', [...localStorageArray, ...newArticless]);        
-          this.props.dispatch(setNewsArticles([...localStorageArray, ...newArticless]))  
-        } else { // else just add locally read articles ids to the store
-          this.props.dispatch(setNewsArticles([...localStorageArray]))  
-        }
+    //     // if there were no previous articles, locally store all the articles that were returned from the axios call
+    //     if (localStorageArray.length<=0){
+    //       newArticless = [...newNews];
+    //       console.log("loading all news for the first time");
+    //     } else {
+    //       // else filter OUT all old articles from the new ones
+    //       newArticless = newNews.filter((article)=>(
+    //         !localStorageArray.find(ls => ls.id=== article.id)
+    //       ))
+    //     }
+    //     // if there are any new articles to add, add them to local storage and the store
+    //     if (newArticless.length>0) {
+    //       ls.set('news', [...localStorageArray, ...newArticless]);        
+    //       this.props.dispatch(setNewsArticles([...localStorageArray, ...newArticless]))  
+    //     } else { // else just add locally read articles ids to the store
+    //       this.props.dispatch(setNewsArticles([...localStorageArray]))  
+    //     }
 
-      })
+    //   })
   }
 
   handleClose = () => {this.setState({show: false})};

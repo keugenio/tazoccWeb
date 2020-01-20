@@ -51,11 +51,9 @@ const  NavigationOverlay = (props) => {
               <span>06</span>Shop TAZ
             </Link> 
           </li>
-          <li className="navigation__item">  
-            <Link className="navigation__link" to="/news" onClick={closeNavOverlay}>
-              <span>07</span>News
-            </Link>
-          </li>
+
+
+
           {loggedIn && (
             <li className="navigation__item">  
             <Link className="navigation__link" to="/dashboard" onClick={closeNavOverlay}>
