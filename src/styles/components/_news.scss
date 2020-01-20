@@ -1,11 +1,13 @@
 .news {
   background-image: url('/images/bg_join.png');
   font-size: 1.5rem;
+  color: $dark;
 }
 p.link-more {
   display: none;
 }
 .newsModal {
+  color:$dark;
   & .modal-dialog {
     min-width: 75%;
   }

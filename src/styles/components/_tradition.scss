@@ -58,6 +58,11 @@
       opacity:1;
     }
   }
+  & .carousel-item {
+    & .card-body {
+      color:$primary;
+    }
+  }
 }
 .otherTerms{
   & .card {
