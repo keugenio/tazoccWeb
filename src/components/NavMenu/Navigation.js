@@ -40,7 +40,7 @@ class Navigation extends Component {
             Team Arizona Outrigger Canoe Club
           </Link>
           <div className="navbar-nav ml-auto">
-            {loggedIn && (<div className="nav-item"><UnreadNewsBadge /></div>)}
+            {/*loggedIn && (<div className="nav-item"><UnreadNewsBadge /></div>)*/}
             
             <div className="nav-item">
               <Link className="nav_link titleHoverMessage" to="#" onClick={this.handleShow} title="Have a Question? Ask us!">

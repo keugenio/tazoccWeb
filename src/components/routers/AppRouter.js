@@ -60,8 +60,8 @@ class AppRouter extends React.Component {
           if (paddler){
             this.props.dispatch(setUserRole(paddler.role || ''));                   
             this.props.dispatch(setUserAttendance(paddler.attendance || []))  
-            this.props.dispatch(setUserReadNews(paddler.readNews || []));
-            this.props.dispatch(setAmountOfNewsUserStillNeedsToRead( newsAmount - (paddler.readNews? paddler.readNews.length: 0)));
+            // this.props.dispatch(setUserReadNews(paddler.readNews || []));
+            // this.props.dispatch(setAmountOfNewsUserStillNeedsToRead( newsAmount - (paddler.readNews? paddler.readNews.length: 0)));
             this.props.dispatch(setSCORAInfo(paddler));    
             this.props.dispatch(setSelectedPaddler(paddler))      
           } 
