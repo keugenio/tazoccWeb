@@ -1,7 +1,7 @@
 import React from 'react'
 import { Router } from '@reach/router';
 import { connect } from 'react-redux';
-import firebase, { dbRacesToPaddlers, dbAllPaddlers } from '../Firebase';
+import firebase, { dbRacesToPaddlers, dbAllPaddlers, dbRaces } from '../Firebase';
 import axios from 'axios';
 import Navigation from '../NavMenu/Navigation';
 import Home from '../Home';
@@ -21,7 +21,7 @@ import Footer from '../Footer';
 import SuperAdmin from '../_SuperAdmin/SuperAdmin';
 import EditProfile from '../Auth/EditProfile';
 import "babel-polyfill";
-import { setUserName, setUserID, setUserImage, addRaceToPaddler, setUserRole, setUserAttendance, setSelectedPaddler, setUserReadNews, setSCORAInfo, setNewsArticles, setAmountOfNewsUserStillNeedsToRead } from '../../store/store';
+import { setPaddlerName, setPaddlerID, setPaddlerImage, setPaddlerRole, setPaddlerAttendance, addRaceToPaddler, setSelectedPaddler, setUserReadNews, setSCORAInfo, setNewsArticles, setAmountOfNewsUserStillNeedsToRead, addRace } from '../../store/store';
 
 class AppRouter extends React.Component {
   constructor(){
@@ -44,22 +44,34 @@ class AppRouter extends React.Component {
     //       newsAmount = res.data.length;
     //   }) 
 
-    firebase.auth().onAuthStateChanged(FBUser => {      
+   firebase.auth().onAuthStateChanged(async FBUser => {      
       if (FBUser) {
-        // set user in store
-        // this.props.dispatch(setUserName(FBUser.displayName));
-        this.props.dispatch(setUserName(FBUser.displayName));        
-        this.props.dispatch(setUserID(FBUser.uid))
-        this.props.dispatch(setUserImage(FBUser.photoURL));
-        
+        //load all races
+        await dbRaces.get()
+          .then(qSnap=>{
+            qSnap.docs.map(doc=>{
+             dbRaces.doc(doc.id).get()
+              .then(race=>{
+                const raceInfo = race.data()                
+                dbRacesToPaddlers.where("raceID", "==", race.id).get()
+                .then((res)=>{
+                  this.props.dispatch(addRace({...raceInfo, raceID:race.id, paddlerCount:res.docs.length}))
+                  });                
+              })
+            })
+          })
+
         // get all relevant info for current user
-        dbAllPaddlers.doc(FBUser.uid).get()
+        await dbAllPaddlers.doc(FBUser.uid).get()
         .then(doc=>{
           const paddler = doc.data();
           // if exisiting paddler in firestore, update the store with info else add new paddler to firestore
           if (paddler){
-            this.props.dispatch(setUserRole(paddler.role || ''));                   
-            this.props.dispatch(setUserAttendance(paddler.attendance || []))  
+            this.props.dispatch(setPaddlerName(paddler.paddlerName));
+            this.props.dispatch(setPaddlerID(paddler.paddlerID));
+            this.props.dispatch(setPaddlerRole(paddler.role || ''));                   
+            this.props.dispatch(setPaddlerAttendance(paddler.attendance || []));
+            this.props.dispatch(setPaddlerImage(FBUser.photoURL));
             // this.props.dispatch(setUserReadNews(paddler.readNews || []));
             // this.props.dispatch(setAmountOfNewsUserStillNeedsToRead( newsAmount - (paddler.readNews? paddler.readNews.length: 0)));
             this.props.dispatch(setSCORAInfo(paddler));    
@@ -67,24 +79,24 @@ class AppRouter extends React.Component {
           } 
           else {
             dbAllPaddlers.doc(FBUser.uid).set({
-              name:FBUser.displayName,
-              uid:FBUser.uid,
+              paddlerName:FBUser.displayName,
+              paddlerID:FBUser.uid,
               image:FBUser.photoURL
             })
           }
         })
-        
-        //get the races that the paddler signed up for and load into store
-        dbRacesToPaddlers.where("paddlerID", "==", FBUser.uid).where("enabled", "==", true)
-          .get()
-          .then((querySnapshot)=>{
-            querySnapshot.forEach((race)=>{
-              const raceInfo = race.data();
-              const scoraRaceInfo = this.props.races.find(race=> race.id == raceInfo.raceID)
-              if (scoraRaceInfo)
-                this.props.dispatch(addRaceToPaddler({...scoraRaceInfo, ...raceInfo, changeRequirementForRace:scoraRaceInfo.changeRequirement}))
+        .then(()=>{
+          dbRacesToPaddlers.where("paddlerID", "==", FBUser.uid).where("enabled", "==", true)
+            .get()
+            .then((querySnapshot)=>{
+              querySnapshot.docs.forEach((race)=>{
+                const raceInfo = race.data();
+                const scoraRaceInfo = this.props.races.find(race=> race.raceID  == raceInfo.raceID)
+                if (scoraRaceInfo)
+                  this.props.dispatch(addRaceToPaddler({...scoraRaceInfo, ...raceInfo, changeRequirementForRace:scoraRaceInfo.changeRequirement}))
+              })
             })
-        }) 
+          })
       }
     })
     // make the hover message on the links viewable instantly suing jQuery
@@ -105,12 +117,10 @@ class AppRouter extends React.Component {
           <Tradition path="tradition" />
           <ShopTAZ path="/shopTAZ" />
           <News path="/news" />
-          <PaddlerStats path="/paddlerstats" />
           <Dashboard path="/dashboard" />
           <Login path="/login" />
           <Register path="/register" />
           <AdminControl path="/admin" />
-          <SuperAdmin path="/superAdmin" />
           <EditProfile path="/editprofile" />
           <NotFoundPage default />
         </Router>
@@ -119,7 +129,7 @@ class AppRouter extends React.Component {
     )
   }
 }
-const MapStateToProps = ({user, news, races  }) => ({
-  user, news, races
+const MapStateToProps = ({user, news, races, racesPaddlerSignedUpFor  }) => ({
+  user, news, races, racesPaddlerSignedUpFor
 })
 export default connect (MapStateToProps)(AppRouter);

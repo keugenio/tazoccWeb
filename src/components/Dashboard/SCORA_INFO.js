@@ -29,7 +29,7 @@ class SCORA_INFO extends React.Component {
 
     // write data to firestore and update store
 
-    dbAllPaddlers.doc(this.props.selectedPaddler.uid).set({
+    dbAllPaddlers.doc(this.props.selectedPaddler.paddlerID).set({
       ...this.props.selectedPaddler, 
       scoraID:this.state.scoraID,
       scoraWaiver:this.state.scoraWaiver,

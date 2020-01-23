@@ -4,10 +4,14 @@
     outline:none!important;
     box-shadow: none!important;
   }
+  & .modal-title {
+    font-size: 2rem;
+  }
   & .modal-dialog {
     max-width: 90vw;
     
     & .raceCard{
+      color: $dark;
       & .card-title{
         font-size: 2rem!important;
       }

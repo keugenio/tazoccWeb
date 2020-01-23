@@ -122,3 +122,17 @@
     border-left:thin solid $dark
   }
 }
+
+.moreRaceInfo {
+  .modal-title {
+    color: $primary;
+    font-size: 2rem;
+  }
+  .modal-body {
+    color:$dark
+  }
+  td {
+    padding:1.5rem;
+    vertical-align: top;
+  }
+}

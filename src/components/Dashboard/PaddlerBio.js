@@ -52,7 +52,7 @@ class PaddlerBio extends React.Component{
     this.setState({showEditable:false})
 
     // write to firestore and update the current paddler's info
-    dbAllPaddlers.doc(this.props.selectedPaddler.uid)
+    dbAllPaddlers.doc(this.props.selectedPaddler.paddlerID)
       .set({
         ...this.props.selectedPaddler, 
         duesPaid:this.state.duesPaid,
@@ -132,7 +132,7 @@ class PaddlerBio extends React.Component{
                 {role && (<Col lg={4} xs={3} className="flex-row">
                   <div className="form-check">
                     {this.props.selectedPaddler.image && (<div><Image src={this.props.selectedPaddler.image} fluid roundedCircle style={{width:"75px"}}/></div>)}
-                    {!this.props.selectedPaddler.image && (<Monogram name={this.props.selectedPaddler.name} />)}
+                    {!this.props.selectedPaddler.image && (<Monogram name={this.props.selectedPaddler.paddlerName} />)}
                     <div className="ml-4">{this.props.selectedPaddler.sex || 'no sex assigned yet'}</div>
                   </div>  
                 </Col> )}                            
@@ -191,13 +191,13 @@ class PaddlerBio extends React.Component{
                 <Col lg={4} xs={3} className="flex-row">
                   <div className="form-check">
                     {this.props.selectedPaddler.image && (<div><Image src={this.props.selectedPaddler.image} fluid roundedCircle style={{width:"75px"}}/></div>)}
-                    {!this.props.selectedPaddler.image && (<Monogram name={this.props.selectedPaddler.name} />)}
+                    {!this.props.selectedPaddler.image && (<Monogram name={this.props.selectedPaddler.paddlerName} />)}
                     <Form.Control as="select" size="lg" name="sex" onChange={this.handleChange} style={formStyle} defaultValue={this.state.sex}>
                       <option disabled value='n/a'>-- select sex --</option>
                       <option value='wahine'>wahine</option>
                       <option value='kane'>kane</option>   
-                      <option value='keiki'>keiki wahine</option> 
-                      <option value='keiki'>keiki kane</option>                                                                
+                      <option value='keiki wahine'>keiki wahine</option> 
+                      <option value='keiki kane'>keiki kane</option>                                                                
                     </Form.Control>                    
                   </div>  
                 </Col>                             

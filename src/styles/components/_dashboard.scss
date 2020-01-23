@@ -11,6 +11,9 @@
     background-color: $primary;
     color: $white;
   }
+  & .card-body {
+    color: $dark;
+  }
 }
 .dashboardStats {
   background: url('/images/bg_join.png');
@@ -18,6 +21,9 @@
   .card {
     margin-bottom:2rem;
   }
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
 }
 .dashboard__scoraInfo {
   & label {

@@ -88,23 +88,20 @@ const readNewsArticlesReducer = (state = {readNews:readNewsDefault, amountUnread
 }
 
 /***  Authenticated User Actions and Reducer  ****/
-export const setUserName = (userName) => ({
-  type: 'SET_USER_NAME',
-  userName
+export const setPaddlerName = (paddlerName) => ({
+  type: 'SET_PADDLER_NAME', paddlerName
 })
-export const setUserID = (userID) => ({
-  type:'SET_USER_ID',
-  userID
+export const setPaddlerID = (paddlerID) => ({
+  type:'SET_PADDLER_ID', paddlerID
 })
-export const setUserImage = (image) => ({
-  type:'SET_USER_IMAGE',
-  image
+export const setPaddlerImage = (paddlerImage) => ({
+  type:'SET_PADDLER_IMAGE', paddlerImage
 })
-export const setUserRole = (role) =>({
-  type:'SET_USER_ROLE', role
+export const setPaddlerRole = (role) =>({
+  type:'SET_PADDLER_ROLE', role
 })
-export const setUserAttendance = (attendanceArray) =>({
-  type:'SET_USER_ATTENDANCE', attendanceArray
+export const setPaddlerAttendance = (paddlerAttendanceArray) =>({
+  type:'SET_PADDLER_ATTENDANCE', paddlerAttendanceArray
 })
 export const setUserReadNews = (readNewsArray) => ({
   type:'SET_USER_READ_NEWS',
@@ -134,16 +131,16 @@ export const addReadNewsArticle = (articleID) => ({
 })
 const authenticatedUserReducer = (state = {}, action) => {
   switch (action.type) {
-    case 'SET_USER_NAME':
-      return {...state, userName: action.userName}
-    case 'SET_USER_ID':
-      return {...state, userID:action.userID }
-    case 'SET_USER_IMAGE':      
-      return {...state, image:action.image}
-    case 'SET_USER_ROLE':
+    case 'SET_PADDLER_NAME':
+      return {...state, paddlerName: action.paddlerName}
+    case 'SET_PADDLER_ID':
+      return {...state, paddlerID:action.paddlerID }
+    case 'SET_PADDLER_IMAGE':      
+      return {...state, image:action.paddlerImage}
+    case 'SET_PADDLER_ROLE':
       return {...state, role:action.role}
-    case 'SET_USER_ATTENDANCE':      
-      return { ...state, attendance:[...action.attendanceArray]}
+    case 'SET_PADDLER_ATTENDANCE':      
+      return { ...state, attendance:[...action.paddlerAttendanceArray]}
     case 'SET_USER_READ_NEWS':
       return {...state, readNews:[...action.readNewsArray]}      
     case 'SET_SCORA_INFO':
@@ -180,6 +177,9 @@ export const updatePaddler = (paddler) => ({
   type:'UPDATE_PADDLER',
   paddler
 })
+export const clearAllPaddlers = () => ({
+  type: 'CLEAR_ALL_PADDLERS'
+})
 const allPaddlersReducer = (state = [], action) => {
   switch (action.type) {
     case 'SET_PADDLERS':
@@ -190,7 +190,9 @@ const allPaddlersReducer = (state = [], action) => {
         return [...state, action.paddler]
       case 'UPDATE_PADDLER':
         const filteredPaddlers = this.state.filter(paddler=>paddler.uid!=action.paddler.uid);
-        return [...filteredPaddlers, action.paddler ]   
+        return [...filteredPaddlers, action.paddler ]
+      case 'CLEAR_ALL_PADDLERS':
+        return []; 
     default:
       return state;
   }
@@ -201,10 +203,15 @@ export const setSelectedPaddler = (paddler) => ({
   type:'SET_SELECTED_PADDLER',
   paddler
 })
+export const clearSelectedPaddler = (paddler) => ({
+  type:'CLEAR_SELECTED_PADDLER'
+})
 const selectedPaddlerReducer = ( state = '', action ) => {
   switch (action.type) {
     case 'SET_SELECTED_PADDLER':
       return action.paddler;
+    case 'CLEAR_SELECTED_PADDLER':
+      return '';
     default:
       return state;
   }
@@ -237,21 +244,26 @@ export const deleteRace = (raceID) => ({
   type:'DELETE_RACE',
   raceID
 })
+export const clearAllRaces = () =>({
+  type:'CLEAR_ALL_RACES'
+})
 const racesReducer = ( state=[], action ) => {
   switch (action.type) {
     case 'ADD_RACE':
         const sortedRaces = [...state, action.race];
-        sortedRaces.sort(function(a, b){return a.date - b.date});      
+        //sortedRaces.sort(function(a, b){return a.date - b.date});      
       return sortedRaces ;
     case 'UPDATE_RACE':
       //filter out the previous race from state and add the updated race to the state
-      const filteredRaces = state.filter( race=> race.id !== action.race.id)
+      const filteredRaces = state.filter( race=> race.raceID !== action.race.raceID)
       const updatedRaces = [...filteredRaces, action.race];
       updatedRaces.sort(function(a, b){return a.date - b.date});
       return updatedRaces 
     case 'DELETE_RACE':
       const racesNotDeleted = state.filter( race=> race.id !== action.raceID)
       return [...racesNotDeleted];
+    case 'CLEAR_ALL_RACES':
+      return [];
     default:
       return state;
   }

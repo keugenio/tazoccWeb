@@ -36,7 +36,7 @@ class CrewTrials extends React.Component{
           return(
           <div key={i}>{rct[0].division}
             { rct.map((element,i) => {
-              if (!ttSet && element.paddlerID == this.props.paddler.uid){
+              if (!ttSet && element.paddlerID == this.props.paddler.paddlerID){
                 ttSet=true;
                 return (
                   <Badge pill key={i} variant="danger">{element.timeTrial}</Badge>

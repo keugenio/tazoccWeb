@@ -24,7 +24,7 @@ const UserRaceInfo = (props) => {
   const [showInternalInfoModal, setShowInternalInfoModal] = useState(false);
   const [showAttendanceModal, setShowAttendanceModal] = useState(false);
 
-  const race = races.find(race=>race.id == props.raceID);
+  const race = races.find(race=>race.raceID == props.raceID);
   const internalInfo = race.internalInfo || -1;
   const currRace = racesPaddlerSignedUpFor.find(race=>race.raceID == props.raceID)
   const timeTrial =  currRace ? currRace.timeTrial : null;
@@ -142,14 +142,14 @@ const UserRaceInfo = (props) => {
           </Table>
         </Card.Body>
       </Card>
-      {(internalInfo > 0) && (<Modal show={showInternalInfoModal} onHide={closeModal} animation={false} size="lg" centered >
+      {(internalInfo > 0) && (<Modal show={showInternalInfoModal} onHide={closeModal} animation={false} size="lg" centered  className="moreRaceInfo">
         <Modal.Header closeButton />
         <Modal.Title className="pl-4"> {events[internalInfo].title}</Modal.Title>
         <Modal.Body>
           <Card>
             <Card.Img variant="top" src={events[internalInfo].img}></Card.Img>
             <Card.Body>
-              <table>
+              <table className="moreRaceInfo">
                 <tbody>           
                   <tr>
                     <td><label>Description:</label></td>
@@ -174,13 +174,13 @@ const UserRaceInfo = (props) => {
         </Modal.Body>
       </Modal>)} 
 
-      <Modal show={showAttendanceModal} onHide={closeModal} animation={false} size="lg" centered >
+      <Modal show={showAttendanceModal} onHide={closeModal} animation={false} size="lg" centered  className="bigCalendar">
         <Modal.Header closeButton>
           <Modal.Title>Practices for Race Name {race.name} </Modal.Title>
         </Modal.Header>
-        <Modal.Body className="bigCalendar">
+        <Modal.Body>
             <p>Race Date: {moment(race.date).format("MM-DD-YYYY")}</p>
-            <p>{attendance.length} attended practices</p>
+              <p>{attendance.length} attended practices</p>
             
             <Calendar
               year = {moment(race.date).format('YYYY')}

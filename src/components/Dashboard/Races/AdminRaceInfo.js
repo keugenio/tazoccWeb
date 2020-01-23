@@ -34,10 +34,6 @@ class AdminRaceInfo extends Component {
     }  
   }
 
-  static getDerivedStateFromProps(props, state) {
-    const raceInfo = props.races.find(race=>race.id==props.raceID)
-    return{paddlerCount:raceInfo.paddlerCount}
-  }
   toggleEdit = () => {
     const  { raceID, name, host, location, info, internalInfo, date, longCourseReq, shortCourseReq, changeRequirement } = this.props
     this.setState({...this.state, raceID, name:(name||''), host:(host||''), location:(location||''), info:(info||''), internalInfo:(internalInfo || -1), date, longCourseReq:(longCourseReq||''), shortCourseReq:(shortCourseReq||''), changeRequirement, editable:true})
@@ -136,153 +132,11 @@ class AdminRaceInfo extends Component {
 
   render() {
     return (
-      <div>
-        { this.state.editable && (
-          <Card border="warning" className="text-dark box-shadow-primary raceInfo">
-            <Card.Title className="bg-warning text-dark d-flex justify-content-between">
-              <div>
-                Edit {this.state.name}
-              </div>
-              <div>
-                <Button onClick={this.toggleSave} className="btn-success mr-1" ><FontAwesomeIcon icon="save" /></Button>
-                <Button onClick={this.toggleCancel} className="btn-dark">X</Button> 
-              </div>
-            </Card.Title>
-            <Card.Body>
-              <ul>
-                <li>Name: <input type="text" value={this.state.name} name="name" placeholder="race name" onChange={this.handleChange}/></li>
-                <li>Host: <input type="text" value={this.state.host} name="host" placeholder="race host" onChange={this.handleChange}/></li>
-                <li>Location: <input type="text" value={this.state.location} name="location" placeholder="race location" onChange={this.handleChange}/></li>
-                <li>Date:
-                  <DatePicker
-                      value={(this.state.date > 0) || moment().valueOf()}
-                      selected={this.state.date}
-                      onChange={this.handleChangeCalendar}
-                    />
-                </li>
-                <li>Long Course Req: <input type="text" name="longCourseReq" value={this.state.longCourseReq} onChange={this.handleChange}/></li>
-                {!this.state.changeRequirement && (<li>Short Course Req: <input type="text" name="shortCourseReq" value={this.state.shortCourseReq} onChange={this.handleChange}/></li>)}
-                <li>Change Req: <input type="checkbox" name="changeRequirement" defaultChecked={this.state.changeRequirement}  onChange={this.handleChangeChecked}/></li>
-                <li>Race Desc: 
-                  <select name="internalInfo" onChange={this.handleChange} defaultValue={this.state.internalInfo}>
-                    <option value={-1} >none</option>
-                    { events.map((race, i)=> (
-                        <option key={i} value={i}>{race.title}</option>
-                    ))}
-                  </select>
-                </li>
-                <li>More info:<textarea name="info" rows="3" value={this.state.info}  placeholder="add more info" onChange={this.handleChange}/></li>
-              </ul>
-            </Card.Body>
-          </Card>
-        )}
-        {!this.state.editable && (
-          <Card border="info" className="text-dark border-1 m-3 box-shadow-primary raceInfo bg-white-3">
-            <Card.Title className="bg-info text-dark d-flex justify-content-start ">
-              <div className="mr-auto">{this.props.name}</div>
-              <div>
-                <Button className="bg-transparent border-0 text-danger" onClick={this.handleRemoveRace}><FontAwesomeIcon icon="minus-circle" className="fa-2x"></FontAwesomeIcon></Button>            
-                <Button className="bg-transparent border-0 text-muted" onClick={this.toggleEdit}><FontAwesomeIcon icon="edit"  className="fa-2x"/></Button>
-              </div>
-            </Card.Title>
-            <Card.Body>
-              <div className="border border-success p-3">
-                  <div><b>Location:</b>  {this.props.location}</div>
-                  <div><b>Host:</b>  {this.props.host}</div>
-                  <div><b>Date:</b> {moment(this.props.date).format('dddd MMM D, YYYY')}</div>         
-                  {this.props.longCourseReq && (<div><b>Long Course Req: </b>{this.props.longCourseReq} </div>)}
-                  {this.props.shortCourseReq &&(<div><b>Short Course Req:</b>{this.props.shortCourseReq}</div>)}
-                  <div><b>Change Req:</b> {this.props.changeRequirement ? ('yes'):('no')}</div>
-                  { this.props.internalInfo && this.props.internadivnfo>=0 && (<div><b>Race Desc:</b> <Button onClick={()=>{this.handleShowModal("internalInfo")}}>more</Button></div>)}
-                  <div><b>More Info:</b>  {this.props.info}</div>
-                  {this.props.attendance.length>0 && (<div><b className="mr-2">practice attendances:</b><Button onClick={()=>{this.handleShowModal("attendance")}}>show</Button></div>)}
-              </div>
-              <div className="d-flex p-3">
-                <Button variant="success" onClick={()=>{this.handleShowModal("raceDashboard")}} className="mx-auto btnDashboard">
-                Race Dashboard
-                <Badge variant="warning" className="ml-3">{this.state.paddlerCount}</Badge>
-                </Button>
-              </div>
-            </Card.Body>
-          </Card>         
-        )}    
-        {this.props.internalInfo && this.props.internalInfo>=0 && (
-          <Modal show={this.state.showInternalInfoModal} onHide={this.handleCloseModal} animation={false} size="lg" centered >
-              <Modal.Header closeButton />
-              <Modal.Title className="pl-4"> {events[this.props.internalInfo].title}</Modal.Title>
-              <Modal.Body>
-                <Card>
-                  <Card.Img variant="top" src={events[this.props.internalInfo].img}></Card.Img>
-                  <Card.Body>
-                    <table style={tableStyle}>
-                      <tbody>           
-                        <tr>
-                          <td><label style={labelStyle}>Description:</label></td>
-                          <td>{events[this.props.internalInfo].description}</td>
-                        </tr>
-                        <tr>
-                          <td><label style={labelStyle}>Date:</label></td>
-                          <td>{events[this.props.internalInfo].date}</td>
-                        </tr>
-                          <tr>
-                          <td><label style={labelStyle}>Location:</label></td>
-                          <td>{events[this.props.internalInfo].location}</td>
-                        </tr>
-                        <tr>
-                          <td><label style={labelStyle}>More:</label></td>
-                          <td>{events[this.props.internalInfo].more}</td>
-                        </tr>              
-                      </tbody>
-                    </table>           
-                  </Card.Body>
-                </Card>
-              </Modal.Body>
-                
-          </Modal>
-        )}          
-        {this.props.attendance.length>0 && (
-          <Modal show={this.state.showAttendanceModal} onHide={this.handleCloseModal} animation={false} size="lg" centered >
-            <Modal.Header closeButton>
-              <Modal.Title>Practices for Race Name {this.state.name} </Modal.Title>
-            </Modal.Header>
-            <Modal.Body className="bigCalendar">
-                <p>Race Date: {moment(this.props.date).format("MM-DD-YYYY")}</p>
-                <p>{this.props.attendance.length} attended practices</p>
-                
-                <Calendar
-                  year = {moment(this.props.date).format('YYYY')}
-                  minDate = {moment(this.props.date).subtract(45, "days").toDate()}
-                  maxDate = {moment(this.props.date).toDate()}
-                  dataSource={this.props.attendance}
-                  style={'background'}
-                  value={moment(this.props.date).valueOf()}
-                />
-                
-            </Modal.Body>
-            <Modal.Footer>
-              <Button variant="secondary" onClick={this.handleCloseModal} className="btn-lg">
-                Close
-              </Button>
-            </Modal.Footer>
-          </Modal>          
-        )}
-        <Modal show={this.state.showRaceDashboardModal} onHide={this.handleCloseModal} animation={false} centered className="raceDashboard" >
-          <Modal.Header className="bg-info" closeButton>
-            <Modal.Title>Dashboard for {this.props.name} - {moment(this.props.date).format("MMMM DD, YYYY")} </Modal.Title>
-          </Modal.Header>
-          <Modal.Body className="">
-            <RaceDashBoard raceID={this.props.raceID} />
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={this.handleCloseModal} className="btn-lg">
-              Close
-            </Button>
-          </Modal.Footer>
-        </Modal>
-      </div>
+      <div>adminbob</div>
     )
   }
 }
+
 const labelStyle = {
   marginRight:'1rem',
   fontWeight:600

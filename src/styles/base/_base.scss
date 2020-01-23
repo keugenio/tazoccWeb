@@ -125,6 +125,12 @@ button:disabled {
       color: $dark!important;
     }  
   }
+  & .modal-title {
+    color:$primary
+  }
+  & .modal-body {
+    color:$dark
+  }
 }
 .modal {
   background:rgba($info, .75);

@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Row, Col, Card } from 'react-bootstrap';
 import {dbAllPaddlers} from '../Firebase';
-import { addPaddlerToAllPaddlers } from '../../store/store';
+import { addPaddlerToAllPaddlers, clearAllPaddlers } from '../../store/store';
 import "babel-polyfill";
 import SCORA_INFO from '../Dashboard/SCORA_INFO';
 import Search from './Search';
@@ -20,16 +20,18 @@ class AdminControl extends React.Component{
     }
   }
   async componentDidMount(props){
-
-  await dbAllPaddlers.get()
-    .then(paddlers=>{
-      paddlers.forEach(paddler=>{
-        dbAllPaddlers.doc(paddler.id).get().then(doc=>{
-          this.props.dispatch(addPaddlerToAllPaddlers(doc.data()))
+    await dbAllPaddlers.get()
+      .then(paddlers=>{
+        paddlers.forEach(paddler=>{
+          dbAllPaddlers.doc(paddler.id).get().then(doc=>{
+            this.props.dispatch(addPaddlerToAllPaddlers(doc.data()))
+          })
         })
+        this.setState({loading:false})     
       })
-      this.setState({loading:false})     
-    })
+  }
+  componentWillUnmount(){
+    this.props.dispatch(clearAllPaddlers())
   }
   render(){
     if (this.state.loading)

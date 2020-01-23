@@ -9,7 +9,7 @@ function closeNavOverlay() {
   document.getElementById("navi-toggle").checked = false;
 }
 const  NavigationOverlay = (props) => {
-  const loggedIn = props.user.uid || false;
+  const loggedIn = props.user.paddlerID || false;
   const role = props.user.role;
   
   return (

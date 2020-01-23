@@ -17,23 +17,33 @@ class AddRaceToPaddler extends Component {
     super(props)
     this.state = {
       showModal:false,
-      availableRaces:this.props.races.length - this.props.racesPaddlerSignedUpFor.length
+      availableRaces:null
     }
   }
+  static getDerivedStateFromProps(props, state) {
+    const {races, racesPaddlerSignedUpFor} = props;
+    const availableRaces = [];
+    races.forEach((race)=>{
+      if (!racesPaddlerSignedUpFor.find(paddlerRace=>paddlerRace.raceID == race.raceID))
+        availableRaces.push(race)
+    })
+    return {availableRaces:[...availableRaces]}
+  }
+
   handleCloseModal = () => {
     this.setState({showModal:false})
   }
 
-  addRaceToPaddler = (id) => {
-    const {userID} = this.props.user
+  addRaceToPaddler = (raceID) => {
+    const {paddlerID} = this.props.user
     
-    dbRacesToPaddlers.where("paddlerID", "==", userID).where("raceID", "==", id)
+    dbRacesToPaddlers.where("paddlerID", "==", paddlerID).where("raceID", "==", raceID)
     .get()
     .then(function(querySnapshot) {
       if (querySnapshot.docs.length==0){
         const newRaceSignUp = {
-          paddlerID:userID,
-          raceID:id,
+          paddlerID:paddlerID,
+          raceID:raceID,
           longCourseReq:0,
           shortCourseReq:0,
           changeRequirement:false,
@@ -42,7 +52,7 @@ class AddRaceToPaddler extends Component {
         dbRacesToPaddlers.add(newRaceSignUp)
       }
       else{
-        dbRacesToPaddlers.doc(querySnapshot.docs[0].id)
+        dbRacesToPaddlers.doc(querySnapshot.docs[0].raceID)
         .update({
           enabled:true
         })        
@@ -52,8 +62,8 @@ class AddRaceToPaddler extends Component {
         console.log("Error getting documents: ", error);
     });
     this.props.dispatch(addRaceToPaddler({
-      paddlerID:userID,
-      raceID:id,
+      paddlerID:paddlerID,
+      raceID:raceID,
       longCourseReq:0,
       shortCourseReq:0,
       changeRequirement:false,
@@ -65,13 +75,14 @@ class AddRaceToPaddler extends Component {
       this.setState({showModal:false})
   }
   render() {
+    // parse all races so only available races to add are shown
     const {races, racesPaddlerSignedUpFor} = this.props;
     const availableRaces = [];
     races.forEach((race)=>{
-      if (!racesPaddlerSignedUpFor.find(paddlerRace=>paddlerRace.raceID == race.id))
+      if (!racesPaddlerSignedUpFor.find(paddlerRace=>paddlerRace.raceID == race.raceID))
         availableRaces.push(race)
     })
-
+   
     return (
       <div className="addRaceToPaddler">
       <Button variant="primary" onClick={()=>{this.setState({showModal:true})}} className="border-primary">
@@ -83,9 +94,9 @@ class AddRaceToPaddler extends Component {
           </Modal.Header>
           <Modal.Body>
               <CardDeck>
-                {availableRaces.map(race=>(
-                  <Col lg={4} xs={12} key={race.id} >
-                    <Card key={race.id} className="raceCard">
+                {this.state.availableRaces.map((race, i)=>(
+                  <Col lg={4} xs={12} key={i} >
+                    <Card key={race.raceID} className="raceCard">
                       <Card.Body>
                         <Card.Title>{race.name}</Card.Title>
                         {race.host && race.location && (<Card.Subtitle className="mb-2 text-muted">hosted by: {race.host} , {race.location}</Card.Subtitle>)}
@@ -97,7 +108,7 @@ class AddRaceToPaddler extends Component {
                             {race.info && (<ListGroup.Item>More Info: {race.info}</ListGroup.Item>)}
                           </ListGroup>
                           <div className="d-flex justify-content-end w-75 mx-auto mt-3">
-                            <Button variant="success" className="w-100" onClick={()=>{this.addRaceToPaddler(race.id)}}>
+                            <Button variant="success" className="w-100" onClick={()=>{this.addRaceToPaddler(race.raceID)}}>
                               <FontAwesomeIcon icon="plus" className="fa-3x text-white"/>
                             </Button>
                           </div>

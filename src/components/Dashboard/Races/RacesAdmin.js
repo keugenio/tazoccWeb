@@ -9,6 +9,9 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Race from './Race';
 
+const MapStateToProps = ({ races }) => ({
+  races
+})
 class RacesAdmin extends Component {
   constructor(props) {
     super(props);
@@ -28,30 +31,14 @@ class RacesAdmin extends Component {
     }
   }
   
-  getRacesAndUpdateStore = () => {
-    dbRaces.get().then(docs=>{
-      docs.docs.forEach(doc => {
-        const raceData = doc.data();        
-        if (raceData.enabled!= false){         
-          const newRaceData = {...raceData, id:doc.id}
-          this.props.dispatch(addRace(newRaceData));}
-      });
-    })
-    .then(()=>{
-      this.props.races.forEach(race=>{
-        let paddlerCount=0;
-        dbRacesToPaddlers.where("raceID", "==", race.id).where("enabled", "==", true).get().then( snapdata => {
-          this.props.dispatch(updateRace({...race, paddlerCount:snapdata.docs.length } ))                      
+  static getDerivedStateFromProps(props, state) {
+    props.races.forEach(race=>{
+        dbRacesToPaddlers.where("raceID", "==", race.raceID).where("enabled", "==", true).get()
+        .then( snapdata => {
+          props.dispatch(updateRace({...race, paddlerCount:snapdata.docs.length } ))                      
         })        
       })
-    })  
-  }
-  componentDidMount() {
-    //if no races in the store, load races from firestore into store
-    if (this.props.races.length<=0){
-      this.getRacesAndUpdateStore();
-     }
-     this.setState({ready:true})
+    return {ready:true}
   }
 
   rotate = () => {
@@ -87,7 +74,7 @@ class RacesAdmin extends Component {
       //console.log("Document written with ID: ", docRef.id);
       const newRaceInfo = { name, location, date, longCourseReq, shortCourseReq, info, changeRequirement } = this.state
       this.props.dispatch(addRace({
-        id:docRef.id,
+        raceID:docRef.id,
         name: newRaceInfo.name,
         host: newRaceInfo.host,
         location: newRaceInfo.location,
@@ -148,9 +135,9 @@ class RacesAdmin extends Component {
                   { this.props.races.length > 0 && ( 
                     <CardGroup>
                       {this.props.races.map((race,i)=>{
-                        const {id, name, host, location, date, longCourseReq, shortCourseReq, changeRequirement, internalInfo, info} = race
+                        const {raceID, name, host, location, date, longCourseReq, shortCourseReq, changeRequirement, internalInfo, info} = race
                         return (
-                          <Race key={i} raceID={id} name={name} host={host} location={location} internalInfo={internalInfo} info={info} date={date} longCourseReq={longCourseReq} shortCourseReq={shortCourseReq} changeRequirement={changeRequirement} currentPage = {this.props.currentPage} />
+                          <Race key={i} raceID={raceID} name={name} host={host} location={location} internalInfo={internalInfo} info={info} date={date} longCourseReq={longCourseReq} shortCourseReq={shortCourseReq} changeRequirement={changeRequirement} currentPage = {this.props.currentPage} />
                         )
                       })}           
                     </CardGroup>
@@ -266,8 +253,6 @@ class RacesAdmin extends Component {
   }
 }
 
-const MapStateToProps = ({ races }) => ({
-  races
-})
+
 
 export default connect(MapStateToProps)(RacesAdmin);

@@ -21,7 +21,7 @@ class Race extends React.Component{
 
     if ( attendance && attendance.length > 0 ) {
       attendance.forEach( practice => { 
-        if (moment(practice).isBetween(moment(props.date).subtract(45, "days"), moment(props.date), "day", '[]')) {
+        if (moment(practice).isBetween(moment(props.race.date).subtract(45, "days"), moment(props.race.date), "day", '[]')) {
               attendanceDates.push({
                 startDate:moment(practice).toDate(),
                 endDate:moment(practice).toDate(),
@@ -35,7 +35,7 @@ class Race extends React.Component{
 
   componentDidMount(){
     // get all timeTrials for this race and load into store
-    dbRacesToPaddlers.where("raceID", "==", this.props.raceID).get()
+    dbRacesToPaddlers.where("raceID", "==", this.props.race.raceID).get()
     .then(querySnapShot=>{
       querySnapShot.forEach(docs=>{
         dbRacesToPaddlers.doc(docs.id).get()
@@ -48,14 +48,14 @@ class Race extends React.Component{
       })      
     })
     // get all crew time trials for this race and load into store
-    dbCrews.where("race.raceID", "==", this.props.raceID).get()
+    dbCrews.where("race.raceID", "==", this.props.race.raceID).get()
     .then(querySnapShot=>{
       querySnapShot.forEach(docs=>{
         dbCrews.doc(docs.id).get()
           .then((doc)=>{
             const crew=doc.data();
             // only get crews where the current paddler is a part of
-            if (crew.paddlers.some(paddler=>paddler.paddlerID == this.props.paddlerID)){
+            if (crew.paddlers.some(paddler=>paddler.paddlerID == this.props.race.paddlerID)){
               crew.paddlers.forEach(paddler=>{
                 this.props.dispatch(addCrewTimeTrial({
                   crewID:crew.crewID,
@@ -63,7 +63,6 @@ class Race extends React.Component{
                   raceID:crew.race.raceID, 
                   paddlerID:paddler.paddlerID, 
                   timeTrial:paddler.timeTrial}))
-                  
               })
             }
           })
@@ -76,13 +75,14 @@ class Race extends React.Component{
     this.props.dispatch(clearCrewTimeTrials())
   }
   render(){   
-    const dashboardPage =  this.props.currentPage == '/dashboard';
+    const dashboardPage = this.props.currentPage  == '/dashboard';
     const adminPage = this.props.currentPage == '/admin';
-    const {raceID, name, host, location, date, longCourseReq, shortCourseReq, changeRequirement, internalInfo, info, user} = this.props                       
+    const {raceID, paddlerID} = this.props.race;                     
+
     return (
       <div>
-        { dashboardPage &&  (<UserRaceInfo raceID={raceID} paddlerID={user.uid} attendance={this.state.attendance}/>)}
-        { adminPage && (<AdminRaceInfo raceID={raceID} name={name} host={host} location={location} internalInfo={internalInfo} info={info} date={date} longCourseReq={longCourseReq} shortCourseReq={shortCourseReq} changeRequirement={changeRequirement} currentPage = {this.props.currentPage} attendance={this.state.attendance}/>)}           
+        { dashboardPage &&  (<UserRaceInfo raceID={raceID} paddlerID={paddlerID} attendance={[...this.state.attendance]}/>)}
+        { adminPage && (<AdminRaceInfo raceID={raceID} name={name} host={host} location={location} internalInfo={internalInfo} info={info} date={date} longCourseReq={longCourseReq} shortCourseReq={shortCourseReq} changeRequirement={changeRequirement} currentPage = {this.props.currentPage} attendance={[...this.state.attendance]} paddlerCount={paddlerCount}/>)}           
       </div>
     )
   }
