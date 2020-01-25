@@ -53,7 +53,7 @@ class AppRouter extends React.Component {
              dbRaces.doc(doc.id).get()
               .then(race=>{
                 const raceInfo = race.data()                
-                dbRacesToPaddlers.where("raceID", "==", race.id).get()
+                dbRacesToPaddlers.where("raceID", "==", race.id).where("enabled", "==", true).get()
                 .then((res)=>{
                   this.props.dispatch(addRace({...raceInfo, raceID:race.id, paddlerCount:res.docs.length}))
                   });                

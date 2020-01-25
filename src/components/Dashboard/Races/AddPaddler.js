@@ -18,7 +18,7 @@ class AddPaddler extends Component {
     super(props)
     this.state={
       showAddNewPaddlerModal:false,
-      currentPaddler:{uid:-1},
+      currentPaddler:{paddlerID:-1},
       showAddPaddlerButton:false
     }
   }
@@ -29,46 +29,48 @@ class AddPaddler extends Component {
     this.setState({showAddNewPaddlerModal:false})
   }
   handleChange = (e) => {
-    const paddler = this.props.paddlers.find(paddler=>paddler.uid == e.target.value)
+    const paddler = this.props.paddlers.find(paddler=>paddler.paddlerID == e.target.value)
     this.setState({currentPaddler:paddler, showAddPaddlerButton:true})
   }
   addCurrentPaddler = () => {
     // check to see if the paddler already signed up (enabled==false)
-    // if so, update firestore, update store.
+    // if disabled, update firestore, update store. else add to firestore, update store
     
-    dbRacesToPaddlers.where("paddlerID", "==", this.state.currentPaddler.uid).where('raceID', "==", this.props.raceID).where("enabled", "==", false)
+    dbRacesToPaddlers.where("paddlerID", "==", this.state.currentPaddler.paddlerID).where('raceID', "==", this.props.raceID).where("enabled", "==", false)
       .get()
       .then((docs)=>{
         if (docs.docs.length<=0)
           // add paddler to race
-          dbRacesToPaddlers.add({paddlerID: this.state.currentPaddler.uid, raceID: this.props.raceID, enabled:true})
+          dbRacesToPaddlers.add({paddlerID: this.state.currentPaddler.paddlerID, raceID: this.props.raceID, enabled:true})
            .then(doc=>{
             // update the store
-              this.props.dispatch(addPaddlerToRace({raceToPaddlerID:doc.id, paddlerID:this.state.currentPaddler.uid, paddlerName:this.state.currentPaddler.name, timeTrial:0, sex:this.state.currentPaddler.sex, age:moment().diff(moment(this.state.currentPaddler.birthday), 'years')}))            
+              this.props.dispatch(addPaddlerToRace({raceToPaddlerID:doc.id, paddlerID:this.state.currentPaddler.paddlerID, paddlerName:this.state.currentPaddler.paddlerName, timeTrial:0, sex:this.state.currentPaddler.sex, age:moment().diff(moment(this.state.currentPaddler.birthday), 'years')}))            
+              this.setState({showAddPaddlerButton:false, currentPaddler:{paddlerID:-1}})
            })
         else {
           dbRacesToPaddlers.doc(docs.docs[0].id).update({enabled:true})
-          const docID = docs.docs[0].id
-          this.props.dispatch(addPaddlerToRace({raceToPaddlerID:docID, paddlerID:this.state.currentPaddler.uid, paddlerName:this.state.currentPaddler.name, timeTrial:0, sex:this.state.currentPaddler.sex, age:moment().diff(moment(this.state.currentPaddler.birthday), 'years')}))            
+          const docID = docs.docs[0].id;
+          this.props.dispatch(addPaddlerToRace({raceToPaddlerID:docID, paddlerID:this.state.currentPaddler.paddlerID, paddlerName:this.state.currentPaddler.paddlerName, timeTrial:0, sex:this.state.currentPaddler.sex, age:moment().diff(moment(this.state.currentPaddler.birthday), 'years')}))            
+          this.setState({showAddPaddlerButton:false, currentPaddler:{paddlerID:-1}})
         }
-        const currRace = this.props.races.find(race=>race.id == this.props.raceID)
-        this.props.dispatch(updateRace({...currRace, paddlerCount: currRace.paddlerCount++}))
+        const currRace = this.props.races.find(race=>race.raceID == this.props.raceID)
+        this.props.dispatch(updateRace({...currRace, paddlerCount: currRace.paddlerCount+1}))
         // remove the add button
-        this.setState({showAddPaddlerButton:false, currentPaddler:{uid:-1}})         
+                 
       })
   }
   render() {
-    const sortedPaddlers = this.props.paddlers.sort((a,b)=>a.name<b.name?1:-1);
+    const sortedPaddlers = this.props.paddlers.sort((a,b)=>a.paddlerName.toLowerCase()<b.paddlerName.toLowerCase()?1:-1);
     return (
       <div className="d-flex flex-row justify-content-end addPaddler">
         <Form.Group className="d-flex justify-content-end my-auto border border-success p-3">
           <Form.Label className="my-auto">Add Paddler</Form.Label>
           <InputGroup>          
-              <Form.Control as="select" onChange={this.handleChange} className="ml-2" value={this.state.currentPaddler.uid}>
+              <Form.Control as="select" onChange={this.handleChange} className="ml-2" value={this.state.currentPaddler.paddlerID}>
                 <option value={-1} disabled >select paddler</option>
                 { sortedPaddlers.map((paddler, i)=>{
-                  if (!this.props.paddlersForCurrentRace.find(p=>p.paddlerID == paddler.uid))
-                    return (<option key={i} value={paddler.uid}>{paddler.name}</option>)
+                  if (!this.props.paddlersForCurrentRace.find(p=>p.paddlerID == paddler.paddlerID))
+                    return (<option key={i} value={paddler.paddlerID}>{paddler.paddlerName}</option>)
                 })}          
               </Form.Control>
               <InputGroup.Append>

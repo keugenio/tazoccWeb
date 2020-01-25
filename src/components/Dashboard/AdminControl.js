@@ -19,7 +19,7 @@ class AdminControl extends React.Component{
       loading:true
     }
   }
-  async componentDidMount(props){
+  async componentDidMount(){
     await dbAllPaddlers.get()
       .then(paddlers=>{
         paddlers.forEach(paddler=>{
@@ -42,31 +42,37 @@ class AdminControl extends React.Component{
           <Card bg="dark" text="white" className="dashboard">
             <Card.Title className="bg-warning text-white">Admin Dashboard</Card.Title>
             <Card.Body>
-              <Row className="border-light border rounded p-4 mx-1 my-4">
-                <Col lg={8} xs={12}>
-                  {this.props.selectedPaddler && (<PaddlerBio />)}
+              <section className="border-light border rounded">
+              <Row>
+                <Col className="showSearch">
+                  <Search />
+                </Col>
+                <Col lg={8}>
+                  <PaddlerBio />
                   <SCORA_INFO />
                 </Col>
-                <Col lg={4} xs={12}>
+                <Col lg={4} className="hideSearch">
                   <Search />
                 </Col>
               </Row>
+              </section>
               {this.props.user.role == "superAdmin" && (
-                <Row>
-                  <Col lg={6}>
+                <section className="border-light border rounded">
+
+                  <Col lg={6} md={12}>
                     <EditRole />
                   </Col>
-                </Row>
+                </section>
               )}
               <Row>
                 <Col>
                   <RacesAdmin currentPage = {this.props.location.pathname}/>
-                  <Attendance />
+                  {/*<Attendance />*/}
                 </Col>   
               </Row>
             </Card.Body>
           </Card>
-      </div>
+        </div>
     )};
 }
 

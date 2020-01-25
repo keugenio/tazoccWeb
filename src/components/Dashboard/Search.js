@@ -1,15 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Form, Row, Col } from 'react-bootstrap';
+import { Form } from 'react-bootstrap';
 import { setSelectedPaddler, editSelectedPaddler } from '../../store/store';
-import "babel-polyfill";
 
 class Search extends React.Component {
-  componentDidMount(props) {
+  componentDidMount() {
     this.props.dispatch(editSelectedPaddler(true))
   }
   setPaddler = (e) => {
-    const selectedPaddler = this.props.paddlers.find(paddler => paddler.uid === e.target.value)
+    const selectedPaddler = this.props.paddlers.find(paddler => paddler.paddlerID === e.target.value)
     this.props.dispatch(setSelectedPaddler(selectedPaddler))
   }
 
@@ -19,7 +18,7 @@ class Search extends React.Component {
           <Form.Control as="select" size="lg" value="0" onChange={this.setPaddler} style={formStyle} disabled={!this.props.selectedPaddlerEditable}>
             <option disabled value='0' >-- select Paddler --</option>
             { this.props.paddlers.map((paddler, i)=>(
-                <option key={i} value={paddler.uid}>{paddler.name}</option>
+                <option key={i} value={paddler.paddlerID}>{paddler.paddlerName}</option>
               ))
             }
           </Form.Control>
@@ -27,7 +26,7 @@ class Search extends React.Component {
   )}
 }
 const MapStateToProps = ({paddlers, selectedPaddlerEditable}) =>({
-  paddlers,selectedPaddlerEditable
+  paddlers:paddlers.sort((a,b)=>(a.paddlerName.toLowerCase()<b.paddlerName.toLowerCase()?-1:1)),selectedPaddlerEditable
 })
 
 const formStyle = {

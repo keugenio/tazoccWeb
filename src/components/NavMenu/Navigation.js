@@ -37,10 +37,13 @@ class Navigation extends Component {
     const { loggedIn, userImageURL, userName} = this.props;   
     return (
       <nav className="site-nav family-sans navbar navbar-expand higher">
-        <div className="container-fluid navigatorMenu">
-          <Link to="/" className="navbar-brand">
-            Team Arizona Outrigger Canoe Club
-          </Link>
+        <div className="navigatorMenu d-flex align-items-center justify-content-start">
+        
+          <div className="d-flex">
+            <Link to="/" className="navbar-brand">
+              Team Arizona Outrigger Canoe Club
+            </Link>
+          </div>
           <div className="navbar-nav ml-auto">
             {/*loggedIn && (<div className="nav-item"><UnreadNewsBadge /></div>)*/}
             

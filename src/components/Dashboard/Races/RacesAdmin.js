@@ -26,19 +26,8 @@ class RacesAdmin extends Component {
       info:'',
       internalInfo: -1,
       changeRequirement:false,
-      rotation:0,
-      ready:false
+      rotation:0
     }
-  }
-  
-  static getDerivedStateFromProps(props, state) {
-    props.races.forEach(race=>{
-        dbRacesToPaddlers.where("raceID", "==", race.raceID).where("enabled", "==", true).get()
-        .then( snapdata => {
-          props.dispatch(updateRace({...race, paddlerCount:snapdata.docs.length } ))                      
-        })        
-      })
-    return {ready:true}
   }
 
   rotate = () => {
@@ -135,11 +124,11 @@ class RacesAdmin extends Component {
                   { this.props.races.length > 0 && ( 
                     <CardGroup>
                       {this.props.races.map((race,i)=>{
-                        const {raceID, name, host, location, date, longCourseReq, shortCourseReq, changeRequirement, internalInfo, info} = race
                         return (
-                          <Race key={i} raceID={raceID} name={name} host={host} location={location} internalInfo={internalInfo} info={info} date={date} longCourseReq={longCourseReq} shortCourseReq={shortCourseReq} changeRequirement={changeRequirement} currentPage = {this.props.currentPage} />
-                        )
-                      })}           
+                          <Race 
+                            key={i} race={race}
+                            currentPage = {this.props.currentPage} /> )
+                      })}          
                     </CardGroup>
                   )}
                 </Card.Body>

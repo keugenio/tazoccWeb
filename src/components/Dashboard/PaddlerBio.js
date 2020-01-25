@@ -88,11 +88,11 @@ class PaddlerBio extends React.Component{
   }    
 
   render (){
-    const {name, birthday, jerseySize, image, duesPaid, membershipType, role} = this.props.selectedPaddler
+    const {paddlerName, role} = this.props.selectedPaddler
     return (
       <Card className="paddlerBio">
         <Card.Title  className="bg-success text-white d-flex justify-content-between">
-          <div>About {this.props.selectedPaddler.name}</div>
+          <div>About {paddlerName}</div>
           {!role && (<EditProfile />) }
           {((role=="admin") || (role=="superAdmin")) && (<div>
             {this.state.showEditable && (<Button onClick={this.toggleSave} className="btn-danger" ><FontAwesomeIcon icon="save" /></Button>)}
@@ -101,114 +101,172 @@ class PaddlerBio extends React.Component{
           </div>)}
         </Card.Title>
         <Card.Body>
-          {!this.state.showEditable && (
-            <div>
-              <Row>
-                <Col lg={4} xs={12} className="flex-row text-dark">
-                  <div className="form-check">
-                    <label className="form-check-label" htmlFor="duesPaid">Dues Paid for {moment().format('YYYY')}</label>
-                    <span>
-                      {this.props.selectedPaddler.duesPaid && <span>Yes</span> }
-                      {!this.props.selectedPaddler.duesPaid && <span className="text-danger font-weight-bold">NO</span> }
-                    </span>
-                  </div> 
-                  <div className="form-check">
-                    <label className="form-check-label" htmlFor="membershipType">Membership Type:</label>
-                    <span name="membershipType">{this.props.selectedPaddler.membershipType || 'n/a'}</span>                  
-                  </div>
-                </Col>
-                <Col lg={4} xs={3} className="flex-row">
-                  <div className="form-check">
-                    <label className="form-check-label" htmlFor="age">age:</label>
-                    {this.props.selectedPaddler.birthday && (<span name="age">{`${moment().diff(this.props.selectedPaddler.birthday, 'years')},  ${moment(this.props.selectedPaddler.birthday).format('MMM YYYY')}`} </span>)}
-                    {!this.props.selectedPaddler.birthday && (<span>no birthday assigned yet</span>)}
-                  </div>                
-                  <div className="form-check">
-                    <label className="form-check-label" htmlFor="jerseySize">jersey size:</label>
-                    <div name="jerseySize">{this.props.selectedPaddler.jerseySize || 'n/a'}</div>
-                  </div>                  
-                </Col>
-                
-                {role && (<Col lg={4} xs={3} className="flex-row">
-                  <div className="form-check">
-                    {this.props.selectedPaddler.image && (<div><Image src={this.props.selectedPaddler.image} fluid roundedCircle style={{width:"75px"}}/></div>)}
-                    {!this.props.selectedPaddler.image && (<Monogram name={this.props.selectedPaddler.paddlerName} />)}
-                    <div className="ml-4">{this.props.selectedPaddler.sex || 'no sex assigned yet'}</div>
-                  </div>  
-                </Col> )}                            
-              </Row>
-            </div>
-          )}
+          {!this.state.showEditable && (<NonEditableBio selectedPaddler={this.props.selectedPaddler} />)}
           {this.state.showEditable && (
-            <div>
-              <Row>
-                <Col lg={4} xs={12} className="flex-row text-dark">
-                  <div className="form-check">
-                    <label className="form-check-label" htmlFor="duesPaid">Dues Paid for {moment().format('YYYY')}</label>
-                    <span>
-                      <input type="checkbox" className="form-check-input" name="duesPaid" checked={this.state.duesPaid} onChange={this.handleChangeChecked}/>
-                    </span>
-                  </div> 
-                  <div className="form-check">
-                    <label className="form-check-label" htmlFor="membershipType">Membership Type:</label>
-                    <Form.Group id="membershipType">
-                      <Form.Control as="select" size="lg" name="membershipType" onChange={this.handleChange} style={formStyle} defaultValue={this.state.membershipType}>
-                        <option disabled value='n/a'>-- select membershipType --</option>
-                        <option value='single'>single</option>
-                        <option value='family'>family</option>   
-                        <option value='student'>student</option>                                          
-                      </Form.Control>
-                  </Form.Group>                 
-                  </div>
-                </Col>
-                <Col lg={4} xs={3} className="flex-row">
-                  <div className="form-check">
-                    <label className="form-check-label" htmlFor="age">birthday:</label>
-                    <DatePicker
-                      value={this.state.birthday}
-                      selected={this.state.birthday}
-                      onChange={this.handleCalendarChange}
-                    />
-                  </div>                
-                  <div className="form-check">
-                    <label className="form-check-label" htmlFor="jerseySize">jersey size:</label>
-                    <Form.Group id="jerseySize">
-                      <Form.Control as="select" size="lg" name="jerseySize" onChange={this.handleChange} style={formStyle} defaultValue={this.state.jerseySize}>
-                        <option disabled value='n/a'>-- select jerseySize --</option>
-                        <option value='women small'>women small</option>
-                        <option value='women medium'>women medium</option>   
-                        <option value='women large'>women large</option>  
-                        <option value='women xl'>women xl</option>  
-                        <option value='men small'>men small</option>
-                        <option value='men medium'>men medium</option>   
-                        <option value='men large'>men large</option>  
-                        <option value='men xl'>men xl</option>  
-                        <option value='men xxl'>men xxl</option> 
-                      </Form.Control>
-                  </Form.Group>
-                  </div>                  
-                </Col>
-                <Col lg={4} xs={3} className="flex-row">
-                  <div className="form-check">
-                    {this.props.selectedPaddler.image && (<div><Image src={this.props.selectedPaddler.image} fluid roundedCircle style={{width:"75px"}}/></div>)}
-                    {!this.props.selectedPaddler.image && (<Monogram name={this.props.selectedPaddler.paddlerName} />)}
-                    <Form.Control as="select" size="lg" name="sex" onChange={this.handleChange} style={formStyle} defaultValue={this.state.sex}>
-                      <option disabled value='n/a'>-- select sex --</option>
-                      <option value='wahine'>wahine</option>
-                      <option value='kane'>kane</option>   
-                      <option value='keiki wahine'>keiki wahine</option> 
-                      <option value='keiki kane'>keiki kane</option>                                                                
-                    </Form.Control>                    
-                  </div>  
-                </Col>                             
-              </Row>
-            </div>
-          )}          
+            <EditableBio
+              state={this.state}
+              handleChange={this.handleChange}
+              handleChangeChecked={this.handleChangeChecked}
+              handleCalendarChange={this.handleCalendarChange} />)}          
         </Card.Body>
       </Card>
   )}
 }
 
+const NonEditableBio = ({selectedPaddler}) =>(
+  <div className="nonEditableBio">
+    <Row>
+      <Col lg={4} xs={12} className="flex-row text-dark">
+        <table>
+          <tbody>
+            <tr>
+              <td><p>{`Dues Paid for ${moment().format('YYYY')}:`}</p></td>
+              <td>
+                {selectedPaddler.duesPaid && ('Yes') }
+                {!selectedPaddler.duesPaid && <span className="text-danger font-weight-bold">NO</span> }
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Membership Type:</b>
+              </td>
+              <td>
+                <span>{selectedPaddler.membershipType || 'n/a'}</span> 
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </Col>
+      <Col lg={4} xs={12} className="flex-row">
+        <table>
+          <tbody>
+            <tr>
+              <td>
+                <b>age:</b>
+              </td>
+              <td>
+                {selectedPaddler.birthday && (<span name="age">{`${moment().diff(selectedPaddler.birthday, 'years')},  ${moment(selectedPaddler.birthday).format('MMM YYYY')}`} </span>)}
+                {!selectedPaddler.birthday && (<span>no birthday assigned yet</span>)}
+              </td>                      
+            </tr>
+            <tr>
+              <td>
+                <b>jersey size:</b>
+              </td>
+              <td>
+                {selectedPaddler.jerseySize || 'n/a'}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>sex:</b>
+              </td>
+              <td>
+                {selectedPaddler.sex || 'no sex assigned yet'}
+              </td>
+            </tr>
+          </tbody>
+        </table>                 
+      </Col>
+      <Col lg={4} xs={12} className="paddlerImage">
+          {selectedPaddler.image && (<div><Image src={selectedPaddler.image} fluid roundedCircle style={{width:"75px"}}/></div>)}
+          {!selectedPaddler.image && (<Monogram name={selectedPaddler.paddlerName || ''} />)} 
+      </Col>                               
+    </Row>
+  </div>
+)
+const EditableBio = ({state, handleChange, handleChangeChecked, handleCalendarChange}) => (
+    <Row>
+      <Col lg={4} md={12} className="flex-row">
+        <table>
+          <tbody>
+            <tr>
+              <td>
+                Dues Paid for {moment().format('YYYY')}
+              </td>
+              <td>
+                <input type="checkbox" className="form-check-input" name="duesPaid" checked={state.duesPaid} onChange={handleChangeChecked}/>
+              </td>              
+            </tr>
+            <tr>
+              <td>
+                Membership Type:
+              </td>
+              <td>
+                <Form.Group id="membershipType">
+                  <Form.Control as="select" size="lg" name="membershipType" onChange={handleChange} style={formStyle} defaultValue={state.membershipType}>
+                    <option disabled value='n/a'>-- select membershipType --</option>
+                    <option value='single'>single</option>
+                    <option value='family'>family</option>   
+                    <option value='student'>student</option>                                          
+                  </Form.Control>
+                </Form.Group> 
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </Col>
+      <Col lg={4} md={12} className="flex-row">
+        <table>
+          <tbody>
+            <tr>
+              <td>
+                birthday:
+              </td>
+              <td>
+                <DatePicker
+                  value={state.birthday}
+                  selected={state.birthday}
+                  onChange={handleCalendarChange}
+                />
+              </td>              
+            </tr>
+            <tr>
+              <td>
+                jersey size:
+              </td>
+              <td>
+                <Form.Group id="jerseySize">
+                  <Form.Control as="select" size="lg" name="jerseySize" onChange={handleChange} style={formStyle} defaultValue={state.jerseySize}>
+                    <option disabled value='n/a'>-- select jerseySize --</option>
+                    <option value='women small'>women small</option>
+                    <option value='women medium'>women medium</option>   
+                    <option value='women large'>women large</option>  
+                    <option value='women xl'>women xl</option>  
+                    <option value='men small'>men small</option>
+                    <option value='men medium'>men medium</option>   
+                    <option value='men large'>men large</option>  
+                    <option value='men xl'>men xl</option>  
+                    <option value='men xxl'>men xxl</option> 
+                  </Form.Control>
+                </Form.Group>              
+              </td>              
+            </tr>            
+          </tbody>
+        </table>                 
+      </Col>
+      <Col lg={4} md={12} className="flex-row">
+        <table>
+          <tbody>
+            <tr>
+              <td>
+                sex:
+              </td>
+              <td>
+                <Form.Control as="select" size="lg" name="sex" onChange={handleChange} style={formStyle} defaultValue={state.sex}>
+                  <option disabled value='n/a'>-- select sex --</option>
+                  <option value='wahine'>wahine</option>
+                  <option value='kane'>kane</option>   
+                  <option value='keiki wahine'>keiki wahine</option> 
+                  <option value='keiki kane'>keiki kane</option>                                                                
+                </Form.Control>              
+              </td>              
+            </tr>
+          </tbody>
+        </table> 
+      </Col>                             
+    </Row>  
+)
 const MapStateToProps = ({selectedPaddler}) => ({
   selectedPaddler
 })

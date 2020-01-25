@@ -17,4 +17,22 @@
     width: 25px;
     height: 25px;
   }
+  & table {
+    width:100%;
+    & td {
+      padding: .5rem;
+      vertical-align: top;
+      &:nth-child(odd){
+        width:25%;
+        color:$primary;
+        text-align: right;       
+      }
+    }
+  }
+  & .paddlerImage {
+    display:block;
+    @include response(tab-port){
+      display:none;
+    }
+  }
 }

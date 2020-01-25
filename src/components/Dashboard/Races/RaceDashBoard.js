@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { dbRacesToPaddlers, dbCrews } from '../../Firebase';
+import { dbRacesToPaddlers, dbCrews, dbAllPaddlers } from '../../Firebase';
 import moment from 'moment';
 import { addPaddlerToRace, updatePaddlerTT, clearPaddlersToRace, removePaddlerFromRace, updateRace, addCrew, clearCrews } from '../../../store/store';
 import { Card, Col, Tab, Nav, Row, Badge, Form, Button } from 'react-bootstrap';
@@ -97,15 +97,16 @@ class RaceDashBoard extends Component {
     }      
   }
   componentDidMount(){
+    //find all the paddlers for this race and update store
     dbRacesToPaddlers.where("raceID", "==", this.props.raceID)
       .get()
       .then((querySnapshot)=>{
         querySnapshot.forEach((race)=>{
           const raceToPaddlerInfo = race.data();
           if (raceToPaddlerInfo.enabled){
-            const aRacer = this.props.paddlers.find(paddler=>paddler.uid==raceToPaddlerInfo.paddlerID)
-              if (aRacer){
-                const paddler = {raceToPaddlerID: race.id, paddlerID:raceToPaddlerInfo.paddlerID, paddlerName:aRacer.name, timeTrial:raceToPaddlerInfo.timeTrial, age:moment().diff(moment(aRacer.birthday), 'years'), sex:aRacer.sex, novice:aRacer.novice}
+            const aRacer = this.props.paddlers.find(paddler=>paddler.paddlerID==raceToPaddlerInfo.paddlerID)
+              if (aRacer){                
+                const paddler = {raceToPaddlerID: race.id, paddlerID:aRacer.paddlerID, paddlerName:aRacer.paddlerName, timeTrial:raceToPaddlerInfo.timeTrial, age:moment().diff(moment(aRacer.birthday), 'years'), sex:aRacer.sex, novice:aRacer.novice}
                 this.props.dispatch(addPaddlerToRace(paddler))                     
               }}
         })
@@ -162,14 +163,14 @@ class RaceDashBoard extends Component {
         // remove from paddlersToRace
         this.props.dispatch(removePaddlerFromRace(paddlerID))
         // update paddlerCount for race
-        const currRace = this.props.races.find(race=>race.id==this.props.raceID)
-        this.props.dispatch(updateRace({...currRace, paddlerCount:currRace.paddlerCount--}))
+        const currRace = this.props.races.find(race=>race.raceID==this.props.raceID)
+        this.props.dispatch(updateRace({...currRace, paddlerCount:currRace.paddlerCount-1}))
       })   
        
   }
   render() {
     let sortedRacersByTT=this.props.paddlersForCurrentRace.sort((a,b)=>(a.timeTrial < b.timeTrial) ? 1: -1);
-    const currRace = this.props.races.find(race=>race.id==this.props.raceID)
+    const currRace = this.props.races.find(race=>race.raceID==this.props.raceID)
     return (
       <div className="raceDashboard p-2">
       { !this.state.ready && <LoadingIcon textColor="text-dark"/>}

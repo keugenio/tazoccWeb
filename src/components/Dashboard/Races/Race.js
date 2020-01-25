@@ -82,7 +82,7 @@ class Race extends React.Component{
     return (
       <div>
         { dashboardPage &&  (<UserRaceInfo raceID={raceID} paddlerID={paddlerID} attendance={[...this.state.attendance]}/>)}
-        { adminPage && (<AdminRaceInfo raceID={raceID} name={name} host={host} location={location} internalInfo={internalInfo} info={info} date={date} longCourseReq={longCourseReq} shortCourseReq={shortCourseReq} changeRequirement={changeRequirement} currentPage = {this.props.currentPage} attendance={[...this.state.attendance]} paddlerCount={paddlerCount}/>)}           
+        { adminPage && (<AdminRaceInfo race={this.props.race} />)}           
       </div>
     )
   }
