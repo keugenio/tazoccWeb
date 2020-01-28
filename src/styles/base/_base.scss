@@ -17,7 +17,6 @@ body {
   height: 100vh;
   background: $taz-blue!important;
 }
-
 button {
   cursor: pointer;
 }
@@ -141,6 +140,10 @@ button:disabled {
       color:$white;
     }
   }
+}
+
+.modal-open {
+  overflow: visible !important;
 }
 
 .card {

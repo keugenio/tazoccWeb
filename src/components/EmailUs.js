@@ -15,6 +15,8 @@ export default function EmailUs() {
           setShowSuccess(true)
           setShowForm(false)
       }, (error) => {
+        console.log(error);
+        
           setShowError(true)
           setShowForm(false)
       });

@@ -89,7 +89,7 @@ class Navigation extends Component {
         
         
         <Modal show={this.state.show} centered onHide={this.handleClose}>
-          <Modal.Header closeButton>
+          <Modal.Header className="bg-taz-blue text-white" closeButton>
             <Modal.Title>Contact TAZ</Modal.Title>
           </Modal.Header>
           <Modal.Body>

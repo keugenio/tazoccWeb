@@ -22,7 +22,8 @@ class Attendance extends Component {
       paddlersWhoPracticed:[],
       noLoginPaddler:'',
       daysThatHadPractices:'',
-      showModal:false
+      showModal:false,
+      showSaveButton:false
     }
   }
   static getDerivedStateFromProps(props, state) {
@@ -31,7 +32,7 @@ class Attendance extends Component {
     const filteredPaddlers =[];
 
     paddlers.map(paddler=>{
-      if (!state.paddlersWhoPracticed.find((p)=>p.uid == paddler.uid))
+      if (!state.paddlersWhoPracticed.find((p)=>p.paddlerID == paddler.paddlerID))
         filteredPaddlers.push(paddler)
     })
 
@@ -71,9 +72,9 @@ class Attendance extends Component {
   }
   handleCalendarChange = date => {
     
-    this.setState({date:date.valueOf()});
     //convert date to show just the MMDDYYYY instead of timecode
     const newDate = moment(date.valueOf()).format('MM-DD-YYYY');
+    this.setState({date:date.valueOf()});
     
     // on the initial mount of this component, get info from db and
     // load up dbPaddlersWhoPracticed and paddlersWhoPracticed to 
@@ -88,10 +89,12 @@ class Attendance extends Component {
         this.setState({paddlersWhoPracticed: [...data.paddler]})
       }
       else {
-        this.setState({dBpaddlersWhoPracticed:[], paddlersWhoPracticed:[]})
+        this.setState({dBpaddlersWhoPracticed:[], paddlersWhoPracticed:[], showModal:true})
+
       }
     })   
   } 
+
   rotate = () => {
     let newRotation = this.state.rotation + 180;
     if(newRotation >= 360){
@@ -101,12 +104,15 @@ class Attendance extends Component {
       rotation: newRotation,
     })
   }   
-  addPaddlerToPractice = (uid) => {
-    const selectedPaddler = this.props.paddlers.find(paddler=>paddler.uid == uid)
-    this.setState({paddlersWhoPracticed: [...this.state.paddlersWhoPracticed, {uid:selectedPaddler.uid, name:selectedPaddler.name}]})    
+  addPaddlerToPractice = (paddlerID) => {
+    const selectedPaddler = this.props.paddlers.find(paddler=>paddler.paddlerID == paddlerID)
+    this.setState({
+      paddlersWhoPracticed: [...this.state.paddlersWhoPracticed, {paddlerID:selectedPaddler.paddlerID, paddlerName:selectedPaddler.paddlerName}],
+      showSaveButton:true
+    })    
   }
-  removePaddlerFromPractice = (uid) => {
-    const filteredPaddlers = this.state.paddlersWhoPracticed.filter(paddler=> paddler.uid!= uid)
+  removePaddlerFromPractice = (paddlerID) => {
+    const filteredPaddlers = this.state.paddlersWhoPracticed.filter(paddler=> paddler.paddlerID!= paddlerID)
     this.setState({paddlersWhoPracticed: filteredPaddlers})
   }
   updateNoLoginPaddler = (e) => {
@@ -115,43 +121,58 @@ class Attendance extends Component {
   addNoLoginPaddler = (e) =>{
     e.preventDefault();
     this.setState({
-      paddlersWhoPracticed:[...this.state.paddlersWhoPracticed, {name:this.state.noLoginPaddler, uid: "XXXX-" + uuid() }],
-      noLoginPaddler:''})
+      paddlersWhoPracticed:[...this.state.paddlersWhoPracticed, {paddlerName:this.state.noLoginPaddler, paddlerID: "XXXX-" + uuid() }],
+      noLoginPaddler:'', showSaveButton:true})
   }
   savePaddlersWhoAttended = () => {
     // write to db then update the display for paddlers who practiced
-    dbAttendance.doc(moment(this.state.date).format('MM-DD-YYYY')).set({paddler:[...this.state.paddlersWhoPracticed]})
-    .then(()=>{
-      this.setState({dBpaddlersWhoPracticed: [...this.state.paddlersWhoPracticed], showModal:false})
-    })
-    .then(()=>{
-      this.state.paddlersWhoPracticed.forEach(paddler=>{
-        if (!paddler.uid.includes('XXXX')) {
-          // add the date to the user's attendance field
-          dbAllPaddlers.doc(paddler.uid).update({
-            attendance:firebase.firestore.FieldValue.arrayUnion(this.state.date)
-          })
-          .catch(error=>{
-            Swal.fire({
-              icon: 'error',
-              title: "Oops...",
-              text: error,
-              confirmButtonText: 'OK',
-              showClass: {
-                popup: 'animated fadeInDown faster'
-              },
-              hideClass: {
-                popup: 'animated fadeOutUp faster'
-              }                    
-            }) 
-            
-          })
-        }
+    // if there are no paddlers who practiced, delete the document from firestore else update the paddlers
+    
+    if (this.state.paddlersWhoPracticed.length<=0){
+      //remove the doc from the attendance db
+      dbAttendance.doc(moment(this.state.date).format('MM-DD-YYYY')).delete()
+      const currDate = moment(this.state.date).format("MM-DD-YYYY")
+      const filteredDays = this.state.daysThatHadPractices.filter(day=> moment(day).format("MM-DD-YYYY") != currDate)
+      this.setState({daysThatHadPractices:filteredDays, showModal:false})
+    }
+    else {   
+      dbAttendance.doc(moment(this.state.date).format('MM-DD-YYYY')).set({paddler:[...this.state.paddlersWhoPracticed]})
+      .then(()=>{
+        this.setState({dBpaddlersWhoPracticed: [...this.state.paddlersWhoPracticed], showModal:false})
       })
-    })
-    .catch((error)=>{
-      console.log("error writing to db:", error);
-    })
+      .then(()=>{
+        this.state.paddlersWhoPracticed.forEach(paddler=>{
+          if (!paddler.paddlerID.includes('XXXX')) {
+            // add the date to the user's attendance field
+            dbAllPaddlers.doc(paddler.paddlerID).update({
+              attendance:firebase.firestore.FieldValue.arrayUnion(this.state.date)
+            })
+            .catch(error=>{
+              Swal.fire({
+                icon: 'error',
+                title: "Oops...",
+                text: error,
+                confirmButtonText: 'OK',
+                showClass: {
+                  popup: 'animated fadeInDown faster'
+                },
+                hideClass: {
+                  popup: 'animated fadeOutUp faster'
+                }                    
+              }) 
+              
+            })
+          }
+        })
+      })
+      .then(()=>{
+        // update the calendar to mark that this date had attendees
+        this.setState({daysThatHadPractices:[...this.state.daysThatHadPractices, new Date(moment(this.state.date).format("MM-DD-YYYY"))]})
+      })
+      .catch((error)=>{
+        console.log("error writing to db:", error);
+      })
+    }
   }  
   closeModal = () =>{
     this.setState({showModal:false})
@@ -161,18 +182,20 @@ class Attendance extends Component {
   }
   render() {    
     return (
-      <div className="attendance">
+      <div className="attendance" id="attendance">
         <Accordion defaultActiveKey="0">      
         <Card className="text-dark">
-          <Accordion.Toggle as={Card.Title} eventKey="0" className="bg-warning" onClick={this.rotate}>
+          <Accordion.Toggle as={Card.Title} eventKey="0" className="bg-warning">
             <Card.Title className="d-flex justify-content-between align-items-center bg-warning text-dark">
               <span>Attendance</span>
-              <div className="d-flex">                  
-                <FontAwesomeIcon icon="angle-up" className="fa-2x text-dark bg-transparent" style={{transform: `rotate(${this.state.rotation}deg)`}}/>
+              <div className="d-flex">
+                <Button className="bg-transparent" onClick={()=>this.rotate()}>
+                  <FontAwesomeIcon icon="angle-up" className="fa-2x text-dark bg-transparent border-0" style={{transform: `rotate(${this.state.rotation}deg)`}}/>
+                </Button>                
               </div>
             </Card.Title>
           </Accordion.Toggle>          
-          <Accordion.Collapse eventKey='0'>
+          <Accordion.Collapse eventKey="0">
             <Card.Body>
               <Row>
                 <Col lg={6} xs={12}>
@@ -202,7 +225,7 @@ class Attendance extends Component {
                     <Card.Body>
                       <Card.Text>
                         {this.state.dBpaddlersWhoPracticed.map((paddler, i)=>(
-                            <span key={paddler.uid} className="ml-3 comma">{paddler.name}</span>
+                            <span key={paddler.paddlerID} className="ml-3 comma">{paddler.paddlerName}</span>
                           ))}
                       </Card.Text>
                     </Card.Body>
@@ -219,13 +242,13 @@ class Attendance extends Component {
           centered
           className="attendanceModal"
         >
-          <Modal.Header closeButton>
-            <Modal.Title id="contained-modal-title-vcenter">
-              Add Paddlers who attended practice on {moment(this.state.date).format("ddd MMM DD, YYYY")}
+          <Modal.Header className="bg-warning text-dark" closeButton>
+            <Modal.Title>
+              <span className="text-dark">Add Paddlers who attended practice on {moment(this.state.date).format("ddd MMM DD, YYYY")}</span>
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <Card bg="warning" text="dark" >
+            <Card text="dark" >
               <Card.Body>
                 <Row>
                   <Col lg={4} xs={12}>
@@ -233,10 +256,13 @@ class Attendance extends Component {
                         <ListGroup className="listboxText border border-secondary" >
                           <ListGroup.Item className="bg-dark text-white d-flex justify-content-between">
                             <div>Paddlers attended:</div>
-                            {( this.state.date ) && (this.state.paddlersWhoPracticed.length > 0) && (<div><Button variant="danger" onClick={this.savePaddlersWhoAttended}><span className="mr-2">Save  </span><FontAwesomeIcon icon="save" className="text-white bg-dark "/></Button></div>)}
+                            {this.state.date && this.state.showSaveButton && (<div><Button variant="danger" onClick={this.savePaddlersWhoAttended}><FontAwesomeIcon icon="save" className="text-white bg-dark "/></Button></div>)}
                           </ListGroup.Item>
                           {this.state.paddlersWhoPracticed.map((paddler, i)=>(
-                            <ListGroup.Item key={paddler.uid||i} onClick={()=>{this.removePaddlerFromPractice(paddler.uid)}} className={paddler.uid.includes('XXXX') && ("text-muted")}>{paddler.name}</ListGroup.Item>
+                            <ListGroup.Item key={paddler.paddlerID||i} onClick={()=>{this.removePaddlerFromPractice(paddler.paddlerID)}} className={paddler.paddlerID.includes('XXXX') && ("text-muted")}>
+                              {paddler.paddlerName}
+                              <FontAwesomeIcon icon="minus-circle" className="ml-2" />
+                            </ListGroup.Item>
                           ))}
                         </ListGroup>
                       </div>
@@ -246,8 +272,8 @@ class Attendance extends Component {
                       <ListGroup className="listboxText border border-secondary">
                         <ListGroup.Item className="bg-secondary text-dark">Available Paddlers</ListGroup.Item>
                         { this.state.paddlers.map( paddler => (
-                          <ListGroup.Item onClick={()=>{this.addPaddlerToPractice(paddler.uid)}} key={paddler.uid}>
-                          {paddler.name}
+                          <ListGroup.Item onClick={()=>{this.addPaddlerToPractice(paddler.paddlerID)}} key={paddler.paddlerID}>
+                          {paddler.paddlerName}
                           </ListGroup.Item>
                         )) }
                       </ListGroup>
@@ -265,7 +291,7 @@ class Attendance extends Component {
                               onChange={this.updateNoLoginPaddler}
                               value={this.state.noLoginPaddler}
                             />
-                            <button type="submit">submit</button>
+                            <Button type="submit">submit</Button>
                           </InputGroup>                                                    
                         </Form.Row>
                       </Form.Group>     
@@ -276,7 +302,7 @@ class Attendance extends Component {
             </Card>
           </Modal.Body>
           <Modal.Footer>
-            <Button onClick={this.closeModal}>Close</Button>
+            <button onClick={this.closeModal} className="btn-primary">Close</button>
           </Modal.Footer>
         </Modal>        
       </div>

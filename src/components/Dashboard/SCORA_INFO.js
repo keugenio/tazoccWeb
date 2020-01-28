@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Card, Row, Col, Button } from 'react-bootstrap';
+import { Card, Row, Col, Button, Accordion } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { dbAllPaddlers } from '../Firebase';
 import Swal from 'sweetalert2';
@@ -102,14 +102,14 @@ class SCORA_INFO extends React.Component {
   }
   render(){
     return (
-      <Card className="scoraInfo">  
-        <Card.Title className="d-flex justify-content-between">
+      <Card className="scoraInfo">      
+        <Card.Title className="d-flex justify-content-between bg-muted">
           {this.props.selectedPaddler && (<div>SCORA Info for {this.props.selectedPaddler.name}</div>)}
           {!this.props.selectedPaddler && (<div>Select a paddler to view SCORA Info</div>)}
           <div>
-            {this.state.showEditable && (<Button onClick={this.toggleSave} className="btn-danger" ><FontAwesomeIcon icon="save" /></Button>)}
-            {this.props.selectedPaddler && !this.state.showEditable && (<Button onClick={this.toggleEdit} className={this.state.showEdit}><FontAwesomeIcon icon="edit"/></Button>) }
-            {this.state.showEditable && (<Button onClick={this.toggleCancel} className="btn-dark" >x</Button>)}          
+            {this.state.showEditable && (<Button onClick={this.toggleSave} className="btn-danger" ><FontAwesomeIcon icon="save" className="fa-2x text-white"/></Button>)}
+            {this.props.selectedPaddler && !this.state.showEditable && (<Button onClick={this.toggleEdit} className="bg-transparent border-0"><FontAwesomeIcon icon="edit" className="fa-2x text-white"/></Button>) }
+            {this.state.showEditable && (<Button onClick={this.toggleCancel} className="bg-transparent border-0" ><FontAwesomeIcon icon="window-close" className="fa-2x text-white"/></Button>)}          
           </div>
         </Card.Title>
         <Card.Body>

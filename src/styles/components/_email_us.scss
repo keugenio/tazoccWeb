@@ -1,0 +1,9 @@
+.contact-form {
+  & input {
+    font-size: 2rem;
+    border: thin solid $taz-blue;
+  }
+  & textarea {
+    border: thin solid $taz-blue;
+  }
+}

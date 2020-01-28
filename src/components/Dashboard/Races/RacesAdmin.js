@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { dbRaces, dbRacesToPaddlers } from '../../Firebase';
+import { dbRaces } from '../../Firebase';
 import { Row, Col, Card, CardGroup, Modal, Button, Form, Accordion} from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { addRace, updateRace } from '../../../store/store';
+import { addRace } from '../../../store/store';
 import events from '../../eventDescriptions';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -100,30 +100,31 @@ class RacesAdmin extends Component {
   handleChangeCalendar = date => {
     this.setState({date:date.valueOf()});
   }   
-  render() {    
+  render() {   
+    const sortedRaces = this.props.races.sort((a,b)=>(a.date<b.date?-1:1)) 
     return (
       <div className="raceAdmin">
-      <Accordion defaultActiveKey="0">      
+      <Accordion>      
           <Card>
-            <Accordion.Toggle as={Card.Title} eventKey="0" className="bg-primary" onClick={this.rotate}>
+            <Accordion.Toggle as={Card.Title} eventKey="1" className="bg-primary">
               <Card.Title className="d-flex justify-content-between align-items-center bg-primary text-light">
                 <span>Races</span>
-                <div className="d-flex">                  
-                  <FontAwesomeIcon icon="angle-up" className="fa-2x text-warning bg-primary" style={{transform: `rotate(${this.state.rotation}deg)`}}/>                  
+                <div className="d-flex">
+                  <Button variant="primary" onClick={this.handleShowModal} className="bg-transparent border-0">
+                    <FontAwesomeIcon icon="plus-circle" className="fa-2x text-warning bg-transparent"/>
+                  </Button>
+                  <Button className="bg-transparent border-0" onClick={this.rotate}>
+                    <FontAwesomeIcon icon="angle-up" className="fa-2x text-warning bg-transparent" style={{transform: `rotate(${this.state.rotation}deg)`}}/>                  
+                  </Button>                  
                 </div>
               </Card.Title>
             </Accordion.Toggle>          
-            <Accordion.Collapse eventKey='0'>
+            <Accordion.Collapse eventKey='1'>
               <div>
-                <Card.Title className="text-right">
-                  <Button variant="primary" onClick={this.handleShowModal} className="bg-transparent border-0">
-                    <FontAwesomeIcon icon="plus-circle" className="fa-3x text-warning bg-transparent"/>
-                  </Button>
-                </Card.Title>
                 <Card.Body>                
-                  { this.props.races.length > 0 && ( 
+                  { sortedRaces.length > 0 && ( 
                     <CardGroup>
-                      {this.props.races.map((race,i)=>{
+                      {sortedRaces.map((race,i)=>{
                         return (
                           <Race 
                             key={i} race={race}

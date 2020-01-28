@@ -122,6 +122,9 @@ export const setBirthday = (date) => ({
   type:'SET_BIRTHDAY',
   date
 })
+export const updateUser = (paddler) => ({
+  type:'UPDATE_USER', paddler
+})
 export const logUserOut = () => ({
   type: 'LOG_USER_OUT'
 })
@@ -154,7 +157,9 @@ const authenticatedUserReducer = (state = {}, action) => {
     case 'ADD_READ_NEWS_ARTICLE':
       return { ...state, readNews:[...state.readNews, action.articleID]}
     case 'SUBTRACT_AMOUNT_TO_BE_READ':
-      return { ...state, amountStillNeedsToRead:state.amountStillNeedsToRead - 1}``
+      return { ...state, amountStillNeedsToRead:state.amountStillNeedsToRead - 1}
+    case 'UPDATE_USER':
+      return {...state, ...action.paddler}
     default:
       return state;
   }
@@ -189,7 +194,7 @@ const allPaddlersReducer = (state = [], action) => {
       case 'ADD_PADDLER_TO_ALL_PADDLERS':
         return [...state, action.paddler]
       case 'UPDATE_PADDLER':
-        const filteredPaddlers = this.state.filter(paddler=>paddler.uid!=action.paddler.uid);
+        const filteredPaddlers = state.filter(paddler=>paddler.uid!=action.paddler.paddlerID);
         return [...filteredPaddlers, action.paddler ]
       case 'CLEAR_ALL_PADDLERS':
         return []; 

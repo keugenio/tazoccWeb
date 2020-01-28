@@ -49,6 +49,13 @@
   }    
 }
 .attendanceModal {
+  & .modal-header button {
+    color: $dark;
+    font-size: 2rem;
+  }
+  & .modal-title {
+    font-size: 2rem;
+  }
   & .modal-dialog {
     min-width: 80%;
   }
@@ -58,19 +65,26 @@
       }
     & .list-group-item{
       cursor: pointer;
+      font-size: 2rem;
     }
     & .listboxText {
       color:$dark;
       font-size: 1.5rem;
     }
     & label {
-      font-size:1.5rem
+      font-size:2rem;
+    }
+    & input {
+      font-size:2rem;
     }
     .noLogin {
       & button {
         margin-left: 1rem;
       }
-    }    
+    } 
+    .btn {
+      font-size: 1.5rem;
+    }   
   } 
 }
 

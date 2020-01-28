@@ -18,12 +18,12 @@
     height: 25px;
   }
   & table {
-    width:100%;
+    border-spacing: 10px;
+    border-collapse: collapse;
     & td {
       padding: .5rem;
       vertical-align: top;
       &:nth-child(odd){
-        width:25%;
         color:$primary;
         text-align: right;       
       }
@@ -34,5 +34,8 @@
     @include response(tab-port){
       display:none;
     }
+  }
+  & .card-title {
+    padding:.5rem;
   }
 }

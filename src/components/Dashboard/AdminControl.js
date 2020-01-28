@@ -43,33 +43,21 @@ class AdminControl extends React.Component{
             <Card.Title className="bg-warning text-white">Admin Dashboard</Card.Title>
             <Card.Body>
               <section className="border-light border rounded">
-              <Row>
-                <Col className="showSearch">
-                  <Search />
-                </Col>
-                <Col lg={8}>
-                  <PaddlerBio />
-                  <SCORA_INFO />
-                </Col>
-                <Col lg={4} className="hideSearch">
-                  <Search />
-                </Col>
-              </Row>
+                <PaddlerBio />
               </section>
               {this.props.user.role == "superAdmin" && (
                 <section className="border-light border rounded">
-
                   <Col lg={6} md={12}>
                     <EditRole />
                   </Col>
                 </section>
               )}
-              <Row>
-                <Col>
-                  <RacesAdmin currentPage = {this.props.location.pathname}/>
-                  {/*<Attendance />*/}
-                </Col>   
-              </Row>
+              <section className="border-light border rounded"> 
+                <RacesAdmin currentPage = {this.props.location.pathname}/>
+              </section>
+              <section>
+                <Attendance />
+              </section>
             </Card.Body>
           </Card>
         </div>

@@ -1,17 +1,19 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {Card, Form, Col, Row, Button, Modal } from 'react-bootstrap';
+import {Form, Col, Row, Button, Modal } from 'react-bootstrap';
 import firebase, { dbAllPaddlers } from '../Firebase';
-import { setUserName, setBirthday, setSelectedPaddler } from '../../store/store';
+import { setSelectedPaddler, updatePaddler, updateUser } from '../../store/store';
 import Swal from 'sweetalert2';
 import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import 'react-phone-number-input/style.css'
+import PhoneInput from 'react-phone-number-input'
 
-function mapStateToProps({user}) {  
+function mapStateToProps({user, selectedPaddler}) {  
   return {
-    user
+    user, selectedPaddler
   };
 }
 
@@ -19,136 +21,110 @@ class EditProfile extends Component {
   constructor(props){
     super(props);
     this.state={
-      oldDisplayName:'',
       displayName:'',
-      oldBirthday:'',
-      birthday:'',
-      showModal:false
+      duesPaid:false,
+      membershipType:'n/a',
+      birthday:0,
+      jerseySize:'',
+      sex:'wahine',
+      contactName:'',
+      contactNumber:'',
+      showModal:false,
+      showSave:false,
+      showCancel:false
     }
   }
 
-  static getDerivedStateFromProps(props, state) {
-    return {oldDisplayName:props.user.userName, oldBirthday:props.user.birthday || 'none entered yet'}
+  handleEdit = () => {
+    this.setState({
+      displayName:this.props.selectedPaddler.paddlerName || '',
+      birthday:this.props.selectedPaddler.birthday || Date(),
+      duesPaid:this.props.selectedPaddler.duesPaid || false,
+      membershipType:this.props.selectedPaddler.membershipType || '',
+      jerseySize:this.props.selectedPaddler.jerseySize || '',
+      sex:this.props.selectedPaddler.sex || '',
+      contactName:this.props.selectedPaddler.contactName || '',
+      contactNumber:this.props.selectedPaddler.contactNumber||'',      
+      showModal:true
+    })
   }
   handleOnChange = (e) => {    
-    this.setState({displayName:e.target.value});    
+    this.setState({[e.target.name]:e.target.value, showSave:true, showCancel:true});    
+  }
+  handleChangeChecked = (e) => {
+    this.setState({[e.target.name]: e.target.checked, showSave:true, showCancel:true })
   }  
+  handleCancel = () =>{
+    this.setState({
+        "displayName": "",
+        "showModal": true,
+        "duesPaid": false,
+        "membershipType": "n/a",
+        "birthday": 0,
+        "jerseySize": "",
+        "sex": "wahine",
+        "contactName": "",
+        "contactNumber": "",
+        "showSave": false,
+        "showCancel": false,
+        "showModal":false    
+    })
+  }
   handleSave = () => {
     var user = firebase.auth().currentUser;
 
     user.updateProfile({
       displayName:this.state.displayName
     })
-      .then(()=>{
-        this.props.dispatch(setUserName(this.state.displayName))
-      })    
-      .then(()=>{
-        Swal.fire({
-          icon: 'success',
-          title: 'Your display name has been changed!',
-          showConfirmButton: false,
-          timer: 1000
-        })
-        this.setState({displayName:''})
-      })
-      .catch(err=>{
-        Swal.fire({
-          icon: 'error',
-          title: 'error in saving display name',
-          text: err,
-          showConfirmButton: false,
-          timer: 1500
-        })         
-      })
-  }
-  handleCalendarChange = date => {
-    this.setState({ birthday:date.valueOf() });
-  }   
-  handleSaveBirthday = () => {
-    dbAllPaddlers.doc(this.props.user.uid).update({
-      birthday:this.state.birthday
+
+    dbAllPaddlers.doc(this.props.selectedPaddler.paddlerID).update({
+      paddlerName:this.state.displayName,
+      birthday:this.state.birthday,
+      jerseySize:this.state.jerseySize,
+      sex:this.state.sex,
+      contactName:this.state.contactName,
+      contactNumber:this.state.contactNumber      
+    }).then(()=>{
+      const currPaddler = {
+        ...this.props.user,
+        paddlerName:this.state.displayName,
+        birthday:this.state.birthday,
+        jerseySize:this.state.jerseySize,
+        sex:this.state.sex,
+        contactName:this.state.contactName,
+        contactNumber:this.state.contactNumber }
+      this.props.dispatch(updatePaddler(currPaddler))
+      this.props.dispatch(setSelectedPaddler(currPaddler))
+      if (this.props.user.role !== 'admin' && this.props.user.role !== 'superAdmin')
+        this.props.dispatch(updateUser(currPaddler))
     })
-      .then(()=>{
-        Swal.fire({
-          icon: 'success',
-          title: 'Birthday saved!',
-          showConfirmButton: false,
-          timer: 1500
-        }) .then(()=>{
-          this.props.dispatch(setBirthday(this.state.birthday))
-          this.props.dispatch(setSelectedPaddler(this.props.user))
-          this.setState({birthday:''})
-        })       
-      })
-      .catch(err=>{
-        Swal.fire({
-          icon: 'error',
-          title: 'Error in saving Birthday',
-          text:{err},
-          showConfirmButton: false,
-          timer: 1500
-        }) 
-      })
-    
+    this.setState({showModal:false})
+  }
+
+  handleCalendarChange = date => {
+    this.setState({ birthday:date.valueOf(), showSave:true, showCancel:true});
   }
 
   render() {
     return (
       <div>
-        <Button variant="dark" onClick={()=>this.setState({showModal:true})} className="bg-transparent text-dark border-0 d-flex align-items-center">
-          <h4>{this.props.title}</h4><FontAwesomeIcon icon="cog" className="h4 ml-2"/>
-        </Button>
-        <Modal centered show={this.state.showModal} onHide={()=>{this.setState({showModal:false})}}>
-          <Modal.Header className="bg-success text-white" closeButton/>
-          <Modal.Title className="pl-2"><h2>Edit Profile</h2></Modal.Title>
-          <Modal.Body>
-            <div className="editProfilePage">
-              <Card as={Col} className="editProfile mx-auto text-dark">
-                <Card.Body>
-                  <div>
-                    <h4>Current Display Name: {this.state.oldDisplayName}</h4>          
-                    <Form className="container-fluid">
-                      <Form.Group as={Row} controlId="formPlaintextEmail" className="d-flex align-items-center">
-                        <Col lg={10} className="d-flex align-items-center">            
-                            <input
-                              className="form-control w-100"
-                              type="text"
-                              name="displayName"
-                              placeholder="new display name"                     
-                              onChange={this.handleOnChange}
-                            />
-                        </Col>
-                        <Col lg={2} className="d-flex align-items-center">
-                          <Button className="btn-danger" onClick={this.handleSave}>Save</Button>
-                        </Col>             
-                      </Form.Group>  
-                    </Form>       
-                  </div>         
-                </Card.Body>
-              </Card>
-              <Card as={Col} className="editProfile mx-auto text-dark">
-                <Card.Body>
-                  <div>
-                    <h4>Current Birthdate: {moment(this.state.oldBirthday).format("MMM DD, YYYY")}</h4>        
-                    <Form className="container-fluid">
-                      <Form.Group as={Row} controlId="formPlaintextEmail" className="d-flex align-items-center">
-                        <Col lg={10} className="d-flex align-items-center">               
-                          <DatePicker
-                            value={this.state.birthday}
-                            selected={this.state.birthday}
-                            onChange={this.handleCalendarChange}
-                          />
 
-                        </Col>
-                        <Col lg={2} className="d-flex align-items-center">
-                          <Button className="btn-danger" onClick={this.handleSaveBirthday}>Save</Button>
-                        </Col>            
-                      </Form.Group>  
-                    </Form>       
-                  </div>         
-                </Card.Body>
-              </Card>        
-            </div>          
+        <Button variant="dark" onClick={()=>this.handleEdit()} className="bg-transparent text-dark border-0 d-flex align-items-center">
+          <FontAwesomeIcon icon="cog" className="ml-2 fa-2x"/>
+        </Button>
+        <Modal centered show={this.state.showModal} onHide={()=>{this.setState({showModal:false})}} className="editProfile">
+          <Modal.Title className="px-2 bg-success text-white d-flex justify-content-start align-items-center">
+            <h2>Edit Profile</h2>
+            <div className="ml-auto">
+              {this.state.showSave && <Button className="bg-transparent border-0 mr-1" onClick={()=>this.handleSave()}><FontAwesomeIcon icon="save" className="fa-2x text-danger"/></Button>}
+              <Button className="bg-transparent border-0" onClick={()=>this.handleCancel()}><FontAwesomeIcon icon="window-close" className="fa-2x text-white"/></Button>
+            </div>
+            </Modal.Title>
+          <Modal.Body className="text-dark p-3">
+          <EditableBio 
+            admin={this.props.user.role=="admin" || this.props.user.role=="superAdmin"} state = {this.state}            
+            selectedPaddler={this.props.selectedPaddler} handleOnChange={this.handleOnChange} handleChangeChecked={this.handleChangeChecked}
+            handleCalendarChange={this.handleCalendarChange} />         
           </Modal.Body>
         </Modal>
       </div>
@@ -157,6 +133,128 @@ class EditProfile extends Component {
   }
 }
 
+const EditableBio = ({admin, state, selectedPaddler, handleOnChange, handleChangeChecked, handleCalendarChange}) => (
+  <Row className="px-4">
+    {admin &&
+    <Col lg={6} md={12} className="d-flex justify-content-center border border-success p-4">
+      <table>
+        <tbody>
+          <tr>
+            <td>
+              Dues Paid for {moment().format('YYYY')}
+            </td>
+            <td>
+              <input type="checkbox" className="form-check-input" name="duesPaid" checked={state.duesPaid} onChange={handleChangeChecked} defaultValue={selectedPaddler.duesPaid}/>
+            </td>              
+          </tr>
+          <tr>
+            <td>
+              Membership Type:
+            </td>
+            <td>
+              <Form.Group id="membershipType">
+                <Form.Control as="select" size="lg" name="membershipType" onChange={handleOnChange} style={formStyle} defaultValue={selectedPaddler.meme}>
+                  <option disabled value='n/a'>-- select membershipType --</option>
+                  <option value='single'>single</option>
+                  <option value='family'>family</option>   
+                  <option value='student'>student</option>                                          
+                </Form.Control>
+              </Form.Group> 
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </Col>}
+    <Col lg={6} md={12} className="d-flex justify-content-center border border-success p-4">
+      <table>
+        <tbody>
+          <tr>
+            <td>
+              Display Name:
+            </td>
+            <td>
+              <input type="text" name="displayName" onChange={handleOnChange} style={formStyle} defaultValue={selectedPaddler.paddlerName} style={{width:'100%'}}>                                                              
+              </input> 
+            </td>
+          </tr>
+          <tr>
+            <td>
+              birthday:
+            </td>
+            <td>
+              <DatePicker
+                selected={state.birthday}
+                onChange={handleCalendarChange}
+              />
+            </td>              
+          </tr>
+          <tr>
+            <td>
+              jersey size:
+            </td>
+            <td>
+              <Form.Group id="jerseySize">
+                <Form.Control as="select" size="lg" name="jerseySize" onChange={handleOnChange} style={formStyle} defaultValue={selectedPaddler.jerseySize}>
+                  <option disabled value='n/a'>-- select jerseySize --</option>
+                  <option value='women small'>women small</option>
+                  <option value='women medium'>women medium</option>   
+                  <option value='women large'>women large</option>  
+                  <option value='women xl'>women xl</option>  
+                  <option value='men small'>men small</option>
+                  <option value='men medium'>men medium</option>   
+                  <option value='men large'>men large</option>  
+                  <option value='men xl'>men xl</option>  
+                  <option value='men xxl'>men xxl</option> 
+                </Form.Control>
+              </Form.Group>              
+            </td>              
+          </tr>            
+          <tr>
+            <td>
+              sex:
+            </td>
+            <td>
+              <Form.Control as="select" size="lg" name="sex" onChange={handleOnChange} style={formStyle} defaultValue={selectedPaddler.sex}>
+                <option disabled value='n/a'>-- select sex --</option>
+                <option value='wahine'>wahine</option>
+                <option value='kane'>kane</option>   
+                <option value='keiki wahine'>keiki wahine</option> 
+                <option value='keiki kane'>keiki kane</option>                                                                
+              </Form.Control>              
+            </td>              
+          </tr>
+        </tbody>
+      </table>                 
+    </Col>                            
+    <Col lg={6} md={12} className="d-flex justify-content-center border border-success p-4">
+      <table>
+        <tbody>
+          <tr>
+            <td>
+              Contact Name:
+            </td>
+            <td>
+              <input type="text" name="contactName" onChange={handleOnChange} style={formStyle} defaultValue={selectedPaddler.contactName} style={{width:'100%'}}>                                                              
+              </input>              
+            </td>              
+          </tr>
+          <tr>
+            <td>
+              Contact's Number:
+            </td>
+            <td>
+            <input type="text" name="contactNumber" onChange={handleOnChange} style={formStyle} defaultValue={selectedPaddler.contactNumber} style={{width:'100%'}}>                                                              
+            </input>              
+            </td>              
+          </tr>          
+        </tbody>
+      </table>    
+    </Col>
+  </Row>  
+)
+const formStyle = {
+  fontSize:'1.5rem'
+}
 export default connect(
   mapStateToProps,
 )(EditProfile);

@@ -14,7 +14,7 @@ class Search extends React.Component {
 
   render(){
       return (
-        <Form.Group>
+        <Form.Group className="m-0">
           <Form.Control as="select" size="lg" value="0" onChange={this.setPaddler} style={formStyle} disabled={!this.props.selectedPaddlerEditable}>
             <option disabled value='0' >-- select Paddler --</option>
             { this.props.paddlers.map((paddler, i)=>(

@@ -1,14 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Card, Button, Row, Col, Image, Form } from 'react-bootstrap';
+import { Card, Col, Image, Row, Form, Button, Accordion } from 'react-bootstrap';
 import { dbAllPaddlers } from '../Firebase.js';
 import { setSelectedPaddler, editSelectedPaddler } from '../../store/store';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import moment from 'moment';
-import DatePicker from "react-datepicker";
+import Search from "../Dashboard/Search";
 import "react-datepicker/dist/react-datepicker.css";
 import EditProfile from '../Auth/EditProfile';
 import Monogram from '../Monogram';
+import SCORA_INFO from './SCORA_INFO';
 
 class PaddlerBio extends React.Component{
   constructor(props) {
@@ -24,7 +25,8 @@ class PaddlerBio extends React.Component{
       oldMembershipType:'n/a',
       oldJerseySize:'n/a',
       oldBirthday: new Date(),
-      oldSex: 'n/a'
+      oldSex: 'n/a',
+      rotation:0
     }
   }
 
@@ -76,7 +78,15 @@ class PaddlerBio extends React.Component{
     //enable the select paddler input in the Search Component
     this.props.dispatch(editSelectedPaddler(true))    
   }
-
+  rotate = () => {
+    let newRotation = this.state.rotation + 180;
+    if(newRotation >= 360){
+      newRotation =- 360;
+    }
+    this.setState({
+      rotation: newRotation,
+    })
+  } 
   handleChangeChecked = (e) => {
     this.setState({[e.target.name]: e.target.checked })
   }
@@ -90,33 +100,42 @@ class PaddlerBio extends React.Component{
   render (){
     const {paddlerName, role} = this.props.selectedPaddler
     return (
-      <Card className="paddlerBio">
-        <Card.Title  className="bg-success text-white d-flex justify-content-between">
-          <div>About {paddlerName}</div>
-          {!role && (<EditProfile />) }
-          {((role=="admin") || (role=="superAdmin")) && (<div>
-            {this.state.showEditable && (<Button onClick={this.toggleSave} className="btn-danger" ><FontAwesomeIcon icon="save" /></Button>)}
-            {this.props.selectedPaddler && !this.state.showEditable && (<Button onClick={this.toggleEdit} className={this.state.showEdit}><FontAwesomeIcon icon="edit"/></Button>) }
-            {this.state.showEditable && (<Button onClick={this.toggleCancel} className="btn-dark" >x</Button>)}               
-          </div>)}
-        </Card.Title>
-        <Card.Body>
-          {!this.state.showEditable && (<NonEditableBio selectedPaddler={this.props.selectedPaddler} />)}
-          {this.state.showEditable && (
-            <EditableBio
-              state={this.state}
-              handleChange={this.handleChange}
-              handleChangeChecked={this.handleChangeChecked}
-              handleCalendarChange={this.handleCalendarChange} />)}          
-        </Card.Body>
-      </Card>
+      <Accordion>
+        <Card className="paddlerBio">
+        <Accordion.Toggle as={Card.Title} eventKey="1" className="bg-sucess">              
+          <Card.Title  className="bg-success text-white d-flex justify-content-start align-items-center m-0">
+            <MonogramOrImage selectedPaddler={this.props.selectedPaddler} />
+            <div className="ml-3">About {paddlerName}</div>
+            <div className="ml-auto d-flex align-items-center">
+              <Search />
+              <EditProfile />
+              <Button className="bg-transparent border-0" onClick={this.rotate}>
+                <FontAwesomeIcon icon="angle-up" className="fa-2x text-white bg-transparent" style={{transform: `rotate(${this.state.rotation}deg)`}}/>                  
+              </Button>           
+            </div>
+          </Card.Title>
+          </Accordion.Toggle>
+          <Accordion.Collapse eventKey='1'>
+            <Card.Body>
+              {!this.state.showEditable && (<NonEditableBio selectedPaddler={this.props.selectedPaddler} />)}         
+              <SCORA_INFO />
+            </Card.Body>
+          </Accordion.Collapse>
+        </Card>
+      </Accordion>
   )}
 }
 
+const MonogramOrImage = ({selectedPaddler}) =>(
+  <div>
+    {!selectedPaddler.image && (<Monogram name={selectedPaddler.paddlerName || ''} />)}   
+    {selectedPaddler.image && (<div><Image src={selectedPaddler.image} fluid roundedCircle style={{width:"75px"}}/></div>)}
+  </div>
+)
 const NonEditableBio = ({selectedPaddler}) =>(
-  <div className="nonEditableBio">
+  <div className="nonEditableBio p-4">
     <Row>
-      <Col lg={4} xs={12} className="flex-row text-dark">
+      <Col lg={4} xs={12}>
         <table>
           <tbody>
             <tr>
@@ -137,12 +156,20 @@ const NonEditableBio = ({selectedPaddler}) =>(
           </tbody>
         </table>
       </Col>
-      <Col lg={4} xs={12} className="flex-row">
+      <Col lg={4} xs={12}>
         <table>
           <tbody>
             <tr>
               <td>
-                <b>age:</b>
+                <b>Display Name:</b>
+              </td>
+              <td>
+                {selectedPaddler.paddlerName}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Age:</b>
               </td>
               <td>
                 {selectedPaddler.birthday && (<span name="age">{`${moment().diff(selectedPaddler.birthday, 'years')},  ${moment(selectedPaddler.birthday).format('MMM YYYY')}`} </span>)}
@@ -151,7 +178,7 @@ const NonEditableBio = ({selectedPaddler}) =>(
             </tr>
             <tr>
               <td>
-                <b>jersey size:</b>
+                <b>Jersey size:</b>
               </td>
               <td>
                 {selectedPaddler.jerseySize || 'n/a'}
@@ -159,7 +186,7 @@ const NonEditableBio = ({selectedPaddler}) =>(
             </tr>
             <tr>
               <td>
-                <b>sex:</b>
+                <b>Sex:</b>
               </td>
               <td>
                 {selectedPaddler.sex || 'no sex assigned yet'}
@@ -168,110 +195,31 @@ const NonEditableBio = ({selectedPaddler}) =>(
           </tbody>
         </table>                 
       </Col>
-      <Col lg={4} xs={12} className="paddlerImage">
-          {selectedPaddler.image && (<div><Image src={selectedPaddler.image} fluid roundedCircle style={{width:"75px"}}/></div>)}
-          {!selectedPaddler.image && (<Monogram name={selectedPaddler.paddlerName || ''} />)} 
-      </Col>                               
+      <Col lg={4} xs={12}>
+        <table>
+          <tbody>
+            <tr>
+              <td><p>Emergency Contact</p></td>
+              <td>
+                {selectedPaddler.contactName || 'n/a'}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Emergency Contact Number:</b>
+              </td>
+              <td>
+                <span>{selectedPaddler.contactNumber || 'n/a'}</span> 
+              </td>
+            </tr>
+          </tbody>
+        </table>        
+      </Col>                              
     </Row>
   </div>
-)
-const EditableBio = ({state, handleChange, handleChangeChecked, handleCalendarChange}) => (
-    <Row>
-      <Col lg={4} md={12} className="flex-row">
-        <table>
-          <tbody>
-            <tr>
-              <td>
-                Dues Paid for {moment().format('YYYY')}
-              </td>
-              <td>
-                <input type="checkbox" className="form-check-input" name="duesPaid" checked={state.duesPaid} onChange={handleChangeChecked}/>
-              </td>              
-            </tr>
-            <tr>
-              <td>
-                Membership Type:
-              </td>
-              <td>
-                <Form.Group id="membershipType">
-                  <Form.Control as="select" size="lg" name="membershipType" onChange={handleChange} style={formStyle} defaultValue={state.membershipType}>
-                    <option disabled value='n/a'>-- select membershipType --</option>
-                    <option value='single'>single</option>
-                    <option value='family'>family</option>   
-                    <option value='student'>student</option>                                          
-                  </Form.Control>
-                </Form.Group> 
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </Col>
-      <Col lg={4} md={12} className="flex-row">
-        <table>
-          <tbody>
-            <tr>
-              <td>
-                birthday:
-              </td>
-              <td>
-                <DatePicker
-                  value={state.birthday}
-                  selected={state.birthday}
-                  onChange={handleCalendarChange}
-                />
-              </td>              
-            </tr>
-            <tr>
-              <td>
-                jersey size:
-              </td>
-              <td>
-                <Form.Group id="jerseySize">
-                  <Form.Control as="select" size="lg" name="jerseySize" onChange={handleChange} style={formStyle} defaultValue={state.jerseySize}>
-                    <option disabled value='n/a'>-- select jerseySize --</option>
-                    <option value='women small'>women small</option>
-                    <option value='women medium'>women medium</option>   
-                    <option value='women large'>women large</option>  
-                    <option value='women xl'>women xl</option>  
-                    <option value='men small'>men small</option>
-                    <option value='men medium'>men medium</option>   
-                    <option value='men large'>men large</option>  
-                    <option value='men xl'>men xl</option>  
-                    <option value='men xxl'>men xxl</option> 
-                  </Form.Control>
-                </Form.Group>              
-              </td>              
-            </tr>            
-          </tbody>
-        </table>                 
-      </Col>
-      <Col lg={4} md={12} className="flex-row">
-        <table>
-          <tbody>
-            <tr>
-              <td>
-                sex:
-              </td>
-              <td>
-                <Form.Control as="select" size="lg" name="sex" onChange={handleChange} style={formStyle} defaultValue={state.sex}>
-                  <option disabled value='n/a'>-- select sex --</option>
-                  <option value='wahine'>wahine</option>
-                  <option value='kane'>kane</option>   
-                  <option value='keiki wahine'>keiki wahine</option> 
-                  <option value='keiki kane'>keiki kane</option>                                                                
-                </Form.Control>              
-              </td>              
-            </tr>
-          </tbody>
-        </table> 
-      </Col>                             
-    </Row>  
 )
 const MapStateToProps = ({selectedPaddler}) => ({
   selectedPaddler
 })
 export default connect(MapStateToProps)(PaddlerBio)
 
-const formStyle = {
-  fontSize: '1.5rem'
-}

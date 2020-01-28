@@ -6,13 +6,9 @@
     padding:2rem;
     & .card-body {
       & section {
-        padding:2rem;
-        & div:not(:last-child){
+        &:not(:last-child){
           margin-bottom: 2rem;
         }
-      }
-      & section:not(:last-child){
-        margin-bottom: 5rem;
       }
       & .showSearch {
         display:none;

@@ -7,4 +7,12 @@
 .editProfile {
   font-size: 2rem;
   color: $dark;
+  & .modal-dialog {
+    max-width: 75vw;
+  }
+  & td:nth-child(odd) {
+    text-align: right;
+    font-weight: 600;
+    padding-right: 2rem;
+  }
 }

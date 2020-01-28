@@ -6,11 +6,7 @@
   background: rgba($white, .95);
   display: flex;
   width: 85vw;
-  min-height: 85vh;
-  & .card-title {
-    background-color: $primary;
-    color: $white;
-  }
+
   & .card-body {
     color: $dark;
   }
