@@ -12,33 +12,58 @@
   background-size: cover;
   background-repeat: no-repeat;
   width: 100vw;
-  margin-left: -15px;
 }
 .bg-join_1 {
   background-image: url('/images/join_1.jpg');
-  background-position: center right;
-  background-size: cover;
   background-repeat: no-repeat;
+  background-position: left;
+  background-size: cover;;
   height: 100vh;
+  @include response(tab-port){
+    background-position: center;
+  }
+
 }
 .bg-join_2 {
   background-image: url('/images/join_2.jpg');
-  background-position: bottom left;
+  background-repeat: no-repeat;
+  background-position: right;
   background-size: cover;
-  min-height: 100vh;
+  height: 100vh;
+  @include response(tab-port){
+    background-position: left;
+  }
 }
 .bg-join_3 {
   background-image: url('/images/join_3.jpg');
+  background-repeat: no-repeat;
+  background-position: right;
   background-size: cover;
-  background-position: center;
-  min-height: 100vh;
+  height: 100vh;
+  @include response(tab-port){
+    background-position: right;
+  }
 }
 .bg-join_4 {
   background-image: url('/images/join_4.jpg');
+  background-repeat: no-repeat;
   background-size: cover;
   background-position: center left;
   background-position-x: 75%;
   height: 100vh;
+  @include response(tab-port){
+    background-position: right;
+  }  
+}
+.bg-join_5 {
+  background-image: url('/images/join_5.jpg');
+  background-repeat: no-repeat;
+  background-position: right;
+  background-size: cover;
+  height: 100vh;
+  @include response(tab-port){
+    background-position: right;
+  }
 }
 
 .bg-white-fade {
@@ -58,35 +83,43 @@
 .bgAIcon {
   @include aTribal;
 }
-.joinUsText {
-  font-size: 2.25rem;
-    line-height: 2.75rem;
-    & ul {
-      line-height: 1.8rem;
-    }
-    & li {
-      margin-bottom:2rem;
-      color: $white;
-      text-shadow: (.15rem .15rem rgba($dark, .75));
-    }
-}
 .joinUsContainer {
-  padding-top: 5rem;
-  padding-bottom: 5rem;
+  padding: 0;
+  .row {
+    margin-left: 0;
+    margin-right: 0;
+  }
   .row:first-child {
     margin-top:5rem!important;
-    padding-top: 5rem;
-    padding-bottom: 5rem;
-  } 
+  }
+  .columnText {
+    flex-wrap: wrap;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    @include response(tab-port){
+      height: 40%;
+      font-size: 1.75rem;
+    }
+    @include response(tab-port){
+      height: 40%;
+      font-size: 1.75rem;
+    }    
+    & ul {
+      text-align: left;
+      & li {
+        margin: 2rem 0;
+        line-height: 2rem;
+      }
+    }
+  }
   .row:not(:first-child) {
     margin-top:10rem!important;
     margin-bottom:5rem!important;
-    padding-top: 5rem;
-    padding-bottom: 5rem;
   } 
   .btn {
-    font-size: 3rem;
-    padding: 2rem;
+    font-size: 2rem;
+    padding: 1.5rem;
     @include boxShadow($primary);
   }
 }
