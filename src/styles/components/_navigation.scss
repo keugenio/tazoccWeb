@@ -1,9 +1,59 @@
+.tazNavMenu {
+  background:rgba($white, .25);
+  font-size: 1.75rem;
+  padding: .5rem;
+  & a {
+    color:$white;
+  }
+  & .brandText {
+    &:first-child{
+      @include response(tab-port){
+        display: none;
+      }
+    }
+    &:last-child {
+      display: none;
+      @include response(tab-port){
+        display: block;
+      }
+    }
+  }
+  & .contactUsLink {
+    &:first-child{
+      @include response(tab-port){
+        display: none;
+      }
+    }
+    &:last-child {
+      display: none;
+      @include response(tab-port){
+        display: block;
+      }
+    }
+  }
+  & .userProfileIcon {
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    @include boxShadow($dark);
+  }
+  & .dropdown-menu {
+    transform: translate3d(-100px, 50px, 0px)!important;
+  }
+  & li {
+    padding: .25rem .8rem;
+  }
+  & .rightNavItems li.nav-item:not(:last-child){
+    border-right: thin solid $primary;
+  }
+}
+
 .navigation {
   &__checkbox {
     display: none;
   }
   &__button {
-    height: 6rem;
+    height: 4rem;
     width: 5.5rem;
     color: $white;
     cursor: pointer;
@@ -132,13 +182,14 @@
   }  
 
 }
+
 .navigatorMenu {
   background: rgba($white, .25);
-  width: 100vw;
   padding: .75rem 2rem 1rem 2rem;
-  position: absolute;
+  position: fixed;
   top: 0;
-  left: 0;
+  width: 100%;
+
   & .navbar-brand {
     font-size: 2rem;
     color: $white;
@@ -163,12 +214,9 @@
     padding-left: 1rem;
     border:thin solid rgba($white, .25);
   }
-  & .userProfileIcon {
-    height: 50px;
-    width: 50px;
-    border-radius: 50%;
-    @include boxShadow($dark);
-  }
+
+
+
 }
 .navbar {
   padding: 0!important;

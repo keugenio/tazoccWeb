@@ -1,11 +1,11 @@
-import React, { useState }from 'react';
+import React from 'react';
 import { Button, Row, Col, Modal} from 'react-bootstrap'
 
 const JoinUs = () => {
   return (
     <React.Fragment>
-      <div className="bg-white joinUsContainer pt-5 bg-Tribal">
-        <Row className="bg-join_1 d-flex justify-content-start align-items-center m-0" id="joinUs">
+      <div className="joinUsContainer bg-Tribal">
+        <Row className="bg-join_1 d-flex justify-content-start align-items-center">
           <Col lg={4} xs={12} className="px-5 m-0 bg-primary-fade h-100 d-flex flex-column justify-content-center align-items-center text-center"> 
             <img src="/images/hibiscus-white-icon.png" className="mb-4"/>
             <div className="text-white"><h1 className="display-4">Would you like to join our Ohana and paddle with Team Arizona?</h1></div>       

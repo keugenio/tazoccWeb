@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import firebase, { dbRacesToPaddlers, dbAllPaddlers, dbRaces } from '../Firebase';
 import axios from 'axios';
 import Navigation from '../NavMenu/Navigation';
+import NavMenu from "../NavMenu/NavMenu";
 import Home from '../Home';
 import AboutUs from '../AboutUs';
 import Practices from '../Practices';
@@ -108,7 +109,7 @@ class AppRouter extends React.Component {
   render(){
     return (   
       <div>
-        <Navigation />
+        <NavMenu/>
         <Router>
           <Home path="/" />
           <Practices path="/practices" />

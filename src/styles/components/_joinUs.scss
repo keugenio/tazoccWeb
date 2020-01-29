@@ -7,9 +7,12 @@
   clip-path: polygon(5% 0%, 0% 100%, 100% 100%, 100% 0%);
 }
 .bg-Tribal {
-  background-image: url('/images/bg_join.png');
+  background-image:url('/images/bg_join.png') ;
+  background-color: #FFFFFF;;
   background-size: cover;
   background-repeat: no-repeat;
+  width: 100vw;
+  margin-left: -15px;
 }
 .bg-join_1 {
   background-image: url('/images/join_1.jpg');

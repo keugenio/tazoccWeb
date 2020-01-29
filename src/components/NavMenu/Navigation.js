@@ -5,7 +5,7 @@ import NavigationOverlay from './Navigation_overlay';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { logUserOut, clearRacesPaddlerSignedUpFor, clearAllRaces, clearSelectedPaddler } from '../../store/store';
 import { navigate, Link } from '@reach/router';
-import { Modal, Button, Navbar, NavDropdown } from 'react-bootstrap'
+import { Modal, Button, Navbar, NavDropdown, Container } from 'react-bootstrap'
 import UnreadNewsBadge from './UnreadNewsBadge';
 import EmailUs from '../EmailUs';
 import Monogram from '../Monogram';
@@ -36,20 +36,31 @@ class Navigation extends Component {
   render() {
     const { loggedIn, userImageURL, userName} = this.props;   
     return (
-      <nav className="site-nav family-sans navbar navbar-expand higher">
-        <div className="navigatorMenu d-flex align-items-center justify-content-start">
+      <Container fluid className="tazNavMenu">
+        <div className="d-flex align-items-center justify-content-start">
         
           <div className="d-flex">
             <Link to="/" className="navbar-brand">
-              Team Arizona Outrigger Canoe Club
+              <div className="brandText">
+                Team Arizona Outrigger Canoe Club
+              </div>
+              <div className="brandText">
+                Team Arizona OCC
+              </div>              
+
             </Link>
           </div>
-          <div className="navbar-nav ml-auto">
+          <div className="ml-auto d-flex">
             {/*loggedIn && (<div className="nav-item"><UnreadNewsBadge /></div>)*/}
             
             <div className="nav-item">
               <Link className="nav_link titleHoverMessage" to="#" onClick={this.handleShow} title="Have a Question? Ask us!">
-                Contact us
+                <div className="contactUsLink">
+                  Contact us
+                </div>
+                <div className="contactUsLink">
+                  <FontAwesomeIcon icon="envelope-open-text" className="fa-2x"/>
+                </div>
               </Link>
             </div>
             {!loggedIn && (
@@ -101,7 +112,7 @@ class Navigation extends Component {
             </Button>
           </Modal.Footer>
         </Modal>
-      </nav>
+      </Container>
     );
   }
 }
