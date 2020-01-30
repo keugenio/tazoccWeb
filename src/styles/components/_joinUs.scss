@@ -22,7 +22,9 @@
   @include response(tab-port){
     background-position: center;
   }
-
+  @include response(phone){
+    background-position-x: -518px;
+  }
 }
 .bg-join_2 {
   background-image: url('/images/join_2.jpg');
@@ -32,6 +34,10 @@
   height: 100vh;
   @include response(tab-port){
     background-position: left;
+  }
+  @include response(phone){
+    background-position-x:-281px;
+    background-position-y: 152px;;
   }
 }
 .bg-join_3 {
@@ -43,6 +49,10 @@
   @include response(tab-port){
     background-position: right;
   }
+  @include response(phone){
+    background-position-x:-662px;
+    background-position-y: 152px;;
+  }
 }
 .bg-join_4 {
   background-image: url('/images/join_4.jpg');
@@ -53,7 +63,10 @@
   height: 100vh;
   @include response(tab-port){
     background-position: right;
-  }  
+  }
+  @include response(phone){
+    background-position-x:-423px;
+  }   
 }
 .bg-join_5 {
   background-image: url('/images/join_5.jpg');
@@ -64,6 +77,9 @@
   @include response(tab-port){
     background-position: right;
   }
+  @include response(phone){
+    background-position-x:-459px;
+  }  
 }
 
 .bg-white-fade {
@@ -97,6 +113,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    text-align: center;
     @include response(tab-port){
       height: 40%;
       font-size: 1.75rem;
@@ -104,6 +121,10 @@
     @include response(tab-port){
       height: 40%;
       font-size: 1.75rem;
+    }
+    @include response(phone){
+      font-size: 1.75rem;
+      line-height: 2rem;
     }    
     & ul {
       text-align: left;
@@ -112,11 +133,40 @@
         line-height: 2rem;
       }
     }
+    & :first-child{
+      @include response(phone){
+        .display-4{
+          font-size: 2.5rem!important;
+        }
+      }
+    }
+
   }
   .row:not(:first-child) {
     margin-top:10rem!important;
     margin-bottom:5rem!important;
-  } 
+  }
+  & :nth-child(2){
+    .columnText{
+      @include response(phone){
+        height: 54%;
+      }
+    }
+  }  
+  & :nth-child(3){
+    .columnText{
+      @include response(phone){
+        height: 55%;
+      }
+    }
+  }   
+  & :nth-child(4){
+    .columnText{
+      @include response(phone){
+        height: 60%;
+      }
+    }
+  }
   .btn {
     font-size: 2rem;
     padding: 1.5rem;

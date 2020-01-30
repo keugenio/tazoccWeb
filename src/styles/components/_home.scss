@@ -9,7 +9,7 @@
     font-size: 2rem;
     background-color: $primary;
     color: $white;
-    z-index: 1000;
+    z-index: 900;
     border-radius: 10px;
     border: thin $info;
     font-weight: 200;
@@ -39,7 +39,10 @@
   @include response(tab-port){
     width: auto;
     height: 100%;
-  } 
+  }
+  @include response(phone) {
+    transform: translateX(-223px);
+  }
 }
 .title {
   text-shadow: .1rem .1rem .25rem $white;
@@ -52,6 +55,11 @@
   animation-name: moveInLeft;
   animation-duration: 2s;
   animation-timing-function: ease-in-out;
+  @include response(phone){
+    font-size: 4rem;
+    text-align: center;
+    width: 100%;
+  }
 }
 .sub-title {
   text-shadow: .25rem .25rem .5rem $dark;
@@ -106,6 +114,9 @@
   & span {
     width: 100vw;
     height: 100vh;
+  }
+  @include response(phone) {
+    font-size: 2.75rem;
   }
 }
 .animated-words span:nth-child(2) { 

@@ -37,6 +37,7 @@ const NavMenu =(props) => {
       <Nav as="ul" className="justify-content-start" >
         <Nav.Item as="li">
           <Nav.Link href="/" className="brandText">Team Arizona Outrigger Canoe Club</Nav.Link>
+          <Nav.Link href="/" className="brandText">Team Arizona</Nav.Link>
           <Nav.Link href="/" className="brandText">Team Arizona OCC</Nav.Link>
         </Nav.Item>
         <div className="ml-auto row rightNavItems">
@@ -56,6 +57,7 @@ const NavMenu =(props) => {
                   Login <FontAwesomeIcon icon="sign-in-alt"/>
               </Nav.Link>
             )}
+          <div className="logoOrImage">
             {loggedIn && ((paddlerImageURL) ? 
                 (<img src={paddlerImageURL} className="userProfileIcon" />) :
                 (<span><Monogram name= {paddlerName}/></span>))}
@@ -77,7 +79,8 @@ const NavMenu =(props) => {
                     <h4>Logout</h4> <FontAwesomeIcon icon="sign-out-alt" className="ml-2 fa-2x" />
                   </Button>
                 </NavDropdown.Item>
-              </NavDropdown> )}                        
+              </NavDropdown> )}
+          </div>
           </Nav.Item>
           <Nav.Item as="li">
             <NavigationOverlay />
