@@ -40,6 +40,10 @@
     width: auto;
     height: 100%;
   }
+  @include response(phone-land){
+    width: 100%;
+    height:auto
+  }
   @include response(phone) {
     transform: translateX(-223px);
   }
@@ -55,11 +59,17 @@
   animation-name: moveInLeft;
   animation-duration: 2s;
   animation-timing-function: ease-in-out;
+  @include response(phone-land){
+    font-size: 4rem;
+    text-align: center;
+    width: 100%;
+  }
   @include response(phone){
     font-size: 4rem;
     text-align: center;
     width: 100%;
   }
+
 }
 .sub-title {
   text-shadow: .25rem .25rem .5rem $dark;
@@ -114,6 +124,9 @@
   & span {
     width: 100vw;
     height: 100vh;
+  }
+  @include response(phone-land){
+    font-size: 2.75rem;
   }
   @include response(phone) {
     font-size: 2.75rem;

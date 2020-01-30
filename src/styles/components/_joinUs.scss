@@ -139,6 +139,12 @@
           font-size: 2.5rem!important;
         }
       }
+      @include response(phone-land){
+        .display-4{
+          font-size: 2rem!important;
+        }
+      }      
+
     }
 
   }
@@ -151,6 +157,9 @@
       @include response(phone){
         height: 54%;
       }
+      @include response(phone-land){
+        height: 100%;
+      }      
     }
   }  
   & :nth-child(3){
@@ -159,12 +168,19 @@
         height: 55%;
       }
     }
+    @include response(phone-land){
+      height: 100%;
+    }      
   }   
   & :nth-child(4){
     .columnText{
       @include response(phone){
         height: 60%;
       }
+      @include response(phone-land){
+        height: 100%;
+        font-size: 1.5rem;
+      }      
     }
   }
   .btn {

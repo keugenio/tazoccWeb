@@ -41,6 +41,11 @@
       @include response(phone){
         display: none
       }
+      & .fa-2x {
+      @include response(phone-land) {
+          font-size: 1.25em;
+        }
+      }
     }
   }
   & .userProfileIcon {
@@ -51,6 +56,9 @@
   }
   & .dropdown-menu {
     transform: translate3d(-100px, 50px, 0px)!important;
+    @include response(phone-land){
+      height: 200%;
+    }
   }
   & li {
     padding: .25rem .8rem;
@@ -65,6 +73,12 @@
     display: flex;
     @include response(phone){
       display: none;
+    }
+    & div {
+      @include response(phone-land){
+        font-size: 1.5rem;
+      }
+
     }
   }
 }
@@ -114,7 +128,10 @@
     text-align: center;
     font-size: 3rem;
     width: 100%;
-    padding: 0;;
+    padding: 0;
+    @include response(phone-land){
+      font-size: inherit;
+    }
   }
   &__item {
     text-shadow: .25rem .25rem .5rem $dark;
@@ -139,6 +156,10 @@
       @include response(phone){
         font-size: 2rem;
       }
+      @include response(phone-land){
+        font-size: 2rem;
+        padding: .05rem;
+      }      
     }
     &:hover,
     &:active {
@@ -205,6 +226,10 @@
       top: 0;
       transform: rotate(-135deg);
   }  
-
+  & li {
+    @include response(phone-land){
+      padding:0
+    }
+  }
 }
 
