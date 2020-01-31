@@ -28,6 +28,15 @@
   min-height: 75vh;
   & .nav {
     font-size: 2rem;
+    @include response(tab-port){
+      margin-top: 2rem;
+      background-color: rgba($white, .5);
+    }
+    @include response(phone){
+      font-size: 1.25rem;
+      background: rgba($white, .5);
+      margin-top: 2rem;
+    }
   }
 }
 .alertText {
@@ -43,6 +52,11 @@
     width: 50%;
     border: thin solid;
     box-shadow: .25rem .25rem .5rem #000;
+    @include response(phone){
+      font-size: 1.25rem;
+      width: 75%;
+      left: 5%;
+    }
   }
 }
 #practiceTabInfo-tabpane-winter{

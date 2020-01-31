@@ -77,7 +77,7 @@ const  NavigationOverlay = (props) => {
           </li>
           <li className="navigation__item">
             <Link className="navigation__link d-flex justify-content-center align-items-center" to="" onClick={closeNavOverlay}>
-                Settings <EditProfile />
+                <EditProfile location="overlay"/>
             </Link>           
           </li>              
         </ol>

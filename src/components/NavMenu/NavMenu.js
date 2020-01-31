@@ -57,10 +57,9 @@ const NavMenu =(props) => {
                 id="basic-nav-dropdown">
                 <NavDropdown.Item>
                   <div className="d-flex align-items-center">
-                  <Button className="text-dark bg-transparent border-0 d-flex align-items-center">
-                    <h4 className="text-dark">Profile</h4>
-                    <EditProfile title="Settings"/>
-                  </Button>
+                  <div className="text-dark bg-transparent border-0 d-flex align-items-center">
+                    <EditProfile location="navMenu"/>
+                  </div>
                   </div>                                    
                 </NavDropdown.Item>
                 <NavDropdown.Item>

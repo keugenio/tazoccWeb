@@ -4,7 +4,7 @@ import { Button, Row, Col, Modal} from 'react-bootstrap'
 const JoinUs = () => {
   return (
     <React.Fragment>
-      <div className="joinUsContainer bg-Tribal">
+      <div className="joinUsContainer bg-Tribal" id="joinUs">
         <Row className="bg-join_1">
           <Col lg={4} xs={12} className="bg-primary-fade box-shadow-primary columnText">
             <div className="text-center" >
@@ -14,7 +14,7 @@ const JoinUs = () => {
           </Col>
         </Row>
         <Row className="bg-join_2 d-flex justify-content-end">
-          <Col xl={5} lg={4} xs={12} className=" bg-primary-fade box-shadow-primary columnText"> 
+          <Col lg={4} xs={12} className=" bg-primary-fade box-shadow-primary columnText"> 
             <div className="text-white text-shadow-primary p-3 text-center">
               <img src="/images/hibiscus-white-icon.png" className="mb-4"/>
               <p>Team Arizona welcomes all levels of paddlers.  It's always been our mission to share the sport of outrigger paddling along with our Hawaiian culture.

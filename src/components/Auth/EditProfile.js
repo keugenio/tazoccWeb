@@ -97,6 +97,13 @@ class EditProfile extends Component {
       this.props.dispatch(setSelectedPaddler(currPaddler))
       if (this.props.user.role !== 'admin' && this.props.user.role !== 'superAdmin')
         this.props.dispatch(updateUser(currPaddler))
+    }).then(()=>{
+      Swal.fire({
+        title:'success',
+        icon:'success',
+        text:'proifle updated!',
+        timer:1000
+      })
     })
     this.setState({showModal:false})
   }
@@ -109,9 +116,11 @@ class EditProfile extends Component {
     return (
       <div>
 
-        <Button variant="dark" onClick={()=>this.handleEdit()} className="bg-transparent text-dark border-0 d-flex align-items-center">
+        {(this.props.location=="navMenu" || this.props.location=="paddlerBio") && <Button variant="dark" onClick={()=>this.handleEdit()} className="bg-transparent text-dark border-0 d-flex align-items-center">
+          <h4>Settings</h4>
           <FontAwesomeIcon icon="cog" className="ml-2 fa-2x"/>
-        </Button>
+        </Button>}
+        { this.props.location=="overlay" && this.props.user.paddlerID &&  <span onClick={()=>this.handleEdit()}>PROFILE SETTINGS</span>}
         <Modal centered show={this.state.showModal} onHide={()=>{this.setState({showModal:false})}} className="editProfile">
           <Modal.Title className="px-2 bg-success text-white d-flex justify-content-start align-items-center">
             <h2>Edit Profile</h2>

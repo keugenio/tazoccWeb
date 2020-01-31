@@ -5,7 +5,7 @@ import PaddlerBio from '../Dashboard/PaddlerBio';
 import SCORA_INFO from '../Dashboard/SCORA_INFO';
 import My_Races from '../Dashboard/My_Races';
 import LoadingIcon from '../LoadingIcon';
-
+import bgImage from '../../bgImages/bg_tribal.png';
 class Dashboard extends React.Component {
 
   constructor(props) {
@@ -47,11 +47,11 @@ class Dashboard extends React.Component {
 
 const DashboardStats = ({availableRaces, currentPage, pageReady}) => (
   <React.Fragment>
+    <img src={bgImage} className="fullsize-bg-image"></img>
     <div className="dashboardStats">
       <Card className="dashboard bg-white-1">
         <Card.Body>
           <PaddlerBio />
-          <SCORA_INFO />
           <My_Races availableRaces={availableRaces} currentPage={currentPage}/>                      
         </Card.Body>
       </Card>

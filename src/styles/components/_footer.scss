@@ -5,4 +5,8 @@ footer {
   font-size: 1.5rem;
   font-weight: 200;
   background: rgba($dark, .75);
+  @include response(big-desktop){
+    font-size: 3rem;
+    width: 75vw!important;
+  }
 }

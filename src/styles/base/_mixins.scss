@@ -26,6 +26,7 @@
 // media query manager
 /*
 0-600px phone
+812 and 375 phone land
 600-900 tablet portrait
 900-1024 tablet landscape
 1024-1200 iPad Pro
@@ -37,6 +38,7 @@
 }
 /*
 	- phone 
+	- phone-land
 	- tab-port
 	- tab-land
 	- big-desktop
@@ -44,6 +46,9 @@
 @mixin response($breakpoint) {
 	@if $breakpoint== phone{
 		@media (max-width:600px) { @content };
+	}
+	@if $breakpoint == phone-land {
+		@media (max-width:812px) and (max-height:375px) { @content } ; 
 	}
 	@if $breakpoint== tab-port {
 		@media (max-width:900px) { @content };

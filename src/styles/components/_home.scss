@@ -17,6 +17,9 @@
 
     padding: 5px 20px;
     transition-duration: 0.1s;
+    @include response(big-desktop){
+      font-size: 3rem;
+    }
     &:hover {
       font-size: 2.1rem;
       bottom: 24.5%;
@@ -41,8 +44,8 @@
     height: 100%;
   }
   @include response(phone-land){
-    width: auto;
-    height:100%;
+    width: 100%;
+    height:auto;
   }
   @include response(phone) {
     transform: translateX(-223px);
@@ -88,6 +91,9 @@
   position: absolute;
   bottom:10%;
   width: 100%;
+  @include response(big-desktop){
+    width:75vw;
+  }
 }
 @keyframes moveInLeft {
   0% {

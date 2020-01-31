@@ -68,7 +68,6 @@ class TAZCalendar extends React.Component{
             </div>
             <div style={this.state.displayEvents}>
               <Calendar
-              style={calendarStyle}
               localizer={localizer}
               events={this.props.storeEvents}
               onSelectEvent={event => handleOnSelect(event)}
@@ -90,11 +89,6 @@ const mapStateToProps = (state) => {
 //export default TAZCalendar
 export default connect(mapStateToProps)(TAZCalendar)
 
-const calendarStyle = {
-  color:'#000',
-  height:'50vh',
-  margin:'4rem',
-}
 const containerStyle = {
   background:'rgba(255,255,255, .5)',
   minHeight:'90%',

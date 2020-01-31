@@ -48,7 +48,7 @@ const Practices = () => {
             <Col xl={6} xs={12} className="practiceInfo">
             <div className="practiceTabs">
             <Tabs defaultActiveKey="map" id="practiceTabInfo">
-              <Tab eventKey="map" title="Map" className="m-4">
+              <Tab eventKey="map" title="Map">
                 <Alert show={show} variant="success">
                   <Alert.Heading>See where to park and meet us</Alert.Heading>
                   <br/>
@@ -62,7 +62,7 @@ const Practices = () => {
                     </Button>
                   </div>
                 </Alert>               
-                <GoogleApiWrapper/>                  
+                <GoogleApiWrapper />                  
               </Tab>
               <Tab eventKey="summer" title="Summer Clothing">
                 <Card className="bg-white-2">

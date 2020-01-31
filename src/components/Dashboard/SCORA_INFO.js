@@ -104,11 +104,11 @@ class SCORA_INFO extends React.Component {
     return (
       <Card className="scoraInfo">      
         <Card.Title className="d-flex justify-content-between bg-muted">
-          {this.props.selectedPaddler && (<div>SCORA Info for {this.props.selectedPaddler.name}</div>)}
+          {this.props.selectedPaddler && (<div>SCORA Info for {this.props.selectedPaddler.paddlerName}</div>)}
           {!this.props.selectedPaddler && (<div>Select a paddler to view SCORA Info</div>)}
           <div>
             {this.state.showEditable && (<Button onClick={this.toggleSave} className="btn-danger" ><FontAwesomeIcon icon="save" className="fa-2x text-white"/></Button>)}
-            {this.props.selectedPaddler && !this.state.showEditable && (<Button onClick={this.toggleEdit} className="bg-transparent border-0"><FontAwesomeIcon icon="edit" className="fa-2x text-white"/></Button>) }
+            {this.props.user.role!='' && this.props.selectedPaddler && !this.state.showEditable && (<Button onClick={this.toggleEdit} className="bg-transparent border-0"><FontAwesomeIcon icon="edit" className="fa-2x text-white"/></Button>) }
             {this.state.showEditable && (<Button onClick={this.toggleCancel} className="bg-transparent border-0" ><FontAwesomeIcon icon="window-close" className="fa-2x text-white"/></Button>)}          
           </div>
         </Card.Title>
@@ -188,8 +188,8 @@ class SCORA_INFO extends React.Component {
   }
 }
 
-const MapStateToProps = ({selectedPaddler, selectedPaddlerEditable})=> ({
-  selectedPaddler, selectedPaddlerEditable
+const MapStateToProps = ({selectedPaddler, selectedPaddlerEditable, user})=> ({
+  selectedPaddler, selectedPaddlerEditable, user
 })
 
 export default connect(MapStateToProps)(SCORA_INFO)
