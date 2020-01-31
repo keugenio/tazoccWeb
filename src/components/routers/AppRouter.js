@@ -2,8 +2,6 @@ import React from 'react'
 import { Router } from '@reach/router';
 import { connect } from 'react-redux';
 import firebase, { dbRacesToPaddlers, dbAllPaddlers, dbRaces } from '../Firebase';
-import axios from 'axios';
-import Navigation from '../NavMenu/Navigation';
 import NavMenu from "../NavMenu/NavMenu";
 import Home from '../Home';
 import AboutUs from '../AboutUs';
@@ -19,7 +17,6 @@ import Register from '../Auth/Register';
 import AdminControl from '../Dashboard/AdminControl';
 import NotFoundPage from '../NotFoundPage';
 import Footer from '../Footer';
-import SuperAdmin from '../_SuperAdmin/SuperAdmin';
 import EditProfile from '../Auth/EditProfile';
 import "babel-polyfill";
 import { setPaddlerName, setPaddlerID, setPaddlerImage, setPaddlerRole, setPaddlerAttendance, addRaceToPaddler, setSelectedPaddler, setUserReadNews, setSCORAInfo, setNewsArticles, setAmountOfNewsUserStillNeedsToRead, addRace } from '../../store/store';

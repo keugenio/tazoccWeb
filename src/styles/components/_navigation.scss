@@ -2,6 +2,8 @@
   background:rgba($white, .25);
   font-size: 1.75rem;
   padding: .5rem;
+
+
   & a {
     color:$white;
   }
@@ -32,6 +34,9 @@
       @include response(tab-port){
         display: none;
       }
+      @include response(phone){
+        display: block
+      }      
     }
     &:last-child {
       display: none;
@@ -81,8 +86,25 @@
 
     }
   }
+  & .navMenuContactButton{
+    @include response(phone){
+      display: none;
+    }
+  }
 }
+.tazNavMenuPhone {
+  background:rgba($white, .25);
+  font-size: 1.75rem;
+  padding: .5rem;
+  display: none;
+  @include response(phone){
+    display: block;
+  }
+  & a {
+    color:$white;
+  }
 
+}
 .navigation {
 
   &__checkbox {

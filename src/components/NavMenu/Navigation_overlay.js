@@ -1,6 +1,8 @@
 import React from 'react'
 import { Link } from '@reach/router';
 import { connect } from 'react-redux';
+import ContactUsButton from './ContactUsButton';
+import EditProfile from '../Auth/EditProfile';
 
 var $ = require('jquery');
 window.$ = $;
@@ -67,7 +69,17 @@ const  NavigationOverlay = (props) => {
                 <span>09</span>Admin
               </Link>
             </li>
-          )}                  
+          )}
+          <li className="navigation__item">
+            <Link className="navigation__link" to="" onClick={closeNavOverlay}>
+              <ContactUsButton location="overlay"/>
+            </Link> 
+          </li>
+          <li className="navigation__item">
+            <Link className="navigation__link d-flex justify-content-center align-items-center" to="" onClick={closeNavOverlay}>
+                Settings <EditProfile />
+            </Link>           
+          </li>              
         </ol>
       </nav>
     </div>

@@ -41,8 +41,8 @@
     height: 100%;
   }
   @include response(phone-land){
-    width: 100%;
-    height:auto
+    width: auto;
+    height:100%;
   }
   @include response(phone) {
     transform: translateX(-223px);
@@ -59,6 +59,10 @@
   animation-name: moveInLeft;
   animation-duration: 2s;
   animation-timing-function: ease-in-out;
+  @include response(tab-port){
+   width: 100%;
+   text-align: center; 
+  }
   @include response(phone-land){
     font-size: 4rem;
     text-align: center;
@@ -125,11 +129,15 @@
     width: 100vw;
     height: 100vh;
   }
+  @include response(tab-land){
+    margin-top: 1rem;
+  }
   @include response(phone-land){
     font-size: 2.75rem;
   }
   @include response(phone) {
-    font-size: 2.75rem;
+    font-size: 2.5rem;
+    margin-top: 4rem;
   }
 }
 .animated-words span:nth-child(2) { 

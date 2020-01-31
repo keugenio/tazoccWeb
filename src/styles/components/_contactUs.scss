@@ -1,5 +1,23 @@
+.contactUsModal {
+  @include response(phone){
+    width: 95vw;
+  }
+}
 .contact-form {
    label {
     color:$dark;
+  }
+}
+.contactUsButton {
+  & .btn-link:focus{
+    text-decoration: none;
+  }
+  & .btn-link:hover{
+    text-decoration: none;
+  }
+  & .contactUsLink {
+    font-size: 1.75rem;
+    color: $white;
+    text-decoration: none ;
   }
 }

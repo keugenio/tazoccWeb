@@ -1,10 +1,24 @@
 .contact-form {
+  @include response(phone-land) {
+    font-size: 1.5rem;
+  }
   & input {
     font-size: 2rem;
     border: thin solid $taz-blue;
+    @include response(phone-land) {
+      font-size: 1.5rem;
+    } 
   }
   & textarea {
     border: thin solid $taz-blue;
+    @include response(phone-land) {
+      font-size: 1.5rem;
+    } 
+  }
+  & label {
+    @include response(phone-land) {
+      font-size: 1.5rem;
+    }    
   }
 
 }

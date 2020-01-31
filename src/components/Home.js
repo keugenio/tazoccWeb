@@ -63,7 +63,7 @@ class Home extends React.Component {
       <React.Fragment>
       <div className="container-fluid homepage">
         <div className="offset-lg-1 offset-sm-0 title">Team Arizona</div>
-        <div className="text-wrapper offset-1 animated-words display-3 sub-title mt-4">
+        <div className="text-wrapper offset-1 animated-words display-3 sub-title">
             <span>Outrigger Canoe Club</span>
             <span>Ohana</span>
             <span>Outrigger Voyagers</span>

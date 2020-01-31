@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
-import { Nav, Navbar, NavDropdown, Container, Button} from 'react-bootstrap';
+import { Nav, NavDropdown, Container, Button} from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { logUserOut, clearRacesPaddlerSignedUpFor, clearAllRaces, clearSelectedPaddler } from '../../store/store';
 import Monogram from '../Monogram';
 import EditProfile from '../Auth/EditProfile';
 import NavigationOverlay from './Navigation_overlay';
+import ContactUsButton from './ContactUsButton';
 
 const MapStateToProps = ({user})=>({
   loggedIn: user.paddlerID || false,
@@ -14,7 +15,6 @@ const MapStateToProps = ({user})=>({
 })
 
 const NavMenu =(props) => {
-  const [show, setShow] = useState(false);
   const {loggedIn, paddlerName, paddlerImageURL} = props
   const logOutUser = () => {
     //clear the user and his/her races from store, logout from firebase
@@ -26,10 +26,6 @@ const NavMenu =(props) => {
     .then(() =>{
       navigate('/login')
     })
-  }  
-
-  const handleShow = () => {
-
   }
 
   return (
@@ -41,15 +37,8 @@ const NavMenu =(props) => {
           <Nav.Link href="/" className="brandText">Team Arizona OCC</Nav.Link>
         </Nav.Item>
         <div className="ml-auto row rightNavItems">
-          <Nav.Item as="li">
-            <Nav.Link eventKey="link-1" className="titleHoverMessage" onClick={()=>setShow(true)} title="Have a Question? Ask us!">
-            <div className="contactUsLink">
-              Contact TAZ
-            </div>
-            <div className="contactUsLink" onClick={()=>setShow(true)} title="Have a Question? Ask us!">
-              <FontAwesomeIcon icon="envelope-open-text" className="fa-2x"/>
-            </div>
-            </Nav.Link>
+          <Nav.Item as="li" className="navMenuContactButton">
+            <ContactUsButton location="navMenu"/>
           </Nav.Item>
           <Nav.Item as="li" className="d-flex">
             {!loggedIn && (
@@ -86,7 +75,7 @@ const NavMenu =(props) => {
             <NavigationOverlay />
           </Nav.Item>
         </div>
-      </Nav>      
+      </Nav>  
     </Container>
   );
 

@@ -27,7 +27,8 @@
 /*
 0-600px phone
 600-900 tablet portrait
-900-1200 tablet landscape
+900-1024 tablet landscape
+1024-1200 iPad Pro
 1200-1800 normal desktops
 1800+ big desktops
 */
@@ -46,6 +47,12 @@
 	}
 	@if $breakpoint== tab-port {
 		@media (max-width:900px) { @content };
+	}
+	@if $breakpoint == ipadPro-port { 
+		@media (max-width:1024px) and (max-height:1366px) { @content } ; 
+	}
+	@if $breakpoint == ipadPro-land{ 
+		@media (max-width:1366px) and (max-height:1024px) { @content } ; 
 	}
 	@if $breakpoint== tab-land {
 		@media (max-width:1200px) { @content };
