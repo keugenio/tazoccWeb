@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import GoogleApiWrapper from './GoogleApiWrapper';
 import {Tabs, Tab, Alert, Button, Row, Col, Card} from 'react-bootstrap';
 import Calendar from './Calendar';
-import bgImage from '../bgImages/bg_sunset.jpg';
+import bgImage from '../bgImages/bg_practices.jpg';
 
 const Practices = () => {
   const [show, setShow] = useState(true);

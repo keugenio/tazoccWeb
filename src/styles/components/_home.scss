@@ -39,6 +39,10 @@
   left: 0;
   opacity: .75;
   z-index:-1000; 
+  @include response(ipadPro-port){
+    width: auto;
+    height: 100%;
+  }
   @include response(tab-port){
     width: auto;
     height: 100%;
@@ -47,9 +51,7 @@
     width: 100%;
     height:auto;
   }
-  @include response(phone) {
-    transform: translateX(-223px);
-  }
+
 }
 .title {
   text-shadow: .1rem .1rem .25rem $white;

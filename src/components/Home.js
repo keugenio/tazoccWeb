@@ -1,13 +1,10 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import axios from 'axios';
-import bgImage from '../bgImages/bg_home.jpg';
-import {Modal, Button} from 'react-bootstrap';
-import EmailUs from './EmailUs';
+import bgImage from '../bgImages/bg_home_1.jpg';
+import {Button} from 'react-bootstrap';
 import JoinUs from './JoinUs';
 import moment from 'moment';
 import "babel-polyfill";
-import { setNewsArticles } from '../store/store';
 
 const thisYear = (new Date()).getFullYear();    
 const start = new Date("1/1/" + thisYear);

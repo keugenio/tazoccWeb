@@ -66,6 +66,7 @@ const Tradition = () => {
   return(
     <React.Fragment> 
       <div className="bgTraditionPage">
+      <img src={bgImage} className="fullsize-bg-image"></img>
         <Suspense fallback={<h1>loading...</h1>}>
           <div><p className="text-center text-white pageTitle">Tradition</p></div>
             <div className="container traditionContainer">

@@ -6,7 +6,7 @@ import EventInformation from './EventInformation';
 import ScoraRaces from '../data/scora_races';
 import Calendar from './Calendar';
 import {Tabs, Tab, Alert, Row, Col, Container} from 'react-bootstrap';
-import bgImage from '../bgImages/bg_nightime.jpg';
+import bgImage from '../bgImages/bg_calendar.jpg';
 
 const handleOnSelect = (event) => {
   const start = moment(event.start);
