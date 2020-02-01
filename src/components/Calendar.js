@@ -90,7 +90,5 @@ const mapStateToProps = (state) => {
 export default connect(mapStateToProps)(TAZCalendar)
 
 const containerStyle = {
-  background:'rgba(255,255,255, .5)',
-  minHeight:'90%',
-  padding:'1.5rem'
+  background:'rgba(255,255,255, .5)'
 }

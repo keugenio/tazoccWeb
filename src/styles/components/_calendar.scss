@@ -4,14 +4,65 @@
     height: 100vh; 
 }
 
+.eventCalendar{
+  & .rbc-calendar {
+    color:#000;
+    height:50vh!important;
+    margin:4rem;
+    @include response(phone-land){
+      height: 100vh!important;
+      margin: 0!important;
+      font-size: 1rem;
+    }   
+    @include response(phone){
+      margin:0;
+      height: initial!important;
+    } 
+    & .rbc-month-row {
+      @include response(phone-land){
+        overflow:visible;
+      }
+      @include response(phone){
+        overflow:visible;
+      }
+    } 
+    & .rbc-event-content{
+      @include response(tab-port){
+        font-size: 1rem;
+      }
+      @include response(phone-land){
+        font-size: 1rem;
+      }
+      @include response(phone){
+        font-size: 1rem;
+      }
+    }  
+  }
+  & .moreEventInfo{
+    @include response(tab-land){
+      margin-top: 4rem;
+    }    
+
+    & .nav-tabs {
+      background-color: rgba($white, .5);
+    }
+  }  
+}
+
 .rbc-toolbar-label {
   font-size: 2rem;
 }
 .rbc-month-view{
   height:auto!important
 }
+
 .rbc-row-content{
   z-index: 0!important;
+}
+.rbc-date-cell {
+  @include response(phone) {
+    font-size: 1.25rem;
+  }
 }
 .events { 
   & .card{

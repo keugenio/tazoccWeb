@@ -49,14 +49,14 @@ class TAZCalendar extends React.Component{
       <React.Fragment> 
         <img src={bgImage} className="fullsize-bg-image"></img>
         <div><p className="text-center text-white pageTitle">Team Arizona Calendar of Events</p></div>
-        <Container fluid={true}>
+        <Container fluid={true} className="eventCalendar">
           <Row>
-            <Col xl={6} xs={12} className="my-auto">
-                <div className="h-100">
+            <Col xl={6} xs={12} className="my-auto d-flex">
+                
                   <Calendar />             
-                </div>
+               
             </Col>
-            <Col xl={6} xs={12}>
+            <Col xl={6} xs={12} className="moreEventInfo">
               <div className="eventInfo">
                 <Tabs defaultActiveKey="events" id="practiceTabInfo">
                   <Tab eventKey="scora" title="SCORA Races">
