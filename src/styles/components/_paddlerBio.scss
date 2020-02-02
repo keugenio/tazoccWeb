@@ -3,6 +3,12 @@
     font-size: 1.5rem;
   & .h5 {
     font-size: 2.5rem;
+    @include response(phone-land){
+      font-size: 1.25rem;;
+    }    
+    @include response(phone){
+      font-size: 1.25rem;;
+    }
   }
   & .form-check {
     display: flex;
@@ -35,7 +41,20 @@
       display:none;
     }
   }
-  & .card-title {
-    padding:.5rem;
+  & .card {
+    & .card-title {
+      padding:.5rem;
+      @include response(phone){
+        font-size: 1.75rem;
+      }
+      & button {
+        & h4 {
+          @include response(phone){
+            font-size: 1rem;
+          }
+        }
+      }
+    }
+
   }
 }
