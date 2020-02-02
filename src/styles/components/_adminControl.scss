@@ -1,9 +1,11 @@
 .adminContainer {
   display:flex;
   justify-content: center;
-  min-height: 100vh;
+  min-height: 90vh;
+  min-width: 85vw;
   .dashboard{
     padding:2rem;
+    width: 100%;
     & .card-body {
       & section {
         &:not(:last-child){

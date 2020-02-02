@@ -46,7 +46,7 @@ class Dashboard extends React.Component {
 }
 
 const DashboardStats = ({availableRaces, currentPage, pageReady}) => (
-  <React.Fragment>
+  <div className="dashboardContainer">
     <img src={bgImage} className="fullsize-bg-image"></img>
     <div className="dashboardStats">
       <Card className="dashboard bg-white-1">
@@ -56,7 +56,7 @@ const DashboardStats = ({availableRaces, currentPage, pageReady}) => (
         </Card.Body>
       </Card>
     </div>
-  </React.Fragment>
+  </div>
 )
 const NotLoggedIn = () => (
   <React.Fragment>

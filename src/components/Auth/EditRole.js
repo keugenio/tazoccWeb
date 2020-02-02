@@ -52,16 +52,16 @@ class EditRole extends React.Component {
 
   render() {
     return (
-        <Form.Group className="border border-light rounded-lg w-100 p-4 d-flex flex-column align-items-center justify-content-center ">
-          <div className="mr-auto mb-2 text-light" style={fontSize_15}>Set a user's role</div>
-          <Form.Control as="select" size="lg" value="0" name="paddlerID" value={this.state.paddlerID} style={fontSize_15} onChange={this.handleChange} >
+        <Form.Group className="border border-light rounded-lg w-100 p-4 d-flex flex-column align-items-center justify-content-center editRole">
+          <div className="mr-auto mb-2 text-light">Set a user's role</div>
+          <Form.Control as="select" size="lg" value="0" name="paddlerID" value={this.state.paddlerID} onChange={this.handleChange} >
             <option disabled value="0">-- select Paddler --</option>
             { this.props.paddlers.map((paddler, i)=>(
                 <option key={i} value={paddler.paddlerID} >{paddler.paddlerName}</option>
               ))
             }
           </Form.Control>
-          <Form.Control as="select" size="lg" name="role" value={this.state.role} style={fontSize_15} onChange={this.handleChange} >
+          <Form.Control as="select" size="lg" name="role" value={this.state.role} onChange={this.handleChange} >
             <option disabled value="0">-- select Role --</option>
             <option value="user">User</option>
             <option value="superAdmin" >Super Admin</option>
@@ -72,9 +72,6 @@ class EditRole extends React.Component {
       )
     }
 
-}
-const fontSize_15 = {
-  fontSize: '1.5rem'
 }
 
 export default connect(

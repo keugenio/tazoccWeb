@@ -1,4 +1,17 @@
-
+.dashboardContainer{
+  @include response(phone){
+    margin-top: -100px;
+  }
+  .fullsize-bg-image{
+    position: fixed;
+    width: auto;
+    height: 100%;
+    top: 0;
+    left: 0;
+    opacity: .75;
+    z-index:-1000;     
+  }
+}
 .dashboardStats {
   .dashboard {
     top:10rem;
@@ -66,9 +79,16 @@
         }
       }
     }
-
-  } 
-
+    .fullsize-bg-image {
+      position: fixed;
+      width: auto;
+      height: 100%;
+      top: 0;
+      left: 0;
+      opacity: .75;
+      z-index:-1000; 
+    } 
+  }
 }
 .dashboard__scoraInfo {
   & label {

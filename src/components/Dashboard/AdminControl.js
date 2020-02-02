@@ -47,7 +47,7 @@ class AdminControl extends React.Component{
               </section>
               {this.props.user.role == "superAdmin" && (
                 <section className="border-light border rounded">
-                  <Col lg={6} md={12}>
+                  <Col lg={6} md={12} className="py-4">
                     <EditRole />
                   </Col>
                 </section>

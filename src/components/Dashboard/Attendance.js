@@ -94,7 +94,6 @@ class Attendance extends Component {
       }
     })   
   } 
-
   rotate = () => {
     let newRotation = this.state.rotation + 180;
     if(newRotation >= 360){
@@ -216,7 +215,7 @@ class Attendance extends Component {
                   <Card border="dark" text="dark" className="bg-transparent dbListOfPaddlersWhoAttended">
                     <Card.Header className="d-flex justify-content-start text-dark">
                       <span className="ml-2">{moment(this.state.date).format("ddd MM-DD-YYYY")}</span>
-                      <span className="ml-auto">
+                      <span className="ml-auto row">
                         <Badge pill variant="warning" className="ml-3">{this.state.dBpaddlersWhoPracticed.length} attended</Badge>
                         <Button className="bg-transparent border-0 ml-2 text-dark" onClick={this.showModal}><FontAwesomeIcon icon="edit" className="fa-2x"/></Button>
                       </span>

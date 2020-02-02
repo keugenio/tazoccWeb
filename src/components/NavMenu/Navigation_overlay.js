@@ -1,8 +1,11 @@
 import React from 'react'
 import { Link } from '@reach/router';
 import { connect } from 'react-redux';
+import firebase from '../Firebase';
+import { navigate } from '@reach/router';
 import ContactUsButton from './ContactUsButton';
 import EditProfile from '../Auth/EditProfile';
+import { logUserOut, clearRacesPaddlerSignedUpFor, clearAllRaces, clearSelectedPaddler } from '../../store/store';
 
 var $ = require('jquery');
 window.$ = $;
@@ -14,6 +17,22 @@ const  NavigationOverlay = (props) => {
   const loggedIn = props.user.paddlerID || false;
   const role = props.user.role;
   
+  const logOutUser = () => {
+    //clear the user and his/her races from store, logout from firebase
+    props.dispatch(logUserOut());
+    props.dispatch(clearRacesPaddlerSignedUpFor());
+    props.dispatch(clearAllRaces());
+    props.dispatch(clearSelectedPaddler());
+    firebase.auth().signOut()
+    .then(() =>{
+      navigate('/login')
+    })
+    .catch(error=>{
+      console.log(error);
+      
+    })
+  }
+
   return (
     <div className="navigation">
       <input type="checkbox" className="navigation__checkbox" id="navi-toggle"></input>
@@ -79,6 +98,11 @@ const  NavigationOverlay = (props) => {
             <Link className="navigation__link d-flex justify-content-center align-items-center" to="" onClick={closeNavOverlay}>
                 <EditProfile location="overlay"/>
             </Link>           
+          </li>
+          <li className="navigation_item">
+          <Link className="navigation__link d-flex justify-content-center align-items-center" to="" onClick={()=>logOutUser()}>
+            <span> logout</span>
+          </Link>          
           </li>              
         </ol>
       </nav>

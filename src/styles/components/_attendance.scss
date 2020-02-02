@@ -14,28 +14,55 @@
     min-width: 100%;
     & .card-header {
       font-size: 1.5rem;
+      @include response(phone){
+        font-size: 1.25rem;
+        height: 50px;
+      }
+      & .fa-2x {
+        @include response(phone){
+          font-size: 1em;
+        }
+      }
+      & .badge {
+        display: flex;
+        align-items: center;
+      }
     }
     & .card-body p {
       font-size: 1.75rem;
+      @include response(phone){
+        font-size: 1.5rem;
+      }
     }
   }
   & .comma:not(:last-child):after {
       content: ", ";
     }
   & .react-datepicker {
-    font-size: 2rem;
+    font-size: 1.5rem;
     & .react-datepicker__day-name {
-      margin: 1.5rem;
+      margin: 1rem;
+      @include response(phone){
+        margin: .3rem;
+        font-size: 1rem;
+      }
     }
     & .react-datepicker__day--selected{
       padding:.5rem;
       width:3rem;
+      @include response(phone){
+        padding:.1rem .25rem;
+        width:initial;
+      }
     }
     & .react-datepicker__day {
-      margin: 1rem 1.5rem;
+      margin: 1rem;
+      @include response(phone){
+        margin: .3rem;
+      }      
     }
     & .react-datepicker__week {
-      padding: 0rem 1rem;
+      padding: 0rem;
     }
     & .react-datepicker__current-month{
       font-size: initial;
@@ -45,8 +72,13 @@
       width: 3rem!important;
       padding:.5rem;
       color: $dark!important;
+      @include response(phone){
+        width: 2rem!important;
+        padding:.1rem .25rem;
+      }
     }
-  }    
+  }
+
 }
 .attendanceModal {
   & .modal-header button {
@@ -55,6 +87,9 @@
   }
   & .modal-title {
     font-size: 2rem;
+    @include response(phone){
+      font-size: 1.25rem;
+    }
   }
   & .modal-dialog {
     min-width: 80%;

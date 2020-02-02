@@ -30,28 +30,28 @@
       bottom: 25%;
     }
   }
-}
-.fullsize-bg-image {
-  position: fixed;
-  width: 100%;
-  height: auto;
-  top: 0;
-  left: 0;
-  opacity: .75;
-  z-index:-1000; 
-  @include response(ipadPro-port){
+  .fullsize-bg-image {
+    position: fixed;
     width: auto;
     height: 100%;
+    top: 0;
+    left: 0;
+    opacity: .75;
+    z-index:-1000; 
+    @include response(ipadPro-port){
+      width: auto;
+      height: 100%;
+    }
+    @include response(tab-port){
+      width: auto;
+      height: 100%;
+    }
+    @include response(phone-land){
+      width: 100%;
+      height:auto;
+    }
+  
   }
-  @include response(tab-port){
-    width: auto;
-    height: 100%;
-  }
-  @include response(phone-land){
-    width: 100%;
-    height:auto;
-  }
-
 }
 .title {
   text-shadow: .1rem .1rem .25rem $white;
