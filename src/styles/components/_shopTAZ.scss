@@ -1,11 +1,25 @@
-.store {
-  width:90%;
-  min-height: 75vh;
-  background:rgba($white, .75);
-  border: none;
-  border-radius: 15px;
-  margin-right: auto;
-  margin-left: auto;
-}
+.storePage{
+  & img.fullsize-bg-image{
+    height: 100%;
+    width: auto;
+  }
+  & .storeContainer{
+    background:rgba($white, .75);
+    min-height: 90vh;
+    max-width: 90vw;
+    margin:auto;
 
+    & .store {
+      width:90vw;
+      min-height: 75vh;
+      border: none;
+      border-radius: 15px;
+      margin-right: auto;
+      margin-left: auto;
+      @include response(tab-land) {
+        min-height: 90vh;
+      }
+    }
+  }
+}
   
