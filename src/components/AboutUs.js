@@ -1,5 +1,5 @@
 import React, { useState, Suspense } from 'react';
-import { Card, Modal} from 'react-bootstrap';
+import { Card, Row, Col, CardColumns} from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import bgImage from '../bgImages/bg_high_five.jpg';
 
@@ -15,12 +15,12 @@ const AboutUs = () => {
   return(
     <React.Fragment> 
       <Suspense fallback={<h1>loading...</h1>}>
-        <div className="bgOverlayColor">
+        <div className="bgOverlayColor aboutUs">
           <img src={bgImage} className="fullsize-bg-image"></img>
           <div><p className="text-center text-white pageTitle">About TAZ</p></div>
           <div className="container aboutUsContainer">
-            <section className="history section">
-                <h1 className="display-4">Our History</h1>
+            <section className="history_section">
+                <div className="section_title">Our History</div>
                 <img src='/images/coach_allen.jpg' className="image-fluid float-left mr-3"/>
                 <p>
                   Team Arizona began with the vision of one man.  Coach Allen Abad started paddling in the mid 1960’s with Leeward Kai Canoe Club. 
@@ -32,17 +32,25 @@ const AboutUs = () => {
                   and strives to honor him each and every time we are in the canoe together.
                 </p>
             </section>
-            <section className="mission section">
-              <h1 className="display-4">Our Mission</h1>
-              <FontAwesomeIcon icon="quote-left" size="4x" className="float-left mr-3" />
-              <FontAwesomeIcon icon="quote-right" size="4x" className="float-right" /> 
-              <p>
-                to promote the Hawaiian culture through competitive and recreational outrigger canoe paddling 
-                for youth (keikis), family (ohana), and the community
-              </p>                       
+            <section className="mission_section">
+              <div className="section_title">Our Mission</div>
+                <Row>
+                  <Col lg={2} md={1}>
+                    <FontAwesomeIcon icon="quote-left" size="3x"/>
+                  </Col>
+                  <Col className="d-flex justify-content-center text-center">
+                    <p>
+                      to promote the Hawaiian culture through competitive and recreational outrigger canoe paddling 
+                      for youth (keikis), family (ohana), and the community
+                    </p> 
+                  </Col>
+                  <Col lg={2} md={1}>
+                    <FontAwesomeIcon icon="quote-right" size="3x"/>  
+                  </Col>
+                </Row>                                                                            
             </section>   
-            <section id="philosophies" className="section">
-              <h1 className="display-4">Our Philosopies</h1>
+            <section id="philosophies" className="philosophies_section">
+              <div className="section_title">Our Philosopies</div>
               <ul>
                 <li>Hōʻihi - Respect:  Treat people, places, and things like they are special.</li>
                 <li>Pono - Integrity : Choose right over wrong.</li>
@@ -54,23 +62,23 @@ const AboutUs = () => {
                 <li>Moʻomeheu - Culture:  Promote competitive and recreational outrigger canoe paddling.</li>
               </ul>                    
             </section>    
-            <section id="board" className="section">
-              <h1 className="display-4">Board of Directors</h1>
+            <section id="board" className="board_section">
+              <div className="section_title">Board of Directors</div>
               <div className="boardMembers d-flex flex-row flex-wrap justify-content-center" >
-                {BoardMembers.map((member, i)=>(
-                  <Card key={i}>
-                    <Card.Img variant="top" src={member.img}/>
-                    <Card.Body>
-                      <div>
-                        <div className="boardName">{member.name}</div><div className="boardTitle">{member.title}</div>
-                      </div>
-                    </Card.Body>
-                  </Card>
-                ))}
+                  {BoardMembers.map((member, i)=>(
+                    <Card key={i}>
+                      <Card.Img variant="top" src={member.img}/>
+                      <Card.Body>
+                        <div>
+                          <div className="boardName">{member.name}</div><div className="boardTitle">{member.title}</div>
+                        </div>
+                      </Card.Body>
+                    </Card>
+                    ))}
               </div>
               <hr />
               <div className="text-center">
-                <a className="btn btn-warning" href="/docs/BYLAWS-OF-TEAM-ARIZONA-OUTRIGGER-CANOE-CLUB_April_2018.pdf" style={aLink}>BYLAWS (April 2018)</a>
+                <a className="btn btn-warning" href="/docs/BYLAWS-OF-TEAM-ARIZONA-OUTRIGGER-CANOE-CLUB_April_2018.pdf" target="_blank">BYLAWS (April 2018)</a>
               </div>            
             </section>                     
           </div>
@@ -81,10 +89,3 @@ const AboutUs = () => {
 }
 
 export { AboutUs as default }
-
-const aLink = {
-  width:'50%',
-  cursor:"pointer",
-  fontSize:'2rem',
-  border:'thin solid #0d47a1'
-}
