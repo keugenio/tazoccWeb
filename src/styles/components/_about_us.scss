@@ -9,137 +9,136 @@
   section:not(:first-child) {
     margin-top: 3rem;
   }
-}
-section {
-  color: $primary;
-  font-size: 2rem;
-  text-shadow: .05rem .05rem .05rem $info;
-  background: rgba($white, .5);
-  padding: 4rem;
-  border-radius: 10px;
-  border: thin solid $white;
-  font-family: 'Roboto', 'sans-serif';
-  box-shadow: .35rem .25rem .5rem rgba($dark, .5);
-  &:last-child{
-    margin: 3rem;
-  }
-  @include response(phone){
-    font-size: 1.5rem;
-  }
-  & h1 {
-    margin-bottom: 2rem;
-  }
-  & .section_title{
-    font-size: 3.5rem;
-    font-weight: 300;
-    line-height: 1.2;
+  section {
+    color: $primary;
+    font-size: 2rem;
+    text-shadow: .05rem .05rem .05rem $info;
+    background: rgba($white, .5);
+    padding: 4rem;
+    border-radius: 10px;
+    border: thin solid $white;
+    font-family: 'Roboto', 'sans-serif';
+    box-shadow: .35rem .25rem .5rem rgba($dark, .5);
+    &:last-child{
+      margin: 3rem;
+    }
     @include response(phone){
-      font-size: 2.5rem;
-    }
-  }
-  &.mission_section{
-    & .row{     
-      & .col-md-1{
-        @include response(tab-port){
-          padding: 0;
-        }
-      }
-    }
-    & .row > :first-child{
-      display: flex;
-      justify-content: flex-end;
-      @include response(phone){
-        justify-content: flex-start;
-      }
-    }
-    & .row > :last-child{
-      display: flex;
-      justify-content: flex-start;
-      @include response(phone){
-        justify-content: flex-end;
-      }
-    }
-    & svg{
-      &.fa-3x{
-        @include response(tab-port){
-          font-size: 2em;
-        }
-        @include response(phone){
-          font-size: 2rem;
-        }
-      }      
-    }
-  }
-  &.board_section{
-    @include response(phone){
-      padding: 1rem;
-    }
-    & .boardName {
-      font-family: 'Alegreya';
-      margin-bottom: .75rem;
-      color: $white;
-      text-shadow: .25rem .25rem .25rem $primary;
-      width: 100%;      
-      line-height: 1.0;
-      @include response(tab-port){
-        font-size: 1.3rem;
-      }
-    }
-    & .boardTitle{
       font-size: 1.5rem;
-      text-shadow: .05rem .05rem $dark;
-      margin-top: -1rem;
-      line-height: 1.5rem;      
-      margin-top:.5rem;
-      @include response(tab-port){
-        font-size: 1.3rem;
-      }      
-      @include response(phone-land){
-        font-size: 1.1rem;
+    }
+    & h1 {
+      margin-bottom: 2rem;
+    }
+    & .section_title{
+      font-size: 3.5rem;
+      font-weight: 300;
+      line-height: 1.2;
+      @include response(phone){
+        font-size: 2.5rem;
       }
     }
-    & .boardMembers {
-      & .card{
-        background: rgba($primary, .5);
-        padding: 1rem;
-        width: 23%;
-        margin-left: .5rem;
-        margin-top: .5rem;
-        @include boxShadow($primary);
-        @include response(phone){
-          width: 100%;
-          padding: .5rem;
-        }
-        & .card-body{
-          @include response(phone-land){
+    &.mission_section{
+      & .row{     
+        & .col-md-1{
+          @include response(tab-port){
             padding: 0;
           }
         }
       }
-      & .card-text {
-        position: absolute;
-        top:75%;
+      & .row > :first-child{
+        display: flex;
+        justify-content: flex-end;
+        @include response(phone){
+          justify-content: flex-start;
+        }
       }
-      & img {
-        border: thin solid $primary;
-        border-radius: 50%;
-        box-shadow: .25rem .25rem .25rem rgba($taz-blue, .5);
+      & .row > :last-child{
+        display: flex;
+        justify-content: flex-start;
+        @include response(phone){
+          justify-content: flex-end;
+        }
       }
-    }    
-  }
-  & .btn {
-    width:50%;
-    cursor:pointer;
-    font-size:2rem;
-    border:thin solid $primary;
-    @include boxShadow($success);
-    @include response(phone){
-      width:75%;
-      font-size: 1.5rem;
+      & svg{
+        &.fa-3x{
+          @include response(tab-port){
+            font-size: 2em;
+          }
+          @include response(phone){
+            font-size: 2rem;
+          }
+        }      
+      }
+    }
+    &.board_section{
+      @include response(phone){
+        padding: 1rem;
+      }
+      & .boardName {
+        font-family: 'Alegreya';
+        margin-bottom: .75rem;
+        color: $white;
+        text-shadow: .25rem .25rem .25rem $primary;
+        width: 100%;      
+        line-height: 1.0;
+        @include response(tab-port){
+          font-size: 1.3rem;
+        }
+      }
+      & .boardTitle{
+        font-size: 1.5rem;
+        text-shadow: .05rem .05rem $dark;
+        margin-top: -1rem;
+        line-height: 1.5rem;      
+        margin-top:.5rem;
+        @include response(tab-port){
+          font-size: 1.3rem;
+        }      
+        @include response(phone-land){
+          font-size: 1.1rem;
+        }
+      }
+      & .boardMembers {
+        & .card{
+          background: rgba($primary, .5);
+          padding: 1rem;
+          width: 23%;
+          margin-left: .5rem;
+          margin-top: .5rem;
+          @include boxShadow($primary);
+          @include response(phone){
+            width: 100%;
+            padding: .5rem;
+          }
+          & .card-body{
+            @include response(phone-land){
+              padding: 0;
+            }
+          }
+        }
+        & .card-text {
+          position: absolute;
+          top:75%;
+        }
+        & img {
+          border: thin solid $primary;
+          border-radius: 50%;
+          box-shadow: .25rem .25rem .25rem rgba($taz-blue, .5);
+        }
+      }    
+    }
+    & .btn {
+      width:50%;
+      cursor:pointer;
+      font-size:2rem;
+      border:thin solid $primary;
+      @include boxShadow($success);
+      @include response(phone){
+        width:75%;
+        font-size: 1.5rem;
+      }
     }
   }
 }
-
 .history {
   & img {
     box-shadow: .35rem .25rem .5rem rgba($dark, .5);

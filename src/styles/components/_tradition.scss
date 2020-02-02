@@ -1,87 +1,247 @@
-.traditionContainer {
-  & .nav-tabs {
-    font-size: 2rem;
-    @include textShadow($dark);
+.bgTraditionPage{
+  margin-bottom: 3rem;
+  & .pageTitle{
+    padding-top: 3rem;
+    @include response(phone-land){
+      font-size: 3rem;
+    }
+  }
+  & .fullsize-bg-image{
+    height: 100%;
+    width: auto;
+    transform: translateX(-110px);
+    @include response(ipadPro-port){
+      transform: translateX(-350px);
+    }
+    @include response(tab-land){
+      transform: translateX(-150px);
+    }
+    @include response(tab-port){
+      transform: translateX(-250px);
+    } 
+    @include response(phone-land){
+      width: 100%;
+      height: auto;
+      transform: translateX(0);
+    }   
+  }
 
-    & a {
-      color: $white;     
-      text-decoration: none;
+  .traditionContainer {
+    & .nav-tabs {
+      font-size: 2rem;
+      @include textShadow($dark);
+      @include response(phone){
+        font-size: 1.5rem;
+        flex-wrap: nowrap;
+      }
+      & a {
+        color: $white;     
+        text-decoration: none;
+      }
     }
-  }
-  & .nav-link.active {
-    background-color: rgba($white, .5)!important;
-    text-shadow: none;
-  }
-}
-.terms {
-  width: 90%;
-  margin-left:auto;
-  margin-right: auto;
-  font-size: 1.5rem;
-  color: $white;
-  & .card {
-    @include boxShadow($dark);
-    color:$dark;
-    background: rgba($warning, .75);
-  }
-  & .card-text{
-    font-size: 1.25rem;
-  }
-}
-#canoeTypes {
-  margin-top: 4rem;
-  height: 50vh;
-  & .carousel {
-    position: relative;
-  }
-  & .carousel-inner {
-    width: 75%;
-    margin-left: auto;
-    margin-right: auto;
-  }
-  & .card-body {
-    font-size: 2rem;
-  }
-  & .carousel-indicators {
-    top: 0;
-    bottom:unset;
-    position: relative;
-    & li {
-      background-color: $warning!important;
-      opacity:1;
+    & .tab-content {
+      background-color: rgba($white, .5);
+      display: flex;
+      & .tab-pane {
+        width: 100%;
+      }
     }
-  }
-  & .carousel-item {
-    & .card-body {
+    & .nav-link.active {
+      background-color: rgba($white, .5)!important;
+      text-shadow: none;
+    }
+    .terms {
+      width: 90%;
+      margin-left:auto;
+      margin-right: auto;
+      font-size: 1.5rem;
+      color: $primary;
+      text-shadow: .05rem .05rem .05rem $info;
+      background: rgba($white, .5); 
+      padding: 1rem;
+      margin-top: 2rem;
+      margin-bottom: 2rem;  
+      @include response(phone){
+        padding: .25rem;
+      }    
+      & .card {
+        @include boxShadow($dark);
+        color:$dark;
+        background: rgba($warning, .75);
+      }
+      & .card-text{
+        font-size: 1.25rem;
+      }
+    }
+    .canoeTypes {
+      margin-top: 2rem;
+      margin-bottom: 2rem;
+      & .carousel_cards{
+        @include response(phone){
+          display: none;
+        }
+        & .carousel {
+          position: relative;
+        }
+        & .carousel-inner {
+          width: 75%;
+          margin-left: auto;
+          margin-right: auto;
+        }
+        & .card-body {
+          font-size: 2rem;
+          @include response(phone-land){
+            font-size: 1.25rem;
+          }
+          h1{
+            @include response(phone-land){
+              font-size: 1.75rem;
+            }          
+          }
+        }
+        & .carousel-indicators {
+          top: 0;
+          bottom:unset;
+          position: relative;
+          & li {
+            background-color: $warning!important;
+            opacity:1;
+          }
+        }
+        & .carousel-item {
+          & .card-body {
+            color:$primary;
+          }
+        }
+      }
+      & .individual_cards{
+        display: none;
+        color: $primary;
+        @include response(phone){
+          display: block;
+        }
+        & .card {
+          & .card-body {
+            font-size: 2rem;
+            @include response(phone-land){
+              font-size: 1.25rem;
+            }
+            @include response(phone){
+              font-size: 1.25rem;
+            }            
+            h1{
+              @include response(phone-land){
+                font-size: 1.75rem;
+              }
+              @include response(phone){
+                font-size: 1.75rem;
+              }                        
+            }
+          }          
+        }
+        & .card:not(:last-child){
+          margin-bottom: 2rem;
+        }
+      }
+    }    
+    .positions{
       color:$primary;
+      padding: 2rem;
+      font-size: 1.5rem;
+      text-shadow: .05rem .05rem .05rem $info;
+      background: rgba($white, .5); 
+      padding: 1rem;       
+      @include response(phone){
+        padding: 1rem;
+      }
+      & h1 {
+        @include response(phone){
+          font-size: 2rem;
+        }
+      }
+      & .carousel_cards {
+        @include response(phone){
+          display: none;
+        }
+        & .card {
+          width: 75%;
+          margin-left: auto;
+          margin-right: auto;
+          background: rgba($info, .5);
+          padding:2rem;
+          color: $dark;
+          @include response(phone){
+            width: initial;
+          }
+          & .card-title {
+            font-size: 2rem;
+          }
+          & .card-text {
+            font-size: 1.5rem;
+          }
+        }
+        & h1 {
+          @include response(phone-land){
+            font-size: 1.75rem;
+          }
+          @include response(phone){
+            font-size: 1.75rem;
+          }        
+        }
+      }
+      & .individual_cards{
+        display: none;
+        @include response(phone){
+          display: block;
+        }
+        & .card {
+          @include response(phone){
+            padding: 1.25rem;
+          }
+          & .card-title{
+            @include response(phone){
+              font-size: 1.75rem;
+
+            }
+          }
+          & .card-text{
+            @include response(phone){
+              font-size: 1.5rem;
+            }
+          }
+          & .card-body {
+            font-size: 2rem;
+            @include response(phone-land){
+              font-size: 1.25rem;
+            }
+            @include response(phone){
+              font-size: 1.25rem;
+            }            
+            h1{
+              @include response(phone-land){
+                font-size: 1.75rem;
+              }
+              @include response(phone){
+                font-size: 1.75rem;
+              }                        
+            }
+          }          
+        }
+        & .card:not(:last-child){
+          margin-bottom: 2rem;
+        }        
+      }
     }
   }
 }
+
+
 .otherTerms{
   & .card {
     background: rgba($primary, .5);
     color: white;
     & .card-title {
       text-transform: uppercase;
-    }
-  }
-}
-.positions{
-  color:$white;
-  padding: 2rem;
-  font-size: 1.5rem;
-  & .card {
-    width: 75%;
-    margin-left: auto;
-    margin-right: auto;
-    background: rgba($success, .5);
-    padding:2rem;
-    color: $white;
-    & .card-title {
-      font-size: 2rem;
-    }
-    & .card-text {
-      font-size: 1.5rem;
     }
   }
 }

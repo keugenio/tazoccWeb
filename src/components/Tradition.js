@@ -91,8 +91,8 @@ const Tradition = () => {
                 </section>
               </Tab>
               <Tab eventKey="canoes" title="Types of canoes">
-                <div id="canoeTypes">
-                  <Carousel interval={10000} fade={true} indicators={false} controls={true} className="h-100">
+                <div className="canoeTypes">
+                  <Carousel interval={10000} fade={true} indicators={false} controls={true} className="h-100 carousel_cards">
                       { canoes.map((canoe, i) => (
                         <Carousel.Item key={i}>
                           <Card>
@@ -105,6 +105,17 @@ const Tradition = () => {
                         </Carousel.Item>
                       ))}
                   </Carousel>
+                  <div className="individual_cards">
+                    { canoes.map((canoe, i) => (
+                        <Card key={i}>
+                          <Card.Img src={canoeImgs[i]} className="img-fluid"></Card.Img>
+                          <Card.Body>
+                            <h1>{canoe.name}</h1>
+                            <p>{canoe.meaning}</p>
+                          </Card.Body>
+                        </Card>
+                    ))}                  
+                  </div>
               </div>
               </Tab>
               <Tab eventKey="positions" title="Paddler Positions">
@@ -112,7 +123,7 @@ const Tradition = () => {
                   <h1>Six paddlers in the canoe, who does what?</h1>
                   <p>Six paddlers in the canoe all working in unison, but each with a role to play. Each paddler from seat number 1-5, paddles alternately on the opposite side from each other.</p>
                   <div className="responsibility">
-                    <Carousel interval={10000} fade={true} indicators={false} controls={true}>
+                    <Carousel interval={10000} fade={true} indicators={false} controls={true} className="carousel_cards">
                       { oc6responsibilities.map((responsibility, i) => (
                         <Carousel.Item key={i}>
                           <Card>
@@ -121,7 +132,15 @@ const Tradition = () => {
                           </Card>
                         </Carousel.Item>
                       ))}                  
-                    </Carousel>          
+                    </Carousel>    
+                    <div className="individual_cards">
+                      {oc6responsibilities.map((responsibility, i) => (
+                        <Card>
+                          <Card.Title>{responsibility.title}</Card.Title>
+                          <Card.Text>{responsibility.responsibility}</Card.Text>
+                        </Card>
+                      ))}                    
+                    </div>      
                   </div>
                 </section>
               </Tab>
