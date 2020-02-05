@@ -4,12 +4,32 @@
   }
   .fullsize-bg-image{
     position: fixed;
-    width: auto;
-    height: 100%;
+    width: 100%;
+    height: auto;
     top: 0;
     left: 0;
     opacity: .75;
-    z-index:-1000;     
+    z-index:-1000; 
+    @include response(ipadPro-land){
+      width: 100%;
+      height: auto;
+    }
+    @include response(ipadPro-port){
+      width: auto;
+      height: 100%;
+    }
+    @include response(tab-port){
+      width: 100%;
+      height: auto;
+    }
+    @include response(tab-land){
+      width: auto;
+      height: 100%;
+    }
+    @include response(phone-land){
+      width: 100%;
+      height:auto;
+    }
   }
 }
 .dashboardStats {

@@ -190,3 +190,21 @@
     vertical-align: top;
   }
 }
+.userRaces{
+  & .card{
+    & .card-title{
+      h2{
+        @include response(tab-land){
+          font-size: 1.75rem;
+        }
+      }
+    }
+    & .card-body{
+      & table {
+        @include response(tab-land){
+          font-size: 1.25rem;
+        }
+      }
+    }
+  }
+}

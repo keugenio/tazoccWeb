@@ -9,7 +9,7 @@ const My_Races = (props) => {
     <Card text="dark" style={{fontSize:'2rem'}}  className="bg-white-3">
       <Card.Title className="text-white bg-primary d-flex justify-content-between">My Races<AddRaceToPaddler /></Card.Title>
       <Card.Body>
-        <CardDeck>
+        <CardDeck className="userRaces">
         
         { props.availableRaces.map((race)=>{
           return (

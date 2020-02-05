@@ -1,7 +1,28 @@
 .storePage{
   & img.fullsize-bg-image{
-    height: 100%;
-    width: auto;
+    position: fixed;
+    width: 100%;
+    height: auto;
+    top: 0;
+    left: 0;
+    opacity: .75;
+    z-index:-1000; 
+    @include response(ipadPro-land){
+      width: auto;
+      height: 100%;
+    }    
+    @include response(ipadPro-port){
+      width: 100%;
+      height: auto;
+    }
+    @include response(tab-land){
+      width: auto;
+      height: 100%;
+    }
+    @include response(phone-land){
+      width: 100%;
+      height: auto;
+    }    
   }
   & .storeContainer{
     background:rgba($white, .75);
