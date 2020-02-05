@@ -6,24 +6,31 @@
       font-size: 3rem;
     }
   }
-  & .fullsize-bg-image{
-    height: 100%;
-    width: auto;
-    transform: translateX(-110px);
-    @include response(ipadPro-port){
-      transform: translateX(-350px);
+  & .fullsize-bg-image {
+    position: fixed;
+    width: 100%;
+    height: auto;
+    top: 0;
+    left: 0;
+    opacity: .75;
+    z-index:-1000; 
+    @include response(ipadPro-land){
+      width: auto;
+      height: 100%;
     }
-    @include response(tab-land){
-      transform: translateX(-150px);
+    @include response(ipadPro-port){
+      width: auto;
+      height: 100%;
     }
     @include response(tab-port){
-      transform: translateX(-250px);
-    } 
+      width: auto;
+      height: 100%;
+    }
     @include response(phone-land){
       width: 100%;
-      height: auto;
-      transform: translateX(0);
-    }   
+      height:auto;
+    }
+  
   }
 
   .traditionContainer {
@@ -54,7 +61,6 @@
       width: 90%;
       margin-left:auto;
       margin-right: auto;
-      font-size: 1.5rem;
       color: $primary;
       text-shadow: .05rem .05rem .05rem $info;
       background: rgba($white, .5); 
@@ -63,6 +69,7 @@
       margin-bottom: 2rem;  
       @include response(phone){
         padding: .25rem;
+        font-size: 1.25rem;
       }    
       & .card {
         @include boxShadow($dark);
@@ -77,6 +84,7 @@
       margin-top: 2rem;
       margin-bottom: 2rem;
       & .carousel_cards{
+        @include boxShadow($dark);
         @include response(phone){
           display: none;
         }
@@ -109,14 +117,17 @@
           }
         }
         & .carousel-item {
-          & .card-body {
-            color:$primary;
+          & .card{
+            & .card-body {
+              color:$primary;
+            }
           }
         }
       }
       & .individual_cards{
         display: none;
         color: $primary;
+        @include boxShadow($dark);
         @include response(phone){
           display: block;
         }
@@ -147,7 +158,6 @@
     .positions{
       color:$primary;
       padding: 2rem;
-      font-size: 1.5rem;
       text-shadow: .05rem .05rem .05rem $info;
       background: rgba($white, .5); 
       padding: 1rem;       
@@ -159,58 +169,27 @@
           font-size: 2rem;
         }
       }
-      & .carousel_cards {
-        @include response(phone){
-          display: none;
-        }
-        & .card {
-          width: 75%;
-          margin-left: auto;
-          margin-right: auto;
-          background: rgba($info, .5);
-          padding:2rem;
-          color: $dark;
-          @include response(phone){
-            width: initial;
-          }
-          & .card-title {
-            font-size: 2rem;
-          }
-          & .card-text {
-            font-size: 1.5rem;
-          }
-        }
-        & h1 {
-          @include response(phone-land){
-            font-size: 1.75rem;
-          }
-          @include response(phone){
-            font-size: 1.75rem;
-          }        
-        }
-      }
       & .individual_cards{
-        display: none;
-        @include response(phone){
-          display: block;
-        }
         & .card {
+          padding: 1.5rem;   
+          @include boxShadow($dark);       
           @include response(phone){
             padding: 1.25rem;
           }
           & .card-title{
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: $danger;
             @include response(phone){
               font-size: 1.75rem;
-
             }
           }
           & .card-text{
+            font-size: 1.25rem;            
             @include response(phone){
-              font-size: 1.5rem;
+              font-size: 1rem;
             }
           }
           & .card-body {
-            font-size: 2rem;
             @include response(phone-land){
               font-size: 1.25rem;
             }

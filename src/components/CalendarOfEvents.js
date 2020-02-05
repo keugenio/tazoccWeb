@@ -47,9 +47,9 @@ class TAZCalendar extends React.Component{
   render(){
     return(
       <React.Fragment> 
+      <Container fluid={true} className="eventCalendar">
         <img src={bgImage} className="fullsize-bg-image"></img>
         <div><p className="text-center text-white pageTitle">Team Arizona Calendar of Events</p></div>
-        <Container fluid={true} className="eventCalendar">
           <Row>
             <Col xl={6} xs={12} className="my-auto d-flex">
                 

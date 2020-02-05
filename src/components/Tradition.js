@@ -1,6 +1,6 @@
 import React, { useState, Suspense } from 'react'
 import bgImage from '../bgImages/bg_afternoon.jpg';
-import { Card, CardColumns, Carousel, CarouselItem, Tabs, Tab } from 'react-bootstrap';
+import { Card, CardColumns, Carousel, CardGroup, Tabs, Tab } from 'react-bootstrap';
 import canoe1 from '../images/canoe_1.jpg';
 import canoe2 from '../images/canoe_2.jpg';
 import canoe3 from '../images/canoe_3.jpg';
@@ -66,10 +66,10 @@ const Tradition = () => {
   return(
     <React.Fragment> 
       <div className="bgTraditionPage">
-      <img src={bgImage} className="fullsize-bg-image"></img>
+        <img src={bgImage} className="fullsize-bg-image"></img>
         <Suspense fallback={<h1>loading...</h1>}>
           <div><p className="text-center text-white pageTitle">Tradition</p></div>
-            <div className="container traditionContainer">
+            <div className="traditionContainer">
             <Tabs defaultActiveKey="terms" id="uncontrolled-tab-example">
               <Tab eventKey="terms" title="Terms">
                 <section className="terms">
@@ -122,25 +122,15 @@ const Tradition = () => {
                 <section className="positions">
                   <h1>Six paddlers in the canoe, who does what?</h1>
                   <p>Six paddlers in the canoe all working in unison, but each with a role to play. Each paddler from seat number 1-5, paddles alternately on the opposite side from each other.</p>
-                  <div className="responsibility">
-                    <Carousel interval={10000} fade={true} indicators={false} controls={true} className="carousel_cards">
-                      { oc6responsibilities.map((responsibility, i) => (
-                        <Carousel.Item key={i}>
-                          <Card>
-                            <Card.Title>{responsibility.title}</Card.Title>
-                            <Card.Text>{responsibility.responsibility}</Card.Text>
-                          </Card>
-                        </Carousel.Item>
-                      ))}                  
-                    </Carousel>    
-                    <div className="individual_cards">
+                  <div className="responsibility"> 
+                    <CardColumns className="individual_cards">
                       {oc6responsibilities.map((responsibility, i) => (
-                        <Card>
+                        <Card bg="info" key={i}>
                           <Card.Title>{responsibility.title}</Card.Title>
                           <Card.Text>{responsibility.responsibility}</Card.Text>
                         </Card>
                       ))}                    
-                    </div>      
+                    </CardColumns>      
                   </div>
                 </section>
               </Tab>

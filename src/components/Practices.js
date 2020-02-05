@@ -9,13 +9,13 @@ const Practices = () => {
 
   return(
     <React.Fragment> 
-      <div className="bgOverlayColor">
-        <img src={bgImage} className="fullsize-bg-image"></img>
+    <div className="container-fluid practicesPage">
         <div><p className="text-center text-white pageTitle">Practices</p></div>
+        <img src={bgImage} className="fullsize-bg-image"></img>
         <div className="container-fluid practices ">
           <Row>
             <Col xl={6} xs={12}>
-              <Card className="bg-white-2">
+              <Card className="bg-white-4">
                 <Card.Title><h2>Team Arizona holds Open Practices</h2></Card.Title>
                 <Card.Body>                    
                     <ul className="practiceTimes">
@@ -31,7 +31,7 @@ const Practices = () => {
                     </ul>               
                 </Card.Body>
               </Card>
-              <Card className="bg-white-2 directions">
+              <Card className="bg-white-4 directions">
                 <Card.Header><h2>Practices are held on the north side of Tempe Town Lake at the marina.</h2></Card.Header>
                 <Card.Body>
                 <Card.Title><h2>Directions to 550 East Tempe Town Lake, Tempe, AZ 85251</h2></Card.Title>
@@ -46,7 +46,7 @@ const Practices = () => {
               </Card> 
             </Col>       
             <Col xl={6} xs={12} className="practiceInfo">
-            <div className="practiceTabs">
+            <div className="practiceTabs bg-white-4">
             <Tabs defaultActiveKey="map" id="practiceTabInfo">
               <Tab eventKey="map" title="Map">
                 <Alert show={show} variant="success">
@@ -65,7 +65,7 @@ const Practices = () => {
                 <GoogleApiWrapper />                  
               </Tab>
               <Tab eventKey="summer" title="Summer Clothing">
-                <Card className="bg-white-2">
+                <Card className="bg-white-4">
                   <Card.Title>What to wear when it gets warm</Card.Title>
                   <Card.Body>
                     <div className="w-100 d-flex justify-content-center">
@@ -81,7 +81,7 @@ const Practices = () => {
                 </Card>
               </Tab>
               <Tab eventKey="winter" title="Winter Clothing">
-                <Card className="bg-white-2">
+                <Card className="bg-white-4">
                   <Card.Title>What to wear when it gets cold</Card.Title>
                   <Card.Body>
                     <div className="w-100 d-flex justify-content-center">
@@ -102,7 +102,7 @@ const Practices = () => {
               <Tab eventKey="practiceSchedule" title="Practice Schedule">
                 <Card className="bg-white-2">
                   <Card.Body>
-                    <Calendar></Calendar>
+                    <Calendar/>
                   </Card.Body>
                 </Card>               
               </Tab>              
@@ -110,7 +110,7 @@ const Practices = () => {
           </div>
           </Col>
           </Row>
-          </div>
+        </div>
       </div>
 
       </React.Fragment>

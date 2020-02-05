@@ -7,6 +7,7 @@ import moment from 'moment';
 import { addReadNewsArticle, subtractAmountToBeRead } from '../store/store';
 import NewIcon from './NewIcon';
 import { dbAllPaddlers } from './Firebase'
+import Calendar from './Calendar';
 
 const ls = require('local-storage');
 
@@ -108,6 +109,7 @@ class News extends React.Component {
 
       return (
         <div className="news">
+        <Calendar className="h-100" style={{minHeight:'100vh'}}/>
           <div><p className="text-center text-white pageTitle">News</p></div>
           <CardColumns className="100%">
           {news.map((article, i)=>{

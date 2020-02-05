@@ -187,7 +187,7 @@ class RaceDashBoard extends Component {
                   </span>
                 ))}
               </Col> 
-              <Col lg={5} sm={12} className="border-left-2 d-flex align-items-center justify-content-end">
+              <Col lg={5} sm={12} className="border-left-2 d-flex align-items-center justify-content-end addPaddlerContainer">
                 <AddPaddler raceID={this.props.raceID} />
               </Col>         
             </Card.Body>        

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Button, Modal, Form, InputGroup} from 'react-bootstrap'
+import { Button, Modal, Form, InputGroup, Col, Row} from 'react-bootstrap'
 import { dbRacesToPaddlers } from '../../Firebase';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { addPaddlerToRace, updateRace } from '../../../store/store';
@@ -62,29 +62,37 @@ class AddPaddler extends Component {
   render() {
     const sortedPaddlers = this.props.paddlers.sort((a,b)=>a.paddlerName.toLowerCase()<b.paddlerName.toLowerCase()?1:-1);
     return (
-      <div className="d-flex flex-row justify-content-end addPaddler">
-        <Form.Group className="d-flex justify-content-end my-auto border border-success p-3">
-          <Form.Label className="my-auto">Add Paddler</Form.Label>
-          <InputGroup>          
-              <Form.Control as="select" onChange={this.handleChange} className="ml-2" value={this.state.currentPaddler.paddlerID}>
-                <option value={-1} disabled >select paddler</option>
-                { sortedPaddlers.map((paddler, i)=>{
-                  if (!this.props.paddlersForCurrentRace.find(p=>p.paddlerID == paddler.paddlerID))
-                    return (<option key={i} value={paddler.paddlerID}>{paddler.paddlerName}</option>)
-                })}          
-              </Form.Control>
-              <InputGroup.Append>
-                {this.state.showAddPaddlerButton && (<Button onClick={this.addCurrentPaddler}>
-                  <FontAwesomeIcon icon="plus-circle" className="my-auto" />
-                </Button>)}
-              </InputGroup.Append>
-            </InputGroup>
-        </Form.Group>
-        <Form.Group className="border border-success ml-2 p-3 my-auto">
-          <Button onClick={this.addNewPaddler} variant="warning" className="my-auto">
-            Add New Paddler
-          </Button>
-        </Form.Group>
+      <Row className="d-flex row justify-content-end addPaddler">
+        <Col>
+          <Form.Group className="d-flex justify-content-end my-auto border border-success p-3 row w-100 mx-auto">
+            <Col sm={12} className="d-flex justify-content-end addPaddlerLabel">
+              <Form.Label className="my-auto">Add Paddler</Form.Label>
+            </Col>
+            <Col sm={12}>
+              <InputGroup>          
+                <Form.Control as="select" onChange={this.handleChange} value={this.state.currentPaddler.paddlerID}>
+                  <option value={-1} disabled >select paddler</option>
+                  { sortedPaddlers.map((paddler, i)=>{
+                    if (!this.props.paddlersForCurrentRace.find(p=>p.paddlerID == paddler.paddlerID))
+                      return (<option key={i} value={paddler.paddlerID}>{paddler.paddlerName}</option>)
+                  })}          
+                </Form.Control>
+                <InputGroup.Append>
+                  {this.state.showAddPaddlerButton && (<Button onClick={this.addCurrentPaddler}>
+                    <FontAwesomeIcon icon="plus-circle" className="my-auto" />
+                  </Button>)}
+                </InputGroup.Append>
+              </InputGroup>
+            </Col>
+          </Form.Group>
+        </Col>
+        <Col>
+          <Form.Group className="d-flex w-100 border border-success p-3 my-auto justify-content-center">
+            <Button onClick={this.addNewPaddler} variant="warning" className="my-auto">
+              Add New Paddler
+            </Button>
+          </Form.Group>
+        </Col>
         <Modal centered show={this.state.showAddNewPaddlerModal} onHide={this.handleCloseModal} className="addRaceToPaddler float-right">
             <Modal.Header className="bg-success" closeButton>
               <Modal.Title style={{fontSize:'2rem'}}>New Paddler Form</Modal.Title>
@@ -98,7 +106,7 @@ class AddPaddler extends Component {
               </Button>
             </Modal.Footer>
         </Modal>
-      </div>
+      </Row>
     );
   }
 }

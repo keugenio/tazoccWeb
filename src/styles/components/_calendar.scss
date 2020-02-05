@@ -5,9 +5,31 @@
 }
 
 .eventCalendar{
+  & .fullsize-bg-image {
+    position: fixed;
+    width: 100%;
+    height: auto;
+    top: 0;
+    left: 0;
+    opacity: .75;
+    z-index:-1000; 
+    @include response(ipadPro-port){
+      width: auto;
+      height: 100%;
+    }
+    @include response(tab-port){
+      width: auto;
+      height: 100%;
+    }
+    @include response(phone-land){
+      width: 100%;
+      height:auto;
+    }
+  
+  }
   & .rbc-calendar {
     color:#000;
-    height:50vh!important;
+    min-height:50vh!important;
     margin:4rem;
     @include response(phone-land){
       height: 100vh!important;
@@ -27,6 +49,7 @@
       }
     } 
     & .rbc-event-content{
+      font-size: 1.5rem;
       @include response(tab-port){
         font-size: 1rem;
       }
@@ -36,7 +59,22 @@
       @include response(phone){
         font-size: 1rem;
       }
-    }  
+    }
+    & .rbc-toolbar-label {
+      font-size: 2rem;
+    }
+    & .rbc-month-view{
+      min-height:50vh!important
+    }
+    
+    & .rbc-row-content{
+      z-index: 0!important;
+    }
+    & .rbc-date-cell {
+      @include response(phone) {
+        font-size: 1.25rem;
+      }
+    }      
   }
   & .moreEventInfo{
     @include response(tab-land){
@@ -48,22 +86,10 @@
     }
   }  
 }
-
-.rbc-toolbar-label {
-  font-size: 2rem;
-}
 .rbc-month-view{
-  height:auto!important
+  min-height:50vh!important
 }
 
-.rbc-row-content{
-  z-index: 0!important;
-}
-.rbc-date-cell {
-  @include response(phone) {
-    font-size: 1.25rem;
-  }
-}
 .events { 
   & .card{
     margin: .5rem;
