@@ -66,7 +66,18 @@
   }
   @include response(phone){
     background-position-x:-329px;
-  }   
+  } 
+  & img {
+    @include response(big-desktop){
+      height: 10rem;
+      width: 10rem;
+    }      
+  }
+  & .btn {
+    @include response(big-desktop){
+    font-size: 5rem!important;
+    }
+  }     
 }
 .bg-join_5 {
   background-image: url('/images/join_5.jpg');
@@ -89,17 +100,7 @@
 .bg-primary-fade {
   background: rgba($primary, .75);
 }
-.bgAIconLeft {
-  @include aTribal;
-  background-position-x: -150px;
-}
-.bgAIconRight {
-  @include aTribal;
-  background-position-x: 150px
-}
-.bgAIcon {
-  @include aTribal;
-}
+
 .joinUsContainer {
   padding: 0;
   @include response(big-desktop){
@@ -111,6 +112,17 @@
   }
   .row:first-child {
     margin-top:5rem!important;
+    & img {
+      @include response(big-desktop){
+        height: 10rem;
+        width: 10rem;
+      }      
+    }
+    & .display-4 {
+      @include response(big-desktop){
+      font-size: 5rem;
+      }
+    }
   }
   .columnText {
     flex-wrap: wrap;
@@ -119,6 +131,7 @@
     align-items: center;
     text-align: center;
     font-size: 3rem;
+
     @include response(tab-port){
       height: 40%;
       font-size: 1.75rem;
@@ -139,6 +152,10 @@
       & li {
         margin: 2rem 0;
         line-height: 2rem;
+        @include response(big-desktop){
+          margin: 5rem 0;
+          line-height: 5rem;
+        }
       }
     }
     & :first-child{
@@ -161,6 +178,17 @@
     margin-bottom:5rem!important;
   }
   & :nth-child(2){
+    & img {
+      @include response(big-desktop){
+        height: 10rem;
+        width: 10rem;
+      }      
+    }
+    & p {
+      @include response(big-desktop){
+      font-size: 5rem;
+      }
+    }    
     .columnText{
       @include response(phone){
         height: 67%;
@@ -171,6 +199,22 @@
     }
   }  
   & :nth-child(3){
+    & img {
+      @include response(big-desktop){
+        height: 10rem;
+        width: 10rem;
+      }      
+    }
+    & p {
+      @include response(big-desktop){
+      font-size: 5rem;
+      }
+    }  
+    & ul {
+      @include response(big-desktop){
+      font-size: 5rem;
+      }
+    }        
     .columnText{
       @include response(phone){
         height:73%;
@@ -181,6 +225,17 @@
     }      
   }   
   & :nth-child(4){
+    & img {
+      @include response(big-desktop){
+        height: 10rem;
+        width: 10rem;
+      }      
+    }
+    & p {
+      @include response(big-desktop){
+      font-size: 5rem;
+      }
+    }     
     .columnText{
       @include response(phone){
         height: 77%;

@@ -17,11 +17,6 @@
 @mixin textShadow($color) {
 	text-shadow: .25rem .25rem .25rem $color;
 }
-@mixin aTribal{
-  background-image: url('/images/A-with-tribal_300_fade.png');
-  background-repeat: no-repeat;
-  background-size: contain;	
-}
 
 // media query manager
 /*
@@ -48,7 +43,7 @@
 		@media (max-width:600px) { @content };
 	}
 	@if $breakpoint == phone-land {
-		@media (max-width:812px) and (max-height:375px) { @content } ; 
+		@media (max-width: 900px) and (max-height:414px) { @content };
 	}
 	@if $breakpoint== tab-port {
 		@media (max-width:900px) { @content };
@@ -62,10 +57,7 @@
 	@if $breakpoint== tab-land {
 		@media (max-width:1200px) { @content };
 	}
-	@if $breakpoint== big-desktop {
-		@media (min-width:1800px) { @content };
+	@if $breakpoint == big-desktop {
+		@media screen and (min-width: 1900px) { @content };
 	}
-	@if $breakpoint == phone-land {
-		@media (max-width: 900px) and (max-height:414px) { @content }
-	}	
 }

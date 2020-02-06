@@ -64,6 +64,10 @@
   animation-name: moveInLeft;
   animation-duration: 2s;
   animation-timing-function: ease-in-out;
+
+  @include response(big-desktop){
+    font-size: 15rem;
+  }
   @include response(tab-port){
    width: 100%;
    text-align: center; 
@@ -95,6 +99,12 @@
   width: 100%;
   @include response(big-desktop){
     width:75vw;
+  }
+  & .btn {
+    @include response(big-desktop){
+      font-size: 5rem;
+      padding: 1rem 2rem;
+    }    
   }
 }
 @keyframes moveInLeft {
@@ -136,6 +146,9 @@
   & span {
     width: 100vw;
     height: 100vh;
+  }
+  @include response(big-desktop){
+    font-size: 10rem;
   }
   @include response(tab-land){
     margin-top: 1rem;

@@ -7,14 +7,14 @@ const Monogram = (props) => {
 
   if (last!='')
     return (
-      <div className="border rounded-circle bg-taz-blue text-white text-center d-flex align-items-center justify-content-center" style={{fontSize:'2rem', width:'4rem', height:'4rem'}}>
-        <div>{first + last}</div>
+      <div className="border rounded-circle bg-taz-blue text-white text-center d-flex align-items-center justify-content-center monogram">
+        {first + last}
       </div>
     ) 
   else
     return (
-      <div className="border rounded-circle bg-taz-blue text-white text-center d-flex align-items-center justify-content-center" style={{fontSize:'2.5rem', width:'4rem', height:'4rem'}}>
-        <div>{first}</div>
+      <div className="border rounded-circle bg-taz-blue text-white text-center d-flex align-items-center justify-content-center monogram">
+        {first}
       </div>
     )   
 }

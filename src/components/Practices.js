@@ -14,9 +14,9 @@ const Practices = () => {
         <img src={bgImage} className="fullsize-bg-image"></img>
         <div className="container-fluid practices ">
           <Row>
-            <Col xl={6} xs={12}>
+            <Col xl={6} xs={12} className="instructions">
               <Card className="bg-white-4">
-                <Card.Title><h2>Team Arizona holds Open Practices</h2></Card.Title>
+                <Card.Title>Team Arizona holds Open Practices</Card.Title>
                 <Card.Body>                    
                     <ul className="practiceTimes">
                       <li>
@@ -32,11 +32,10 @@ const Practices = () => {
                 </Card.Body>
               </Card>
               <Card className="bg-white-4 directions">
-                <Card.Header><h2>Practices are held on the north side of Tempe Town Lake at the marina.</h2></Card.Header>
-                <Card.Body>
-                <Card.Title><h2>Directions to 550 East Tempe Town Lake, Tempe, AZ 85251</h2></Card.Title>
-                  <hr />
-                  <ul className="mb-0">
+              <Card.Title>Directions to 550 East Tempe Town Lake, Tempe, AZ 85251</Card.Title>
+              <Card.Subtitle className="text-muted">Practices are held on the north side of Tempe Town Lake at the marina</Card.Subtitle>
+              <Card.Body>
+                  <ul className="mb-0 border border-success">
                     <li>From Loop 202 in Tempe, exit on Scottsdale Road and head <b>north</b> (towards Scottsdale, away from Tempe).  You must<strong> immediately</strong> get into the leftmost lane.  You&#8217;ll see the Carvana glass structure to your left.</li>
                     <li>Turn at the first left on E. Gilbert Dr.</li>
                     <li>Follow E. Gilbert Drive westward and the marina entrance is right after the overpass.</li>
@@ -65,7 +64,7 @@ const Practices = () => {
                 <GoogleApiWrapper />                  
               </Tab>
               <Tab eventKey="summer" title="Summer Clothing">
-                <Card className="bg-white-4">
+                <Card>
                   <Card.Title>What to wear when it gets warm</Card.Title>
                   <Card.Body>
                     <div className="w-100 d-flex justify-content-center">
@@ -81,7 +80,7 @@ const Practices = () => {
                 </Card>
               </Tab>
               <Tab eventKey="winter" title="Winter Clothing">
-                <Card className="bg-white-4">
+                <Card>
                   <Card.Title>What to wear when it gets cold</Card.Title>
                   <Card.Body>
                     <div className="w-100 d-flex justify-content-center">
