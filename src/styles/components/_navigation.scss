@@ -4,7 +4,7 @@
   padding: .5rem;
 
   @include response(big-desktop){
-    font-size: 5rem;
+    font-size: 3rem;
     padding: 1rem;
   }
   & a {
@@ -42,7 +42,7 @@
         display: none;
       }  
       @include response(big-desktop){
-        font-size: 5rem;
+        font-size: 3rem;
         padding: 3rem 4rem;
       }    
     }
@@ -86,7 +86,7 @@
     display: flex;
     padding: 1rem;
     @include response(big-desktop){
-      font-size: 5rem;
+      font-size: 3rem;
     }    
     @include response(phone){
       display: none;
@@ -107,7 +107,7 @@
   }
   & .navMenuContactButton{
     @include response(big-desktop){
-      font-size: 5rem;
+      font-size: 3rem;
     }    
     @include response(phone){
       display: none;
@@ -131,6 +131,10 @@
 
   &__checkbox {
     display: none;
+    @include response(big-desktop){
+      width: 25px;
+      height: 25px;
+    }
   }
   &__button {
     height: 4rem;
@@ -198,7 +202,7 @@
         display: inline-block;
       }
       @include response(big-desktop){
-        font-size: 5rem;
+        font-size: 3rem;
       }
       @include response(phone){
         font-size: 2rem;

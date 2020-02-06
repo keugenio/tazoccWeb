@@ -66,7 +66,7 @@
   animation-timing-function: ease-in-out;
 
   @include response(big-desktop){
-    font-size: 15rem;
+    font-size: 10rem;
   }
   @include response(tab-port){
    width: 100%;
@@ -102,7 +102,7 @@
   }
   & .btn {
     @include response(big-desktop){
-      font-size: 5rem;
+      font-size: 3rem;
       padding: 1rem 2rem;
     }    
   }
@@ -148,7 +148,7 @@
     height: 100vh;
   }
   @include response(big-desktop){
-    font-size: 10rem;
+    font-size: 6rem;
   }
   @include response(tab-land){
     margin-top: 1rem;

@@ -1,102 +1,4 @@
-.slant-down-right {
-    -webkit-clip-path: polygon(0% 0%, 0% 100%, 100% 100%, 95% 0%);
-    clip-path: polygon(0% 0%, 0% 100%, 100% 100%, 95% 0%);
-}
-.slant-down-left {
-  -webkit-clip-path: polygon(0% 0%, 0% 100%, 100% 100%, 95% 0%);
-  clip-path: polygon(5% 0%, 0% 100%, 100% 100%, 100% 0%);
-}
-.bg-Tribal {
-  background-image:url('/images/bg_join.png') ;
-  background-color: #FFFFFF;;
-  background-size: cover;
-  background-repeat: no-repeat;
-  width: 100vw;
-}
-.bg-join_1 {
-  background-image: url('/images/join_1.jpg');
-  background-repeat: no-repeat;
-  background-position: left;
-  background-size: cover;;
-  height: 100vh;
-  @include response(tab-port){
-    background-position: center;
-  }
-  @include response(phone){
-    background-position-x: -351px;
-  }
-}
-.bg-join_2 {
-  background-image: url('/images/join_2.jpg');
-  background-repeat: no-repeat;
-  background-position: right;
-  background-size: cover;
-  height: 100vh;
-  @include response(tab-port){
-    background-position: -271px;
-  }
-  @include response(phone){
-    background-position-x:-259px;
-    background-position-y: 200px;;
-  }
-}
-.bg-join_3 {
-  background-image: url('/images/join_3.jpg');
-  background-repeat: no-repeat;
-  background-position: right;
-  background-size: cover;
-  height: 100vh;
-  @include response(tab-port){
-    background-position: right;
-  }
-  @include response(phone){
-    background-position-x:-471px;
-    background-position-y: 166px;;
-  }
-}
-.bg-join_4 {
-  background-image: url('/images/join_4.jpg');
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center left;
-  background-position-x: 75%;
-  height: 100vh;
-  @include response(tab-port){
-    background-position-x: -300px;
-  }
-  @include response(phone){
-    background-position-x:-329px;
-  } 
-  & img {
-    @include response(big-desktop){
-      height: 10rem;
-      width: 10rem;
-    }      
-  }
-  & .btn {
-    @include response(big-desktop){
-    font-size: 5rem!important;
-    }
-  }     
-}
-.bg-join_5 {
-  background-image: url('/images/join_5.jpg');
-  background-repeat: no-repeat;
-  background-position: right;
-  background-size: cover;
-  height: 100vh;
-  @include response(tab-port){
-    background-position-x: -450px;
-  }
-  @include response(phone){
-    background-position-x:-459px;
-    background-position-y: 80px;
-  }  
-}
 
-.bg-white-fade {
-  background: rgba($white, .75);
-}
 .bg-primary-fade {
   background: rgba($primary, .75);
 }
@@ -106,6 +8,86 @@
   @include response(big-desktop){
     width: initial;
   }
+  .bg-join_1 {
+    background-image: url('/images/join_1.jpg');
+    background-repeat: no-repeat;
+    background-position: left;
+    background-size: cover;;
+    height: 100vh;
+    @include response(tab-port){
+      background-position: center;
+    }
+    @include response(phone){
+      background-position-x: -351px;
+    }
+  }
+  .bg-join_2 {
+    background-image: url('/images/join_2.jpg');
+    background-repeat: no-repeat;
+    background-position: right;
+    background-size: cover;
+    height: 100vh;
+    @include response(tab-port){
+      background-position: -271px;
+    }
+    @include response(phone){
+      background-position-x:-259px;
+      background-position-y: 200px;;
+    }
+  }
+  .bg-join_3 {
+    background-image: url('/images/join_3.jpg');
+    background-repeat: no-repeat;
+    background-position: right;
+    background-size: cover;
+    height: 100vh;
+    @include response(tab-port){
+      background-position: right;
+    }
+    @include response(phone){
+      background-position-x:-471px;
+      background-position-y: 166px;;
+    }
+  }
+  .bg-join_4 {
+    background-image: url('/images/join_4.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center left;
+    background-position-x: 75%;
+    height: 100vh;
+    @include response(tab-port){
+      background-position-x: -300px;
+    }
+    @include response(phone){
+      background-position-x:-329px;
+    } 
+    & img {
+      @include response(big-desktop){
+        height: 10rem;
+        width: 10rem;
+      }      
+    }
+    & .btn {
+      @include response(big-desktop){
+      font-size: 5rem!important;
+      }
+    }     
+  }
+  .bg-join_5 {
+    background-image: url('/images/join_5.jpg');
+    background-repeat: no-repeat;
+    background-position: right;
+    background-size: cover;
+    height: 100vh;
+    @include response(tab-port){
+      background-position-x: -450px;
+    }
+    @include response(phone){
+      background-position-x:-459px;
+      background-position-y: 80px;
+    }  
+  }  
   .row {
     margin-left: 0;
     margin-right: 0;
@@ -131,7 +113,7 @@
     align-items: center;
     text-align: center;
     font-size: 3rem;
-
+    
     @include response(tab-port){
       height: 40%;
       font-size: 1.75rem;
@@ -151,7 +133,7 @@
       text-align: left;
       & li {
         margin: 2rem 0;
-        line-height: 2rem;
+        line-height: 3rem;
         @include response(big-desktop){
           margin: 5rem 0;
           line-height: 5rem;
@@ -186,7 +168,7 @@
     }
     & p {
       @include response(big-desktop){
-      font-size: 5rem;
+      font-size: 3rem;
       }
     }    
     .columnText{
@@ -207,12 +189,12 @@
     }
     & p {
       @include response(big-desktop){
-      font-size: 5rem;
+      font-size: 3rem;
       }
     }  
     & ul {
       @include response(big-desktop){
-      font-size: 5rem;
+      font-size: 3rem;
       }
     }        
     .columnText{
@@ -233,7 +215,7 @@
     }
     & p {
       @include response(big-desktop){
-      font-size: 5rem;
+      font-size: 3rem;
       }
     }     
     .columnText{

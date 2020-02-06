@@ -3,6 +3,9 @@
     font-size: 1.5rem;
   & .h5 {
     font-size: 2.5rem;
+    @include response(big-desktop){
+      font-size: 2rem;
+    }    
     @include response(tab-land){
       font-size: 1.75rem;
     }
@@ -62,5 +65,8 @@
       }
     }
 
+  }
+  & .monogram {
+    padding: 1rem;
   }
 }

@@ -1,5 +1,5 @@
 node_modules
-
+component/keys
 playground
 package-lock.json
 public/bundle.js
