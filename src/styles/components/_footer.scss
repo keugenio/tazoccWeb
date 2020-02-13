@@ -8,6 +8,6 @@ footer {
   z-index: 1001;
   @include response(big-desktop){
     font-size: 3rem;
-    width: 85vw!important;
+    left: 0;
   }
 }

@@ -8,8 +8,6 @@ import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import 'react-phone-number-input/style.css'
-import PhoneInput from 'react-phone-number-input'
 
 function mapStateToProps({user, selectedPaddler}) {  
   return {
@@ -192,7 +190,7 @@ const EditableBio = ({admin, state, selectedPaddler, handleOnChange, handleChang
             </td>
             <td>
               <DatePicker
-                selected={state.birthday}
+                selected={new Date(state.birthday)}
                 onChange={handleCalendarChange}
               />
             </td>              

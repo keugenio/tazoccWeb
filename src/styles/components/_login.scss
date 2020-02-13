@@ -6,6 +6,8 @@
   flex-direction : column;
   justify-content: center;
   background-image: url('/images/bg_join.png');
+  background-repeat: no-repeat;
+  background-size: cover;
   & input {
     font-size: 2rem;
   }
