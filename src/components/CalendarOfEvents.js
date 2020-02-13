@@ -51,10 +51,8 @@ class TAZCalendar extends React.Component{
         <img src={bgImage} className="fullsize-bg-image"></img>
         <div><p className="text-center text-white pageTitle">Team Arizona Calendar of Events</p></div>
           <Row>
-            <Col xl={6} xs={12} className="my-auto d-flex">
-                
-                  <Calendar />             
-               
+            <Col xl={6} xs={12} className="my-auto d-flex calendarInfo">                
+              <Calendar />                            
             </Col>
             <Col xl={6} xs={12} className="moreEventInfo">
               <div className="eventInfo">

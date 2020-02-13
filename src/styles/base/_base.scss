@@ -45,7 +45,7 @@ button:disabled {
   src: url('/fonts/AlberobelloScript.woff');
 }
 
-@import url('https://fonts.googleapis.com/css?family=Alegreya|Alegreya+Sans|Roboto&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Alegreya|Alegreya+Sans|Roboto|Dancing+Script&display=swap');
 
 .pageTitle {
   text-shadow: .1rem .1rem .25rem $dark;
@@ -60,6 +60,9 @@ button:disabled {
   text-align: left;
   font-family: 'Roboto';
   font-size: 3.5rem;
+  &::first-letter{
+    font-family: 'astria_font-webfont';
+  }
 }
 .containerTitle {
   text-align: left;

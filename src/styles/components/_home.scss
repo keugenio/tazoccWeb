@@ -85,11 +85,14 @@
 
 }
 .sub-title {
+  font-family: 'Dancing Script';
   text-shadow: .25rem .25rem .5rem $dark;
   position: absolute;
   top: 45%;
+  font-size: 5rem;
   text-transform: lowercase;
   animation: moveInRight 2s ease-in-out;
+  & span:before { content: "\00a0 "; }
 }
 .homepageButtons {
   display: flex;

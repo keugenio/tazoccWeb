@@ -11,7 +11,6 @@ import News from '../News';
 import TAZCalendarOfEvents from '../CalendarOfEvents'
 import ShopTAZ from '../ShopTAZ';
 import Login from '../Auth/Login';
-import PaddlerStats from '../PaddlerStats';
 import Dashboard from '../Dashboard/Dashboard';
 import Register from '../Auth/Register';
 import AdminControl from '../Dashboard/AdminControl';
@@ -99,8 +98,6 @@ class AppRouter extends React.Component {
     })
     // make the hover message on the links viewable instantly suing jQuery
     $('.titleHoverMessage').tooltip({show: {effect:"none", delay:0}});
-
-
   }
 
   render(){

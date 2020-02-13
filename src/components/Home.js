@@ -61,10 +61,10 @@ class Home extends React.Component {
       <div className="container-fluid homepage">
         <div className="offset-lg-1 offset-sm-0 title">Team Arizona</div>
         <div className="text-wrapper offset-1 animated-words display-3 sub-title">
-            <span>Outrigger Canoe Club</span>
-            <span>Ohana</span>
-            <span>Outrigger Voyagers</span>
-            <span>Outrigger Racers</span>
+            <span> Outrigger Canoe Club</span>
+            <span> Ohana</span>
+            <span> Outrigger Voyagers</span>
+            <span> Outrigger Racers</span>
             <span>Lives Aloha</span>
         </div>    
         <img src={bgImage} className="fullsize-bg-image"></img>

@@ -6,7 +6,7 @@ import { navigate } from '@reach/router';
 import ContactUsButton from './ContactUsButton';
 import EditProfile from '../Auth/EditProfile';
 import { logUserOut, clearRacesPaddlerSignedUpFor, clearAllRaces, clearSelectedPaddler } from '../../store/store';
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 var $ = require('jquery');
 window.$ = $;
 require('bootstrap');
@@ -99,11 +99,17 @@ const  NavigationOverlay = (props) => {
                 <EditProfile location="overlay"/>
             </Link>           
           </li>
-          <li className="navigation_item">
-          <Link className="navigation__link d-flex justify-content-center align-items-center" to="" onClick={()=>logOutUser()}>
-            <span> logout</span>
-          </Link>          
-          </li>              
+          {loggedIn && 
+            <li className="navigation_item">
+              <Link className="navigation__link d-flex justify-content-center align-items-center" to="" onClick={()=>logOutUser()}>
+                <span> logout </span>
+              </Link>          
+            </li>}
+          {!loggedIn && (
+            <Link className="nav_link titleHoverMessage loginButton" to="/login" title="Login to see your stats">
+                Login <FontAwesomeIcon icon="sign-in-alt"/>
+            </Link>
+          )}                          
         </ol>
       </nav>
     </div>

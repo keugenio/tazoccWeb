@@ -17,19 +17,20 @@ const AboutUs = () => {
       <Suspense fallback={<h1>loading...</h1>}>
         <div className="bgOverlayColor aboutUs">
           <img src={bgImage} className="fullsize-bg-image"></img>
-          <div><p className="text-center text-white pageTitle">About TAZ</p></div>
+          <div><p className="text-center text-white pageTitle">About taz</p></div>
           <div className="container aboutUsContainer">
             <section className="history_section">
-                <div className="section_title">Our History</div>
+                <div className="section_title text-center">Like many canoe clubs, Team Arizona has humble beginnings.</div>
                 <img src='/images/coach_allen.jpg' className="image-fluid float-left mr-3"/>
+                <div className="display-4"></div>
                 <p>
                   Team Arizona began with the vision of one man.  Coach Allen Abad started paddling in the mid 1960’s with Leeward Kai Canoe Club. 
-                  The club was a family oriented where all members came together to paddle and help the club.  
-                  In 1968, Coach Allen left Hawaii to serve in the Navy.  After serving four years in the Navy, Coach Allen moved to San Diego where he met other local people from Hawaii and in 1976, San Diego’s first canoe club was established.  
+                  Much like today, the club was family oriented where all members came together to paddle and help the club.  
+                  In 1968, Coach Allen left Hawaii to serve in the Navy.  After serving four years, Coach Allen moved to San Diego where he met other local people from Hawaii and in 1976, San Diego’s first canoe club was established.  
                   It started as a recreational club, allowing locals to enjoy what they missed from back home.  
-                  A few years later, Coach Allen moved to Arizona where he later founded Team Arizona (TAZ) Outrigger Canoe Club in 2004.
+                  A few years later, Coach Allen moved to Arizona where he later founded Team Arizona Outrigger Canoe Club (TAZ) in 2004.
                   In 2009, after a two year battle with pancreatic cancer, Coach Allen passed away.  Team Arizona proudly paddles in loving memory of Coach Allen
-                  and strives to honor him each and every time we are in the canoe together.
+                  and strives to honor his memory and teachings whether we are in or out of the canoe together.
                 </p>
             </section>
             <section className="mission_section">
@@ -63,7 +64,7 @@ const AboutUs = () => {
               </ul>                    
             </section>    
             <section id="board" className="board_section">
-              <div className="section_title">Board of Directors</div>
+              <div className="section_title board">Board of Directors</div>
               <div className="boardMembers d-flex flex-row flex-wrap justify-content-center" >
                   {BoardMembers.map((member, i)=>(
                     <Card key={i}>

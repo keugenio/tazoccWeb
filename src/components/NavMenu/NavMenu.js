@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Nav, NavDropdown, Container, Button} from 'react-bootstrap';
-import { navigate } from '@reach/router';
+import { navigate, Link } from '@reach/router';
 import firebase from 'firebase';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { logUserOut, clearRacesPaddlerSignedUpFor, clearAllRaces, clearSelectedPaddler } from '../../store/store';
@@ -34,9 +34,9 @@ const NavMenu =(props) => {
     <Container fluid className="tazNavMenu">
       <Nav as="ul" className="justify-content-start" >
         <Nav.Item as="li">
-          <Nav.Link href="/" className="brandText">Team Arizona Outrigger Canoe Club</Nav.Link>
-          <Nav.Link href="/" className="brandText">Team Arizona</Nav.Link>
-          <Nav.Link href="/" className="brandText">Team Arizona OCC</Nav.Link>
+          <Link to="/" className="brandText">Team Arizona Outrigger Canoe Club</Link>
+          <Link to="/" className="brandText">Team Arizona</Link>
+          <Link to="/" className="brandText">Team Arizona OCC</Link>
         </Nav.Item>
         <div className="ml-auto row rightNavItems">
           <Nav.Item as="li" className="navMenuContactButton">
@@ -44,9 +44,9 @@ const NavMenu =(props) => {
           </Nav.Item>
           <Nav.Item as="li" className="d-flex">
             {!loggedIn && (
-              <Nav.Link eventKey="link-2" className="nav_link titleHoverMessage" href="/login" title="Login to see your stats">
+              <Link className="nav_link titleHoverMessage loginButton" to="/login" title="Login to see your stats">
                   Login <FontAwesomeIcon icon="sign-in-alt"/>
-              </Nav.Link>
+              </Link>
             )}
           <div className="logoOrImage">
             {loggedIn && ((paddlerImageURL) ? 

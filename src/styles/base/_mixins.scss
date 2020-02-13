@@ -1,16 +1,40 @@
-@mixin fontFace($family,$src,$style: normal,$weight: normal) {
-	@font-face {
-		font-family: $family;
-		src: url('#{$src}.eot'); // IE9 compat
-		src: url('#{$src}.eot?#iefix') format('embedded-opentype'), // IE8 and below
-			url('#{$src}.woff') format('woff'), // standards
-			url('#{$src}.ttf') format('truetype'), // Safari, Android, iOS
-			url('#{$src}.svg##{$family}') format('svg'); // legacy iOS
+@function str-replace($string, $search, $replace: "") {
+	$index: str-index($string, $search);
 
+	@if $index {
+		@return str-slice($string, 1, $index - 1) + $replace + str-replace(str-slice($string, $index + str-length($search)), $search, $replace);
+	}
+
+	@return $string;
+}
+
+@mixin font-face($name, $path, $weight: null, $style: null, $exts: woff) {
+	$src: null;
+
+	$extmods: (
+		eot: "?",
+		svg: "#" + str-replace($name, " ", "_")
+	);
+
+	$formats: (
+		otf: "opentype",
+		ttf: "truetype"
+	);
+
+	@each $ext in $exts {
+		$extmod: if(map-has-key($extmods, $ext), $ext + map-get($extmods, $ext), $ext);
+		$format: if(map-has-key($formats, $ext), map-get($formats, $ext), $ext);
+		$src: append($src, url(quote($path + "." + $extmod)) format(quote($format)), comma);
+	}
+
+	@font-face {
+		font-family: quote($name);
 		font-style: $style;
 		font-weight: $weight;
+		src: $src;
 	}
 }
+
 @mixin boxShadow($color) {
 	box-shadow: .25rem .25rem .25rem $color;
 }
@@ -39,6 +63,7 @@
 	- big-desktop
 */
 @mixin response($breakpoint) {
+	
 	@if $breakpoint== phone{
 		@media (max-width:600px) { @content };
 	}
@@ -48,16 +73,22 @@
 	@if $breakpoint== tab-port {
 		@media (max-width:900px) { @content };
 	}
+	@if $breakpoint== tab-land {
+		@media (max-width:1200px) { @content };
+	}
 	@if $breakpoint == ipadPro-port { 
 		@media (max-width:1024px) and (max-height:1366px) { @content } ; 
 	}
 	@if $breakpoint == ipadPro-land{ 
 		@media (max-width:1366px) and (max-height:1024px) { @content } ; 
 	}
-	@if $breakpoint== tab-land {
-		@media (max-width:1200px) { @content };
-	}
 	@if $breakpoint == big-desktop {
-		@media (min-width: 112.5em) { @content }; //1800px
+		@media (min-width: 112.5em) { @content };
+	}	
+	@if $breakpoint == land {
+		@media (orientation:landscape) { @content };
 	}
+	@if $breakpoint == port {
+		@media (orientation:portrait) { @content};
+	}	
 }

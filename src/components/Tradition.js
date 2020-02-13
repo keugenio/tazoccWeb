@@ -73,8 +73,8 @@ const Tradition = () => {
             <Tabs defaultActiveKey="terms" id="uncontrolled-tab-example">
               <Tab eventKey="terms" title="Terms">
                 <section className="terms">
-                  <p>In every sport or job there is a special language. Words are used in this specialty like no other. For example, Navy terms. This also works for paddling the Hawaiian canoe.</p>
-                  <p>If Na Ho'okele (steerers) use the same language for commands universally, there will be little or no confusion on the part of the paddlers. These commands can and should be used to familiarize the crew with the language. The same language used consistently also gives Ho'okele (steerer) control of the canoe and used to the idea of giving commands.</p>
+                  <p>In every sport or job there is a special language. For example, Navy terms, words are used in this specialty like no other.  This also works for paddling the Hawaiian canoe.</p>
+                  <p>If Na Ho'okele (steerers) use the same language for commands universally, there would be little or no confusion on the part of the paddlers. These commands can and should be used to familiarize the crew with the language. The same language used consistently also gives Ho'okele (steerer) control of the canoe and used to the idea of giving commands.</p>
                               
                   <CardColumns className="terms">
                     {terms.map((term, i)=>(

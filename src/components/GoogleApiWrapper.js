@@ -29,7 +29,6 @@ export class MapContainer extends React.Component {
       <Map 
         google={this.props.google}
         zoom={17}
-        style={style}
         initialCenter={{
           lat: 33.434428,
           lng: -111.931940
@@ -72,8 +71,3 @@ export class MapContainer extends React.Component {
 export default GoogleApiWrapper({
   apiKey: (GoogleApiKey.key)
 })(MapContainer)
-
-const style = {
-  maxWidth: '90%',
-  maxHeight: '80%'
-}

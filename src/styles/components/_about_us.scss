@@ -28,7 +28,7 @@
       transform: translateX(0px);
     }
   
-  }  
+  }
 }
 .aboutUsContainer{
   section:not(:first-child) {
@@ -54,11 +54,25 @@
       margin-bottom: 2rem;
     }
     & .section_title{
-      font-size: 3.5rem;
+      font-family: 'Dancing Script', cursive;
+      color: $white;
+      font-size: 5.5rem;
       font-weight: 300;
-      line-height: 1.2;
+      line-height: .75;
+      z-index: -1;
+      margin-bottom: 2rem;
+      &::first-letter{
+        font-family: 'astria_font-webfont';
+      }
       @include response(phone){
         font-size: 2.5rem;
+      }
+      &.board {
+        font-family: initial;
+        font-size: 4rem;
+        &::first-letter{
+          font-family: initial;
+        }
       }
     }
     &.mission_section{
@@ -116,10 +130,10 @@
         line-height: 1.5rem;      
         margin-top:.5rem;
         @include response(tab-port){
-          font-size: 1.3rem;
+          font-size: 1rem;
         }      
         @include response(phone-land){
-          font-size: 1.1rem;
+          font-size: 1rem;
         }
       }
       & .boardMembers {
@@ -130,11 +144,17 @@
           margin-left: .5rem;
           margin-top: .5rem;
           @include boxShadow($primary);
+          @include response(tab-port){
+            padding: .25rem;
+          }
           @include response(phone){
             width: 100%;
-            padding: .5rem;
+            padding: .25rem;
           }
           & .card-body{
+            @include response(tab-port){
+              padding: .25rem;
+            }
             @include response(phone-land){
               padding: 0;
             }
