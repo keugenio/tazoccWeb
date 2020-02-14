@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import {Row, Col, Card} from 'react-bootstrap';
 import { navigate, Link } from '@reach/router';
 import Swal from 'sweetalert2';
+import bgImage from '../../bgImages/bg_tribal.png';
 
 class Login extends Component {
   constructor(props) {
@@ -128,10 +129,11 @@ class Login extends Component {
   render() {
     return (
         <div className="login">
+          <img src={bgImage} className="fullsize-bg-image"></img>
           <form className="mt-3" onSubmit={this.signInWithEmail} >
-            <Card className="bg-white-3">
+            <Card className="loginForm">
+              <Card.Title>Login</Card.Title>
               <Card.Body>
-                <h3 className="font-weight-light mb-3">Log in</h3>
                 <section className="form-group">
                   <label
                     className="form-control-label sr-only"
@@ -176,8 +178,8 @@ class Login extends Component {
             </Card>
           </form>            
 
-          <Row className="mt-4 p-4">
-            <button className="btn btn-lg btn-success" onClick={this.signInWithGoogle} >Sign with Google</button>
+          <Row className="mt-4 p-4 loginButtons">
+            <button className="btn btn-lg btn-success mr-4" onClick={this.signInWithGoogle} >Sign with Google</button>
             <button className="btn btn-lg btn-primary" onClick={this.signInWithFacebook} >Sign with Facebook</button>
           </Row>
         </div>

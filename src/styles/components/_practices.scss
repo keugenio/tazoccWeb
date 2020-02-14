@@ -75,7 +75,6 @@
       }
       & ul {
         color:$dark;
-        text-shadow: .25rem .25rem .5rem $primary;
         display: inline-block;
         padding: 3rem;
         font-size: 1.75rem;
@@ -185,6 +184,9 @@
       & .practiceImg {
         width: 75%;
         height: 50%;
+      }
+      & .nav-tabs{
+        margin: 0;
       }
   }   
 }

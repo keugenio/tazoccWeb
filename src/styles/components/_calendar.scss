@@ -39,7 +39,10 @@
         height: 100vh!important;
         margin: 0!important;
         font-size: 1rem;
-      }   
+      }  
+      & .rbc-event {
+        padding: 2px;
+      } 
       & .rbc-month-row {
         @include response(phone-land){
           overflow:visible;
@@ -49,7 +52,7 @@
         }
       } 
       & .rbc-event-content{
-        font-size: 1.5rem;
+        font-size: 1rem;
         @include response(tab-port){
           font-size: 1rem;
         }

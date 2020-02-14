@@ -7,7 +7,6 @@ module.exports = (env) => {
 
   return {
     entry: './src/app.js',
-    //entry: './src/playground/arrays.js',
     output: {
       path: path.join(__dirname, 'public'),
       filename: 'bundle.js'

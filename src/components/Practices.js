@@ -14,7 +14,6 @@ const Practices = () => {
         <img src={bgImage} className="fullsize-bg-image"></img>
         <div className="container-fluid practices ">
           <CardGroup>
-
             <Col>
               <Card className="bg-white-4">
                 <Card.Title>Team Arizona holds Open Practices</Card.Title>
@@ -33,17 +32,17 @@ const Practices = () => {
                 </Card.Body>
               </Card>
               <Card className="bg-white-4 directions">
-              <Card.Title>Directions to 550 East Tempe Town Lake, Tempe, AZ 85251</Card.Title>
-              <Card.Subtitle className="text-muted">Practices are held on the north side of Tempe Town Lake at the marina</Card.Subtitle>
-              <Card.Body>
-                  <ul className="mb-0 border border-success">
-                    <li>From Loop 202 in Tempe, exit on Scottsdale Road and head <b>north</b> (towards Scottsdale, away from Tempe).  You must<strong> immediately</strong> get into the leftmost lane.  You&#8217;ll see the Carvana glass structure to your left.</li>
-                    <li>Turn at the first left on E. Gilbert Dr.</li>
-                    <li>Follow E. Gilbert Drive westward and the marina entrance is right after the overpass.</li>
-                    <li>Park anywhere in the parking lot and we gather on the west side of the boatyard.  Look for the blue and white canoes.</li>
-                  </ul>                
-                </Card.Body>
-            </Card>
+                <Card.Title>Directions to 550 East Tempe Town Lake, Tempe, AZ 85251</Card.Title>
+                <Card.Subtitle className="text-muted">Practices are held on the north side of Tempe Town Lake at the marina</Card.Subtitle>
+                <Card.Body>
+                    <ul className="mb-0 border border-success">
+                      <li>From Loop 202 in Tempe, exit on Scottsdale Road and head <b>north</b> (towards Scottsdale, away from Tempe).  You must<strong> immediately</strong> get into the leftmost lane.  You&#8217;ll see the Carvana glass structure to your left.</li>
+                      <li>Turn at the first left on E. Gilbert Dr.</li>
+                      <li>Follow E. Gilbert Drive westward and the marina entrance is right after the overpass.</li>
+                      <li>Park anywhere in the parking lot and we gather on the west side of the boatyard.  Look for the blue and white canoes.</li>
+                    </ul>                
+                  </Card.Body>
+              </Card>
               <Card className="googleMap">
                 <Card.Body> 
                   <Alert show={show} variant="success">
@@ -65,7 +64,7 @@ const Practices = () => {
               <Card>
                 <Card.Body className="practiceInfo">
                   <div className="practiceTabs bg-white-4">
-                    <Tabs defaultActiveKey="summer" id="practiceTabInfo">
+                    <Tabs fill defaultActiveKey="summer" id="practiceTabInfo">
                       <Tab eventKey="summer" title="Summer Clothing">
                         <Card>
                           <Card.Title>What to wear when it gets warm</Card.Title>

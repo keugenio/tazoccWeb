@@ -6,8 +6,22 @@ footer {
   font-weight: 200;
   background: rgba($dark, .75);
   z-index: 1001;
+  text-align: center;
   @include response(big-desktop){
     font-size: 3rem;
     left: 0;
+  }
+  & .container {
+    display: flex;
+    justify-content: space-between;
+    @include response(phone){
+      flex-direction: column;
+      font-size: 1rem;
+      align-items: center;
+      justify-content: center;
+    }
+    &:nth-child(2){
+      margin-left: initial;
+    }
   }
 }

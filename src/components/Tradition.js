@@ -70,7 +70,7 @@ const Tradition = () => {
         <Suspense fallback={<h1>loading...</h1>}>
           <div><p className="text-center text-white pageTitle">Tradition</p></div>
             <div className="traditionContainer">
-            <Tabs defaultActiveKey="terms" id="uncontrolled-tab-example">
+            <Tabs fill defaultActiveKey="terms" id="uncontrolled-tab-example">
               <Tab eventKey="terms" title="Terms">
                 <section className="terms">
                   <p>In every sport or job there is a special language. For example, Navy terms, words are used in this specialty like no other.  This also works for paddling the Hawaiian canoe.</p>
@@ -79,9 +79,9 @@ const Tradition = () => {
                   <CardColumns className="terms">
                     {terms.map((term, i)=>(
                       <Card key={i}>
+                        <Card.Title>{term.name}</Card.Title>
+                        <Card.Subtitle className="mb-2">pronounced: {term.pronounced}</Card.Subtitle>
                         <Card.Body>
-                          <Card.Title>{term.name}</Card.Title>
-                          <Card.Subtitle className="mb-2 text-light">pronounced: {term.pronounced}</Card.Subtitle>
                           <Card.Text>{term.meaning}</Card.Text>
                         </Card.Body>
                       </Card>
@@ -122,22 +122,35 @@ const Tradition = () => {
                 <section className="positions">
                   <h1>Six paddlers in the canoe, who does what?</h1>
                   <p>Six paddlers in the canoe all working in unison, but each with a role to play. Each paddler from seat number 1-5, paddles alternately on the opposite side from each other.</p>
-                  <div className="responsibility"> 
-                    <CardColumns className="individual_cards">
+                  <div className="responsibility d-flex justify-content-center"> 
+                    <div className="individual_cards col-lg-8 ">
                       {oc6responsibilities.map((responsibility, i) => (
                         <Card bg="info" key={i}>
                           <Card.Title>{responsibility.title}</Card.Title>
                           <Card.Text>{responsibility.responsibility}</Card.Text>
                         </Card>
                       ))}                    
-                    </CardColumns>      
+                    </div>      
                   </div>
                 </section>
               </Tab>
+              <Tab eventKey="characteristics" title="Paddler Characteristics">
+                <section className="positions">
+                  <h1 className="text-center mb-4">What are the characteristics of each seat?</h1>                  
+                  <div className="d-flex justify-content-center"> 
+                    <div className="individual_cards col-lg-8 ">
+                      {oc6characteristics.map((responsibility, i) => (
+                        <Card bg="success" key={i}>
+                          <Card.Title>{responsibility.question}</Card.Title>
+                          <Card.Text>{responsibility.response}</Card.Text>
+                        </Card>
+                      ))}                    
+                    </div>      
+                  </div>
+                </section>
+              </Tab>              
             </Tabs>            
             </div>
-          
-
           </Suspense>
       </div>
     </React.Fragment>
