@@ -4,7 +4,7 @@ import { Modal, CardDeck, Card, Col, Button, ListGroup } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import moment from 'moment';
 import { dbRacesToPaddlers } from '../../components/Firebase';
-import { addRaceToPaddler } from '../../store/store'
+import { addRaceToPaddler,addTimeTrial } from '../../store/store'
 
 function mapStateToProps({user, races, racesPaddlerSignedUpFor}) {
   return {
@@ -44,18 +44,28 @@ class AddRaceToPaddler extends Component {
         const newRaceSignUp = {
           paddlerID:paddlerID,
           raceID:raceID,
-          longCourseReq:0,
-          shortCourseReq:0,
           changeRequirement:false,
-          enabled:true
+          enabled:true,
+          timeTrial:0
         }
         dbRacesToPaddlers.add(newRaceSignUp)
       }
       else{
-        dbRacesToPaddlers.doc(querySnapshot.docs[0].raceID)
+        dbRacesToPaddlers.doc(querySnapshot.docs[0].id)
         .update({
           enabled:true
-        })        
+        })  
+        dbRacesToPaddlers.doc(querySnapshot.docs[0].id)
+        .get()
+        .then((doc)=>{
+          const raceToPaddler = doc.data()
+          this.props.dispatch(addTimeTrial({
+            raceID: raceToPaddler.raceID,
+            paddlerID: raceToPaddler.paddlerID,
+            timeTrial:raceToPaddler.timeTrial
+          }))
+          
+        })
       }      
     })
     .catch(function(error) {
@@ -64,10 +74,9 @@ class AddRaceToPaddler extends Component {
     this.props.dispatch(addRaceToPaddler({
       paddlerID:paddlerID,
       raceID:raceID,
-      longCourseReq:0,
-      shortCourseReq:0,
       changeRequirement:false,
-      enabled:true
+      enabled:true,
+      timeTrial:0
     }))
     // check the amount of races left to add for user.  close the modal if no more races to add
     const availRaces = this.props.races.length - this.props.racesPaddlerSignedUpFor.length - 1

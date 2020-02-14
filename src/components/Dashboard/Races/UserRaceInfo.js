@@ -107,15 +107,14 @@ const UserRaceInfo = (props) => {
                 <td className="text-danger font-weight-bold">Time Trial</td>
                 <td className="text-danger font-weight-bold"> {timeTrial ? `${timeTrial} m` : 'no trial yet'}</td>
               </tr>
-
-              {timeTrial && (<tr>
+              <tr>
                 <td>Ranking for Race</td>
                 <td> <TimeTrials paddler={{...props.paddler, timeTrial}} raceID={props.raceID}/></td>
-              </tr>)} 
-              {timeTrial && (<tr>
+              </tr>
+              <tr>
                 <td>Crew Rank</td>
                 <td><CrewTrials paddler={{...props.paddler, timeTrial}} raceID={props.raceID}/></td>
-              </tr>)}                            
+              </tr>                          
 
               <tr>
                 <td>Change Req</td>
