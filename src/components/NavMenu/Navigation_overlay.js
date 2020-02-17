@@ -72,6 +72,11 @@ const  NavigationOverlay = (props) => {
               <span>06</span>Shop TAZ
             </Link> 
           </li>
+          <li className="navigation__item">   
+            <Link className="navigation__link" to="/scoraRaces" onClick={closeNavOverlay}>
+              <span>07</span>SCORA Race Results
+            </Link> 
+          </li>          
 
 
 

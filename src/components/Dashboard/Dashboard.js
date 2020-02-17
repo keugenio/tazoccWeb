@@ -4,10 +4,9 @@ import { Card, Spinner } from 'react-bootstrap';
 import PaddlerBio from '../Dashboard/PaddlerBio';
 import SCORA_INFO from '../Dashboard/SCORA_INFO';
 import My_Races from '../Dashboard/My_Races';
-import LoadingIcon from '../LoadingIcon';
 import bgImage from '../../bgImages/bg_tribal.png';
-class Dashboard extends React.Component {
 
+class Dashboard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -52,7 +51,7 @@ const DashboardStats = ({availableRaces, currentPage, pageReady}) => (
       <Card className="dashboard bg-white-1">
         <Card.Body>
           <PaddlerBio />
-          <My_Races availableRaces={availableRaces} currentPage={currentPage}/>                      
+          <My_Races availableRaces={availableRaces} currentPage={currentPage}/>                    
         </Card.Body>
       </Card>
     </div>

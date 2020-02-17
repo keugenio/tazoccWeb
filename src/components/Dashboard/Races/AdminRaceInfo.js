@@ -33,7 +33,9 @@ class AdminRaceInfo extends Component {
       paddlerCount:0
     }  
   }
-
+  static getDerivedStateFromProps(props, state) {
+    return { raceID: props.race.raceID };
+  }
   toggleEdit = () => {
     const  { raceID, name, host, location, info, internalInfo, date, longCourseReq, shortCourseReq, changeRequirement } = this.props.race
     this.setState({...this.state, raceID, name:(name||''), host:(host||''), location:(location||''), info:(info||''), internalInfo:(internalInfo || -1), date, longCourseReq:(longCourseReq||''), shortCourseReq:(shortCourseReq||''), changeRequirement, editable:true})

@@ -1,0 +1,9 @@
+.scoraRacesPage {
+  margin-bottom: 5rem;
+  & .pageTitle{
+    padding-top: 8rem;
+    @include response(phone-land){
+      font-size: 3rem;
+    }
+  }
+}

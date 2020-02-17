@@ -107,6 +107,7 @@ class PaddlerBio extends React.Component{
             <MonogramOrImage selectedPaddler={this.props.selectedPaddler} />
             <div className="ml-3">About {paddlerName}</div>
             <div className="ml-auto d-flex align-items-center">
+              {(this.props.user.role == "admin" || this.props.user.role=="superAdmin") && <Search/>}
               <EditProfile location="paddlerBio" />
               <Button className="bg-transparent border-0" onClick={this.rotate}>
                 <FontAwesomeIcon icon="angle-up" className="fa-2x text-white bg-transparent" style={{transform: `rotate(${this.state.rotation}deg)`}}/>                  
@@ -116,7 +117,7 @@ class PaddlerBio extends React.Component{
           </Accordion.Toggle>
           <Accordion.Collapse eventKey='1'>
             <Card.Body>
-              {this.props.user.role != '' && <div className="d-flex justify-content-end"><Search /></div>}
+              {/*this.props.user.role != '' && <div className="d-flex justify-content-end"><Search /></div>*/}
               {!this.state.showEditable && (<NonEditableBio selectedPaddler={this.props.selectedPaddler} />)}         
               <SCORA_INFO />
             </Card.Body>

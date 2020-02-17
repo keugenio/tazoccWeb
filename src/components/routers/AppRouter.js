@@ -17,6 +17,7 @@ import AdminControl from '../Dashboard/AdminControl';
 import NotFoundPage from '../NotFoundPage';
 import Footer from '../Footer';
 import EditProfile from '../Auth/EditProfile';
+import ScoraRacesPage from '../ScoraRacesPage';
 import "babel-polyfill";
 import { setPaddlerName, setPaddlerID, setPaddlerImage, setPaddlerRole, setPaddlerAttendance, addRaceToPaddler, setSelectedPaddler, setUserReadNews, setSCORAInfo, setNewsArticles, setAmountOfNewsUserStillNeedsToRead, addRace } from '../../store/store';
 
@@ -49,11 +50,13 @@ class AppRouter extends React.Component {
             qSnap.docs.map(doc=>{
              dbRaces.doc(doc.id).get()
               .then(race=>{
-                const raceInfo = race.data()                
-                dbRacesToPaddlers.where("raceID", "==", race.id).where("enabled", "==", true).get()
-                .then((res)=>{
-                  this.props.dispatch(addRace({...raceInfo, raceID:race.id, paddlerCount:res.docs.length}))
-                  });                
+                const raceInfo = race.data()  
+                if (raceInfo.enabled){
+                  dbRacesToPaddlers.where("raceID", "==", race.id).where("enabled", "==", true).get()
+                  .then((res)=>{
+                    this.props.dispatch(addRace({...raceInfo, raceID:race.id, paddlerCount:res.docs.length}))
+                    });
+                }              
               })
             })
           })
@@ -117,6 +120,7 @@ class AppRouter extends React.Component {
           <Register path="/register" />
           <AdminControl path="/admin" />
           <EditProfile path="/editprofile" />
+          <ScoraRacesPage path="/scoraRaces" />
           <NotFoundPage default />
         </Router>
         <Footer />

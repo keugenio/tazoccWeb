@@ -141,7 +141,7 @@ const UserRaceInfo = (props) => {
           </Table>
         </Card.Body>
       </Card>
-      {(internalInfo > 0) && (<Modal show={showInternalInfoModal} onHide={closeModal} animation={false} size="lg" centered  className="moreRaceInfo">
+      {(internalInfo >= 0) && (<Modal show={showInternalInfoModal} onHide={closeModal} animation={false} size="lg" centered  className="moreRaceInfo">
         <Modal.Header closeButton />
         <Modal.Title className="pl-4"> {events[internalInfo].title}</Modal.Title>
         <Modal.Body>

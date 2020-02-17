@@ -265,7 +265,7 @@ const racesReducer = ( state=[], action ) => {
       updatedRaces.sort(function(a, b){return a.date - b.date});
       return updatedRaces 
     case 'DELETE_RACE':
-      const racesNotDeleted = state.filter( race=> race.id !== action.raceID)
+      const racesNotDeleted = state.filter( race=> race.raceID !== action.raceID)
       return [...racesNotDeleted];
     case 'CLEAR_ALL_RACES':
       return [];

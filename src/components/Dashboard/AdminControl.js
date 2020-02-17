@@ -5,7 +5,6 @@ import {dbAllPaddlers} from '../Firebase';
 import { addPaddlerToAllPaddlers, clearAllPaddlers } from '../../store/store';
 import "babel-polyfill";
 import SCORA_INFO from '../Dashboard/SCORA_INFO';
-import Search from './Search';
 import LoadingIcon from '../LoadingIcon';
 import PaddlerBio from './PaddlerBio';
 import RacesAdmin from './Races/RacesAdmin';
@@ -40,7 +39,9 @@ class AdminControl extends React.Component{
       return (
         <div className="adminContainer">
           <Card bg="dark" text="white" className="dashboard">
-            <Card.Title className="bg-warning text-white">Admin Dashboard</Card.Title>
+            <Card.Title className="bg-warning text-white">
+              <div>Admin Dashboard</div>
+            </Card.Title>
             <Card.Body>
               <section className="border-light border rounded">
                 <PaddlerBio />
