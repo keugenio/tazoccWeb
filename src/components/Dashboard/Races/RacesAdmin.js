@@ -53,11 +53,12 @@ class RacesAdmin extends Component {
       host:this.state.host,
       location:this.state.location,
       date:this.state.date,
-      longCourseReq:this.state.longCourseReq,
-      shortCourseReq:this.state.shortCourseReq,
+      longCourseReq:this.state.longCourseReq || null,
+      shortCourseReq:this.state.shortCourseReq || null,
       info:this.state.info,
       internalInfo:((this.state.internalInfo!=-1) ? this.state.internalInfo: null),
-      changeRequirement:this.state.changeRequirement     
+      changeRequirement:this.state.changeRequirement, 
+      enabled:true    
     })
     .then((docRef) => {
       //console.log("Document written with ID: ", docRef.id);
@@ -72,7 +73,8 @@ class RacesAdmin extends Component {
         shortCourseReq: newRaceInfo.shortCourseReq,
         info: newRaceInfo.info,
         internalInfo:((this.state.internalInfo!=-1) ? this.state.internalInfo: null),
-        changeRequirement: newRaceInfo.changeRequirement         
+        changeRequirement: newRaceInfo.changeRequirement,
+        enabled:newRaceInfo.enabled        
       }))
     })
     .catch(function(error) {

@@ -11,6 +11,7 @@ import News from '../News';
 import TAZCalendarOfEvents from '../CalendarOfEvents'
 import ShopTAZ from '../ShopTAZ';
 import Login from '../Auth/Login';
+import FirebaseLogin from '../Auth/FirebaseLogin';
 import Dashboard from '../Dashboard/Dashboard';
 import Register from '../Auth/Register';
 import AdminControl from '../Dashboard/AdminControl';
@@ -116,7 +117,9 @@ class AppRouter extends React.Component {
           <ShopTAZ path="/shopTAZ" />
           <News path="/news" />
           <Dashboard path="/dashboard" />
-          <Login path="/login" />
+          <Dashboard path="/signedIn" />
+          <FirebaseLogin path="/login" />
+          {/*<Login path="/login" />*/}
           <Register path="/register" />
           <AdminControl path="/admin" />
           <EditProfile path="/editprofile" />
