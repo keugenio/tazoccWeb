@@ -137,10 +137,10 @@ const NonEditableBio = ({selectedPaddler}) =>(
   <div className="nonEditableBio p-4">
     <Row>
       <Col lg={4} xs={12}>
-        <table>
+        <table className="text-muted border border-muted">
           <tbody>
             <tr>
-              <td><p>{`Dues Paid for ${moment().format('YYYY')}:`}</p></td>
+              <td><p className="text-muted">{`Dues Paid for ${moment().format('YYYY')}:`}</p></td>
               <td>
                 {selectedPaddler.duesPaid && ('Yes') }
                 {!selectedPaddler.duesPaid && <span className="text-danger font-weight-bold">NO</span> }
@@ -148,12 +148,20 @@ const NonEditableBio = ({selectedPaddler}) =>(
             </tr>
             <tr>
               <td>
-                <b>Membership Type:</b>
+                <b className="text-muted">Membership Type:</b>
               </td>
               <td>
                 <span>{selectedPaddler.membershipType || 'n/a'}</span> 
               </td>
             </tr>
+            <tr>
+              <td>
+                <b className="text-muted">Paddler Email:</b>
+              </td>
+              <td>
+                <span>{selectedPaddler.email || 'n/a'}</span> 
+              </td>
+            </tr>            
           </tbody>
         </table>
       </Col>
@@ -199,7 +207,13 @@ const NonEditableBio = ({selectedPaddler}) =>(
       <Col lg={4} xs={12}>
         <table>
           <tbody>
-            <tr>
+          <tr>
+            <td><p>Paddler Phone</p></td>
+            <td>
+              {selectedPaddler.paddlerPhone || 'n/a'}
+            </td>
+          </tr>
+          <tr>
               <td><p>Emergency Contact</p></td>
               <td>
                 {selectedPaddler.contactName || 'n/a'}

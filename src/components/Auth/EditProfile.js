@@ -25,6 +25,7 @@ class EditProfile extends Component {
       birthday:0,
       jerseySize:'',
       sex:'wahine',
+      paddlerPhone:'',
       contactName:'',
       contactNumber:'',
       showModal:false,
@@ -41,6 +42,7 @@ class EditProfile extends Component {
       membershipType:this.props.selectedPaddler.membershipType || '',
       jerseySize:this.props.selectedPaddler.jerseySize || '',
       sex:this.props.selectedPaddler.sex || '',
+      paddlerPhone: this.props.selectedPaddler || '',
       contactName:this.props.selectedPaddler.contactName || '',
       contactNumber:this.props.selectedPaddler.contactNumber||'',      
       showModal:true
@@ -80,6 +82,7 @@ class EditProfile extends Component {
       birthday:this.state.birthday,
       jerseySize:this.state.jerseySize,
       sex:this.state.sex,
+      paddlerPhone: this.state.paddlerPhone,
       contactName:this.state.contactName,
       contactNumber:this.state.contactNumber      
     }).then(()=>{
@@ -238,7 +241,16 @@ const EditableBio = ({admin, state, selectedPaddler, handleOnChange, handleChang
         <tbody>
           <tr>
             <td>
-              Contact Name:
+              Paddler Phone:
+            </td>
+            <td>
+            <input type="text" name="paddlerPhone" onChange={handleOnChange} style={formStyle} defaultValue={selectedPaddler.paddlerPhone} style={{width:'100%'}}>                                                              
+            </input>              
+            </td>              
+          </tr>          
+          <tr>
+            <td>
+              Emergency Contact Name:
             </td>
             <td>
               <input type="text" name="contactName" onChange={handleOnChange} style={formStyle} defaultValue={selectedPaddler.contactName} style={{width:'100%'}}>                                                              
@@ -247,14 +259,15 @@ const EditableBio = ({admin, state, selectedPaddler, handleOnChange, handleChang
           </tr>
           <tr>
             <td>
-              Contact's Number:
+              Emergency Contact's Number:
             </td>
             <td>
             <input type="text" name="contactNumber" onChange={handleOnChange} style={formStyle} defaultValue={selectedPaddler.contactNumber} style={{width:'100%'}}>                                                              
             </input>              
             </td>              
           </tr>          
-        </tbody>
+                
+          </tbody>
       </table>    
     </Col>
   </Row>  

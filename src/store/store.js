@@ -100,6 +100,9 @@ export const setPaddlerImage = (paddlerImage) => ({
 export const setPaddlerRole = (role) =>({
   type:'SET_PADDLER_ROLE', role
 })
+export const setPaddlerEmail = (email) => ({
+  type:'SET_PADDLER_EMAIL', email
+})
 export const setPaddlerAttendance = (paddlerAttendanceArray) =>({
   type:'SET_PADDLER_ATTENDANCE', paddlerAttendanceArray
 })
@@ -144,6 +147,8 @@ const authenticatedUserReducer = (state = {}, action) => {
       return {...state, role:action.role}
     case 'SET_PADDLER_ATTENDANCE':      
       return { ...state, attendance:[...action.paddlerAttendanceArray]}
+    case 'SET_PADDLER_EMAIL':
+      return ({...state, email:action.email})
     case 'SET_USER_READ_NEWS':
       return {...state, readNews:[...action.readNewsArray]}      
     case 'SET_SCORA_INFO':
@@ -205,8 +210,10 @@ const allPaddlersReducer = (state = [], action) => {
 
 /*******  selected Paddler Action and Reducer ******/
 export const setSelectedPaddler = (paddler) => ({
-  type:'SET_SELECTED_PADDLER',
-  paddler
+  type:'SET_SELECTED_PADDLER', paddler
+})
+export const setSelectedPaddlerEmail = (email) => ({
+  type:'SET_SELECTED_PADDLER_EMAIL', email
 })
 export const clearSelectedPaddler = (paddler) => ({
   type:'CLEAR_SELECTED_PADDLER'
@@ -215,6 +222,8 @@ const selectedPaddlerReducer = ( state = '', action ) => {
   switch (action.type) {
     case 'SET_SELECTED_PADDLER':
       return action.paddler;
+    case 'SET_SELECTED_PADDLER_EMAIL':
+      return {...state, email:action.email}
     case 'CLEAR_SELECTED_PADDLER':
       return '';
     default:

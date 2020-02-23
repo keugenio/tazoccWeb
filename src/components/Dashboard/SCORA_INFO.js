@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import { Card, Row, Col, Button, Accordion } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { dbAllPaddlers } from '../Firebase';
+import SmartWaiver from '../Dashboard/SmartWaiver';
+
 import Swal from 'sweetalert2';
 
 import { setSelectedPaddler, editSelectedPaddler } from '../../store/store'
@@ -106,7 +108,9 @@ class SCORA_INFO extends React.Component {
         <Card.Title className="d-flex justify-content-between bg-muted">
           {this.props.selectedPaddler && (<div>SCORA Info for {this.props.selectedPaddler.paddlerName}</div>)}
           {!this.props.selectedPaddler && (<div>Select a paddler to view SCORA Info</div>)}
-          <div>
+          <div className="d-flex">
+            {this.props.selectedPaddler.scoraWaiver && <SmartWaiver selectedPaddler={this.props.selectedPaddler}/>
+            }
             {this.state.showEditable && (<Button onClick={this.toggleSave} className="btn-danger" ><FontAwesomeIcon icon="save" className="fa-2x text-white"/></Button>)}
             {this.props.user.role!='' && this.props.selectedPaddler && !this.state.showEditable && (<Button onClick={this.toggleEdit} className="bg-transparent border-0"><FontAwesomeIcon icon="edit" className="fa-2x text-white"/></Button>) }
             {this.state.showEditable && (<Button onClick={this.toggleCancel} className="bg-transparent border-0" ><FontAwesomeIcon icon="window-close" className="fa-2x text-white"/></Button>)}          
@@ -118,7 +122,7 @@ class SCORA_INFO extends React.Component {
               <Row>
                 <Col lg={6} xs={12} className="flex-row text-dark">
                   <div className="input-group input-group-lg d-flex align-items-center">
-                    SCORA ID:<div className="ml-2">{this.props.selectedPaddler.scoraID || 'none'}</div>    
+                    SCORA ID:<div className="ml-2">{this.props.selectedPaddler.SCORAID || 'none'}</div>    
                   </div>     
                 </Col>
               </Row>
@@ -127,12 +131,6 @@ class SCORA_INFO extends React.Component {
                   <div className="form-check">
                     <input type="checkbox" className="form-check-input" name="scoraWaiverView" checked={this.props.selectedPaddler.scoraWaiver || false} disabled/>
                     <label className="form-check-label" htmlFor="scoraWaiver">SCORA Waiver</label>
-                  </div>
-                </Col>
-                <Col lg={4} xs={4} className="flex-row">
-                  <div className="form-check">
-                    <input type="checkbox" className="form-check-input" name="scoraSmartWaiverView" checked={this.props.selectedPaddler.scoraSmartWaiver || false} disabled/>
-                    <label className="form-check-label" htmlFor="scoraSmartWaiver">SCORA Waiver</label>
                   </div>
                 </Col>
                 <Col lg={4} xs={4} className="flex-row">
@@ -166,12 +164,6 @@ class SCORA_INFO extends React.Component {
                     <div className="form-check">
                       <input type="checkbox" className="form-check-input" name="scoraWaiver" checked={this.state.scoraWaiver} onChange={this.handleChange}/>
                       <label className="form-check-label" htmlFor="scoraWaiver">SCORA Waiver</label>
-                    </div>
-                  </Col>
-                  <Col lg={4} xs={4} className="flex-row">
-                    <div className="form-check">
-                      <input type="checkbox" className="form-check-input" name="scoraSmartWaiver" checked={this.state.scoraSmartWaiver} onChange={this.handleChange}/>
-                      <label className="form-check-label" htmlFor="scoraSmartWaiver">SCORA Waiver</label>
                     </div>
                   </Col>
                   <Col lg={4} xs={4} className="flex-row">

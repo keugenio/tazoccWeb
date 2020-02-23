@@ -20,7 +20,7 @@ import Footer from '../Footer';
 import EditProfile from '../Auth/EditProfile';
 import ScoraRacesPage from '../ScoraRacesPage';
 import "babel-polyfill";
-import { setPaddlerName, setPaddlerID, setPaddlerImage, setPaddlerRole, setPaddlerAttendance, addRaceToPaddler, setSelectedPaddler, setUserReadNews, setSCORAInfo, setNewsArticles, setAmountOfNewsUserStillNeedsToRead, addRace } from '../../store/store';
+import { setPaddlerName, setPaddlerID, setPaddlerImage, setPaddlerRole, setPaddlerAttendance, setPaddlerEmail, addRaceToPaddler, setSelectedPaddler, setSelectedPaddlerEmail, setUserReadNews, setSCORAInfo, setNewsArticles, setAmountOfNewsUserStillNeedsToRead, addRace } from '../../store/store';
 
 class AppRouter extends React.Component {
   constructor(){
@@ -73,10 +73,13 @@ class AppRouter extends React.Component {
             this.props.dispatch(setPaddlerRole(paddler.role || ''));                   
             this.props.dispatch(setPaddlerAttendance(paddler.attendance || []));
             this.props.dispatch(setPaddlerImage(FBUser.photoURL));
+            this.props.dispatch(setPaddlerEmail(FBUser.email));
+            
             // this.props.dispatch(setUserReadNews(paddler.readNews || []));
             // this.props.dispatch(setAmountOfNewsUserStillNeedsToRead( newsAmount - (paddler.readNews? paddler.readNews.length: 0)));
             this.props.dispatch(setSCORAInfo(paddler));    
-            this.props.dispatch(setSelectedPaddler(paddler))      
+            this.props.dispatch(setSelectedPaddler(paddler));
+            this.props.dispatch(setSelectedPaddlerEmail(FBUser.email))    
           } 
           else {
             dbAllPaddlers.doc(FBUser.uid).set({
