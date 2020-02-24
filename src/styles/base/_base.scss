@@ -149,6 +149,11 @@ button:disabled {
       color:$white;
     }
   }
+  & .modal-header {
+    & button {
+      color: $dark;
+    }
+  }
 }
 
 .modal-open {

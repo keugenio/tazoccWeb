@@ -9,7 +9,7 @@ const SmartWaiver = (props) => {
     <div>
       <Button onClick={()=>setShowModal(true)}>SCORA Waiver</Button>
       <Modal show={showModal} onHide={()=>setShowModal(false)} >
-        <Modal.Header closeButton>
+        <Modal.Header className="text-dark" closeButton>
           <Modal.Title className="text-dark">SCORA Waiver</Modal.Title>  
         </Modal.Header>
         <Modal.Body>
