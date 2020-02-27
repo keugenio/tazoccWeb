@@ -32,6 +32,8 @@
   & table {
     border-spacing: 10px;
     border-collapse: collapse;
+    table-layout: fixed;
+    width: 100%;
     & td {
       padding: .5rem;
       vertical-align: top;

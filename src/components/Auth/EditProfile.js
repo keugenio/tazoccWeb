@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {Form, Col, Row, Button, Modal } from 'react-bootstrap';
 import firebase, { dbAllPaddlers } from '../Firebase';
-import { setSelectedPaddler, updatePaddler, updateUser } from '../../store/store';
+import { setSelectedPaddler, updateSelectedPaddler, updatePaddler, updateUser } from '../../store/store';
 import Swal from 'sweetalert2';
 import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -42,7 +42,7 @@ class EditProfile extends Component {
       membershipType:this.props.selectedPaddler.membershipType || '',
       jerseySize:this.props.selectedPaddler.jerseySize || '',
       sex:this.props.selectedPaddler.sex || '',
-      paddlerPhone: this.props.selectedPaddler || '',
+      paddlerPhone: this.props.selectedPaddler.paddlerPhone || '',
       contactName:this.props.selectedPaddler.contactName || '',
       contactNumber:this.props.selectedPaddler.contactNumber||'',      
       showModal:true
@@ -87,16 +87,18 @@ class EditProfile extends Component {
       contactNumber:this.state.contactNumber      
     }).then(()=>{
       const currPaddler = {
-        ...this.props.user,
+        ...this.props.selectedPaddler,
         paddlerName:this.state.displayName,
         birthday:this.state.birthday,
         jerseySize:this.state.jerseySize,
         sex:this.state.sex,
+        paddlerPhone: this.state.paddlerPhone,
         contactName:this.state.contactName,
         contactNumber:this.state.contactNumber }
-      this.props.dispatch(updatePaddler(currPaddler))
-      this.props.dispatch(setSelectedPaddler(currPaddler))
-      if (this.props.user.role !== 'admin' && this.props.user.role !== 'superAdmin')
+      this.props.dispatch(updateSelectedPaddler(currPaddler))
+      if (this.props.location=="admin")
+        this.props.dispatch(updatePaddler(currPaddler))
+      if (this.props.location!="admin")
         this.props.dispatch(updateUser(currPaddler))
     }).then(()=>{
       Swal.fire({
@@ -117,10 +119,10 @@ class EditProfile extends Component {
     return (
       <div>
 
-        {(this.props.location=="navMenu" || this.props.location=="paddlerBio") && <Button variant="dark" onClick={()=>this.handleEdit()} className="bg-transparent text-dark border-0 d-flex align-items-center">
+        <Button variant="dark" onClick={()=>this.handleEdit()} className="bg-transparent text-dark border-0 d-flex align-items-center">
           <h4>Settings</h4>
           <FontAwesomeIcon icon="cog" className="ml-2 fa-2x"/>
-        </Button>}
+        </Button>
         { this.props.location=="overlay" && this.props.user.paddlerID &&  <span onClick={()=>this.handleEdit()}>PROFILE SETTINGS</span>}
         <Modal centered show={this.state.showModal} onHide={()=>{this.setState({showModal:false})}} className="editProfile">
           <Modal.Title className="px-2 bg-success text-white d-flex justify-content-start align-items-center">
@@ -224,7 +226,7 @@ const EditableBio = ({admin, state, selectedPaddler, handleOnChange, handleChang
               sex:
             </td>
             <td>
-              <Form.Control as="select" size="lg" name="sex" onChange={handleOnChange} style={formStyle} defaultValue={selectedPaddler.sex}>
+              <Form.Control as="select" size="lg" name="sex" onChange={handleOnChange} style={formStyle} defaultValue={selectedPaddler.sex || "n/a"}>
                 <option disabled value='n/a'>-- select sex --</option>
                 <option value='wahine'>wahine</option>
                 <option value='kane'>kane</option>   

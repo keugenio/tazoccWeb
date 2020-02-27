@@ -2,56 +2,58 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Card, Spinner } from 'react-bootstrap';
 import PaddlerBio from '../Dashboard/PaddlerBio';
-import SCORA_INFO from '../Dashboard/SCORA_INFO';
 import My_Races from '../Dashboard/My_Races';
 import bgImage from '../../bgImages/bg_tribal.png';
+import DatePicker from './Datepicker';
+import moment from 'moment';
+import { dbAttendance } from '../Firebase';
 
 class Dashboard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      pageReady:false
+      daysThatHadPractices:[],
+      pageReady:true
     }
   }
 
-  static getDerivedStateFromProps(props, state) {
-    const { racesPaddlerSignedUpFor, races } = props
-    const availableRaces=[];
-
-    if (props.loggedIn) {  
-      racesPaddlerSignedUpFor.forEach(signedUpRace =>{
-        const raceInfo = races.find(race=>race.raceID==signedUpRace.raceID);
-        const userRaceInfo = {...raceInfo, ...signedUpRace };
-    
-        availableRaces.push(userRaceInfo)
+ async componentDidMount(){
+    let daysThatHadPractices =
+    await dbAttendance.get()
+    .then((snapShot)=>{
+      let practices=[];
+      snapShot.docs.forEach(doc=>{
+        practices.push(new Date(doc.id))
       })
-      const { scoraSmartWaiver, scoraWaiver, huliDrill, scoraID, uid} = props.user
-      return {...state, scoraSmartWaiver, scoraWaiver, huliDrill, scoraID, availableRaces, paddlerID:uid, pageReady:true}
-    }
-    else {
-      return null}
-
+      return practices
+    })
+    this.setState({daysThatHadPractices:[...daysThatHadPractices], pageReady:true});
   }
 
-  render () {
+  render () {    
     return (
       <div>
-        {this.state.pageReady && this.props.loggedIn && <DashboardStats 
-          availableRaces={this.props.racesPaddlerSignedUpFor} currentPage={this.props.path}/>}
+        {this.state.pageReady && this.props.loggedIn && 
+          <DashboardStats 
+            availableRaces={this.props.racesPaddlerSignedUpFor}
+            currentPage={this.props.path}
+            daysThatHadPractices = {this.state.daysThatHadPractices}
+          />}
         {this.state.pageReady && !this.props.loggedIn && <NotLoggedIn />}
       </div>
      )
   }
 }
 
-const DashboardStats = ({availableRaces, currentPage, pageReady}) => (
+const DashboardStats = ({availableRaces, currentPage, daysThatHadPractices}) => (
   <div className="dashboardContainer">
     <img src={bgImage} className="fullsize-bg-image"></img>
     <div className="dashboardStats">
       <Card className="dashboard bg-white-1">
         <Card.Body>
           <PaddlerBio />
-          <My_Races availableRaces={availableRaces} currentPage={currentPage}/>                    
+          <My_Races availableRaces={availableRaces} currentPage={currentPage}/>  
+          <DatePicker daysThatHadPractices={daysThatHadPractices}/>
         </Card.Body>
       </Card>
     </div>

@@ -29,7 +29,7 @@ const AddNoLoginPaddlerForm = (props) => {
     else {
       // add paddler to auth firestore
       const birthday = moment().subtract(age, "years").valueOf();
-      let newPaddler = {name:displayName, birthday, sex:sex, SCORAID:'', uid:('XXXX-'+ uuid())}
+      let newPaddler = {name:displayName, birthday, sex:sex, scoraID:'', uid:('XXXX-'+ uuid())}
 
       dbAllPaddlers.doc(newPaddler.uid).set({
         ...newPaddler

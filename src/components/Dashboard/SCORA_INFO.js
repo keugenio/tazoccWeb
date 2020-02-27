@@ -122,7 +122,7 @@ class SCORA_INFO extends React.Component {
               <Row>
                 <Col lg={6} xs={12} className="flex-row text-dark">
                   <div className="input-group input-group-lg d-flex align-items-center">
-                    SCORA ID:<div className="ml-2">{this.props.selectedPaddler.SCORAID || 'none'}</div>    
+                    SCORA ID:<div className="ml-2">{this.props.selectedPaddler.scoraID || 'none'}</div>    
                   </div>     
                 </Col>
               </Row>

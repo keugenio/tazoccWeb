@@ -100,7 +100,10 @@ class AppRouter extends React.Component {
                   this.props.dispatch(addRaceToPaddler({...scoraRaceInfo, ...raceInfo, changeRequirementForRace:scoraRaceInfo.changeRequirement}))
               })
             })
-          })
+        })
+        .then(()=>{
+          dbAllPaddlers.doc(FBUser.uid).update({email:FBUser.email})
+        })
       }
     })
     // make the hover message on the links viewable instantly suing jQuery

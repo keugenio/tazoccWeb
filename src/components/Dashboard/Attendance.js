@@ -4,8 +4,7 @@ import { connect} from 'react-redux';
 import { Accordion, Form, Card, Button, Row, Col, ListGroup, InputGroup, Badge, Modal } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Swal from 'sweetalert2';
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+import DatePicker from './Datepicker';
 import moment from 'moment';
 import uuid from 'uuid/v4'
 import { } from '../../store/store';
@@ -183,55 +182,44 @@ class Attendance extends Component {
     return (
       <div className="attendance" id="attendance">
         <Accordion defaultActiveKey="0">      
-        <Card className="text-dark">
-          <Accordion.Toggle as={Card.Title} eventKey="0" className="bg-warning">
-            <Card.Title className="d-flex justify-content-between align-items-center bg-warning text-dark">
-              <span>Attendance</span>
-              <div className="d-flex">
-                <Button className="bg-transparent" onClick={()=>this.rotate()}>
-                  <FontAwesomeIcon icon="angle-up" className="fa-2x text-dark bg-transparent border-0" style={{transform: `rotate(${this.state.rotation}deg)`}}/>
-                </Button>                
-              </div>
-            </Card.Title>
-          </Accordion.Toggle>          
-          <Accordion.Collapse eventKey="0">
-            <Card.Body>
-              <Row>
-                <Col lg={6} xs={12}>
-                  <Card text="dark" border="dark">
-                    <Card.Body className="d-flex justify-content-center">
-                      <DatePicker
-                        value={this.state.date}
-                        selected={this.state.date}
-                        onChange={this.handleCalendarChange}
-                        defaultValue={new Date()}
-                        highlightDates={this.state.daysThatHadPractices}
-                        inline
-                      />                    
-                    </Card.Body>
-                  </Card>              
-                </Col>
-                <Col lg={6} xs={12} className="d-flex justify-content-center">
-                  <Card border="dark" text="dark" className="bg-transparent dbListOfPaddlersWhoAttended">
-                    <Card.Header className="d-flex justify-content-start text-dark">
-                      <span className="ml-2">{moment(this.state.date).format("ddd MM-DD-YYYY")}</span>
-                      <span className="ml-auto row">
-                        <Badge pill variant="warning" className="ml-3">{this.state.dBpaddlersWhoPracticed.length} attended</Badge>
-                        <Button className="bg-transparent border-0 ml-2 text-dark" onClick={this.showModal}><FontAwesomeIcon icon="edit" className="fa-2x"/></Button>
-                      </span>
-                    </Card.Header>
+          <Card className="text-dark">
+            <Accordion.Toggle as={Card.Title} eventKey="0" className="bg-warning">
+              <Card.Title className="d-flex justify-content-between align-items-center bg-warning text-dark">
+                <span>Attendance</span>
+                <div className="d-flex">
+                  <Button className="bg-transparent" onClick={()=>this.rotate()}>
+                    <FontAwesomeIcon icon="angle-up" className="fa-2x text-dark bg-transparent border-0" style={{transform: `rotate(${this.state.rotation}deg)`}}/>
+                  </Button>                
+                </div>
+              </Card.Title>
+            </Accordion.Toggle>          
+            <Accordion.Collapse eventKey="0">
+              <Card.Body>
+                <Row>
+                  <Col lg={6} xs={12} className="d-flex justify-content-center">
+                    <DatePicker daysThatHadPractices={this.state.daysThatHadPractices} handleCalendarChange={this.handleCalendarChange}/>            
+                  </Col>
+                  <Col lg={6} xs={12} className="d-flex justify-content-center">
+                    <Card border="dark" text="dark" className="bg-transparent dbListOfPaddlersWhoAttended">
+                      <Card.Header className="d-flex justify-content-start text-dark">
+                        <span className="ml-2">{moment(this.state.date).format("ddd MM-DD-YYYY")}</span>
+                        <span className="ml-auto row">
+                          <Badge pill variant="warning" className="ml-3">{this.state.dBpaddlersWhoPracticed.length} attended</Badge>
+                          <Button className="bg-transparent border-0 ml-2 text-dark" onClick={this.showModal}><FontAwesomeIcon icon="edit" className="fa-2x"/></Button>
+                        </span>
+                      </Card.Header>
 
-                    <Card.Body>
-                      <Card.Text>
-                        {this.state.dBpaddlersWhoPracticed.map((paddler, i)=>(
-                            <span key={paddler.paddlerID} className="ml-3 comma">{paddler.paddlerName}</span>
-                          ))}
-                      </Card.Text>
-                    </Card.Body>
-                  </Card>
-                </Col>
-              </Row>                                    
-            </Card.Body>
+                      <Card.Body>
+                        <Card.Text>
+                          {this.state.dBpaddlersWhoPracticed.map((paddler, i)=>(
+                              <span key={paddler.paddlerID} className="ml-3 comma">{paddler.paddlerName}</span>
+                            ))}
+                        </Card.Text>
+                      </Card.Body>
+                    </Card>
+                  </Col>
+                </Row>                                    
+              </Card.Body>
             </Accordion.Collapse>          
           </Card>
         </Accordion>

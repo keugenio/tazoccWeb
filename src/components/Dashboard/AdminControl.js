@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Row, Col, Card } from 'react-bootstrap';
+import { Col, Card } from 'react-bootstrap';
 import {dbAllPaddlers} from '../Firebase';
 import { addPaddlerToAllPaddlers, clearAllPaddlers } from '../../store/store';
 import "babel-polyfill";
@@ -44,7 +44,7 @@ class AdminControl extends React.Component{
             </Card.Title>
             <Card.Body>
               <section className="border-light border rounded">
-                <PaddlerBio />
+                <PaddlerBio location="admin"/>
               </section>
               {this.props.user.role == "superAdmin" && (
                 <section className="border-light border rounded">

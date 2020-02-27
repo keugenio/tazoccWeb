@@ -15,7 +15,7 @@ const SmartWaiver = (props) => {
         <Modal.Body>
         <Card>
           <Card.Body className="text-dark dislay-3">
-            {props.selectedPaddler && <span>Your SCORA ID is <b>{props.selectedPaddler.SCORAID}</b></span>}
+            {props.selectedPaddler && <span>Your SCORA ID is <b>{props.selectedPaddler.scoraID}</b></span>}
             <p>Good news!! You only have to complete 1 waiver!</p>
             <ol>
               <li>remember your SCORA ID {} and use that to complete your form</li>

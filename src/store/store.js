@@ -125,6 +125,9 @@ export const setBirthday = (date) => ({
   type:'SET_BIRTHDAY',
   date
 })
+export const setPaddler = (paddler) => ({
+  type: 'SET_PADDLER', paddler
+})
 export const updateUser = (paddler) => ({
   type:'UPDATE_USER', paddler
 })
@@ -156,7 +159,9 @@ const authenticatedUserReducer = (state = {}, action) => {
     case 'SET_AMOUNT_OF_NEWS_USERS_STILL_NEEDS_TO_READ':
       return {...state, amountStillNeedsToRead:action.amount};  
     case 'SET_BIRTHDAY':
-      return {...state, birthday:action.date}   
+      return {...state, birthday:action.date};
+    case 'SET_PADDLER':
+      return { ...action.paddler};
     case 'LOG_USER_OUT':  
       return {}
     case 'ADD_READ_NEWS_ARTICLE':
@@ -199,8 +204,8 @@ const allPaddlersReducer = (state = [], action) => {
       case 'ADD_PADDLER_TO_ALL_PADDLERS':
         return [...state, action.paddler]
       case 'UPDATE_PADDLER':
-        const filteredPaddlers = state.filter(paddler=>paddler.uid!=action.paddler.paddlerID);
-        return [...filteredPaddlers, action.paddler ]
+        const filteredPaddlers1 = state.filter(paddler=>paddler.paddlerID!=action.paddler.paddlerID);
+        return [...filteredPaddlers1, action.paddler ]
       case 'CLEAR_ALL_PADDLERS':
         return []; 
     default:
@@ -212,6 +217,9 @@ const allPaddlersReducer = (state = [], action) => {
 export const setSelectedPaddler = (paddler) => ({
   type:'SET_SELECTED_PADDLER', paddler
 })
+export const updateSelectedPaddler = (paddler) => ({
+  type:'UPDATE_SELECTED_PADDLER', paddler
+})
 export const setSelectedPaddlerEmail = (email) => ({
   type:'SET_SELECTED_PADDLER_EMAIL', email
 })
@@ -222,6 +230,8 @@ const selectedPaddlerReducer = ( state = '', action ) => {
   switch (action.type) {
     case 'SET_SELECTED_PADDLER':
       return action.paddler;
+      case 'UPDATE_SELECTED_PADDLER':
+        return {...state, ...action.paddler};      
     case 'SET_SELECTED_PADDLER_EMAIL':
       return {...state, email:action.email}
     case 'CLEAR_SELECTED_PADDLER':
