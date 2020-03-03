@@ -1,12 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Card, Spinner } from 'react-bootstrap';
+import { Card } from 'react-bootstrap';
 import PaddlerBio from '../Dashboard/PaddlerBio';
 import My_Races from '../Dashboard/My_Races';
 import bgImage from '../../bgImages/bg_tribal.png';
 import DatePicker from './Datepicker';
 import moment from 'moment';
-import { dbAttendance } from '../Firebase';
+import { dbAttendance, dbAllPaddlers } from '../Firebase';
+import { addPaddlerToAllPaddlers } from '../../store/store';
 
 class Dashboard extends React.Component {
   constructor(props) {
@@ -27,6 +28,16 @@ class Dashboard extends React.Component {
       })
       return practices
     })
+    await dbAllPaddlers.get()
+    .then(paddlers=>{
+      paddlers.forEach(paddler=>{
+        dbAllPaddlers.doc(paddler.id).get().then(doc=>{
+          this.props.dispatch(addPaddlerToAllPaddlers(doc.data()))
+        })
+      })
+      this.setState({loading:false})     
+    })
+
     this.setState({daysThatHadPractices:[...daysThatHadPractices], pageReady:true});
   }
 

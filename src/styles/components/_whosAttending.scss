@@ -1,0 +1,13 @@
+.whosAttending {
+  & .modal-content {
+    & .modal-header {
+      color: $dark;
+    }
+    & .modal-body {
+      color: $dark;
+      & .comma:not(:last-child):after{
+        content: ", ";
+      }
+    }
+  }
+}

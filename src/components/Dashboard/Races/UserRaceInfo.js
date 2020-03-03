@@ -10,6 +10,7 @@ import Swal from 'sweetalert2';
 import Calendar from 'rc-year-calendar';
 import TimeTrials from './TimeTrials/TimeTrials';
 import CrewTrials from './TimeTrials/CrewTrials';
+import WhosAttending from './WhosAttending';
 
 import "babel-polyfill";
 
@@ -130,10 +131,11 @@ const UserRaceInfo = (props) => {
                 <td>{race.info}</td>
               </tr>
               <tr>
-                <td>
+                <td className="d-flex">
                   <Button variant="dark" onClick={()=>openModal('practices')} className="text-white border-0">
                     {attendance.length} practices attended
                   </Button>
+                  <WhosAttending raceID={race.raceID} />
                 </td>
               </tr>
 
