@@ -55,8 +55,8 @@ class WhosAttending extends Component {
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            {this.props.paddlersForCurrentRace.map(paddler=>(
-              <span className="comma">{paddler.paddlerName}</span>
+            {this.props.paddlersForCurrentRace.map((paddler, i)=>(
+              <span key={i} className="comma">{paddler.paddlerName}</span>
             ))}
           </Modal.Body>
         </Modal>

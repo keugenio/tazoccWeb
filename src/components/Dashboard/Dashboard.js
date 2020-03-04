@@ -8,6 +8,7 @@ import DatePicker from './Datepicker';
 import moment from 'moment';
 import { dbAttendance, dbAllPaddlers } from '../Firebase';
 import { addPaddlerToAllPaddlers } from '../../store/store';
+import Attendance from './Attendance';
 
 class Dashboard extends React.Component {
   constructor(props) {
@@ -64,7 +65,7 @@ const DashboardStats = ({availableRaces, currentPage, daysThatHadPractices}) => 
         <Card.Body>
           <PaddlerBio />
           <My_Races availableRaces={availableRaces} currentPage={currentPage}/>  
-          <DatePicker daysThatHadPractices={daysThatHadPractices}/>
+          <Attendance />
         </Card.Body>
       </Card>
     </div>

@@ -88,7 +88,10 @@ class Attendance extends Component {
         this.setState({paddlersWhoPracticed: [...data.paddler]})
       }
       else {
-        this.setState({dBpaddlersWhoPracticed:[], paddlersWhoPracticed:[], showModal:true})
+        this.setState({dBpaddlersWhoPracticed:[], paddlersWhoPracticed:[], });
+        // only show the edit modal to admins
+        if (this.props.user.role == "admin" || this.props.user.role == "superAdmin")
+          this.setState({showModal:true})
 
       }
     })   
@@ -205,7 +208,7 @@ class Attendance extends Component {
                         <span className="ml-2">{moment(this.state.date).format("ddd MM-DD-YYYY")}</span>
                         <span className="ml-auto row">
                           <Badge pill variant="warning" className="ml-3">{this.state.dBpaddlersWhoPracticed.length} attended</Badge>
-                          <Button className="bg-transparent border-0 ml-2 text-dark" onClick={this.showModal}><FontAwesomeIcon icon="edit" className="fa-2x"/></Button>
+                          {(this.props.user.role == "admin" || this.props.user.role=="superAdmin") && <Button className="bg-transparent border-0 ml-2 text-dark" onClick={this.showModal}><FontAwesomeIcon icon="edit" className="fa-2x"/></Button>}
                         </span>
                       </Card.Header>
 
@@ -300,7 +303,7 @@ const formStyle = {
   fontSize: '1.5rem'
 }
 
-const MapStateToProps = ({ paddlers }) =>({
-  paddlers
+const MapStateToProps = ({ paddlers, user }) =>({
+  paddlers, user
 })
 export default connect(MapStateToProps)(Attendance);
