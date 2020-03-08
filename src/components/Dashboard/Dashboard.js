@@ -4,11 +4,10 @@ import { Card } from 'react-bootstrap';
 import PaddlerBio from '../Dashboard/PaddlerBio';
 import My_Races from '../Dashboard/My_Races';
 import bgImage from '../../bgImages/bg_tribal.png';
-import DatePicker from './Datepicker';
-import moment from 'moment';
 import { dbAttendance, dbAllPaddlers } from '../Firebase';
 import { addPaddlerToAllPaddlers } from '../../store/store';
 import Attendance from './Attendance';
+import AllTimeTrials from './AllTimeTrials';
 
 class Dashboard extends React.Component {
   constructor(props) {
@@ -63,6 +62,7 @@ const DashboardStats = ({availableRaces, currentPage, daysThatHadPractices}) => 
     <div className="dashboardStats">
       <Card className="dashboard bg-white-1">
         <Card.Body>
+          <AllTimeTrials />
           <PaddlerBio />
           <My_Races availableRaces={availableRaces} currentPage={currentPage}/>  
           <Attendance />
