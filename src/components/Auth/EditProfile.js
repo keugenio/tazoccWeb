@@ -79,6 +79,8 @@ class EditProfile extends Component {
 
     dbAllPaddlers.doc(this.props.selectedPaddler.paddlerID).update({
       paddlerName:this.state.displayName,
+      duesPaid:this.state.duesPaid,
+      membershipType:this.state.membershipType,
       birthday:this.state.birthday,
       jerseySize:this.state.jerseySize,
       sex:this.state.sex,
@@ -89,6 +91,8 @@ class EditProfile extends Component {
       const currPaddler = {
         ...this.props.selectedPaddler,
         paddlerName:this.state.displayName,
+        duesPaid:this.state.duesPaid,
+        membershipType:this.state.membershipType,        
         birthday:this.state.birthday,
         jerseySize:this.state.jerseySize,
         sex:this.state.sex,
@@ -104,7 +108,7 @@ class EditProfile extends Component {
       Swal.fire({
         title:'success',
         icon:'success',
-        text:'proifle updated!',
+        text:'the Profile updated!',
         timer:1000
       })
     })

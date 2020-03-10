@@ -10,7 +10,7 @@ const Datepicker = ({daysThatHadPractices, handleCalendarChange}) => {
           <DatePicker
             onChange={handleCalendarChange}
             defaultValue={new Date()}
-            highlightDates={daysThatHadPractices}
+
             inline
           />                    
         </Card.Body>
