@@ -123,11 +123,11 @@ class EditProfile extends Component {
     return (
       <div>
 
-        <Button variant="dark" onClick={()=>this.handleEdit()} className="bg-transparent text-dark border-0 d-flex align-items-center">
+        {this.props.location != "overlay" && <Button variant="dark" onClick={()=>this.handleEdit()} className="bg-transparent text-dark border-0 d-flex align-items-center">
           <h4>Settings</h4>
           <FontAwesomeIcon icon="cog" className="ml-2 fa-2x"/>
-        </Button>
-        { this.props.location=="overlay" && this.props.user.paddlerID &&  <span onClick={()=>this.handleEdit()}>PROFILE SETTINGS</span>}
+        </Button>}
+        { this.props.location =="overlay" && this.props.user.paddlerID &&  <span onClick={()=>this.handleEdit()}>PROFILE SETTINGS</span>}
         <Modal centered show={this.state.showModal} onHide={()=>{this.setState({showModal:false})}} className="editProfile">
           <Modal.Title className="px-2 bg-success text-white d-flex justify-content-start align-items-center">
             <h2>Edit Profile</h2>

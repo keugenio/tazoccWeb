@@ -74,13 +74,13 @@
   }
   @include response(phone-land){
     font-size: 4rem;
-    text-align: center;
+    text-align: left;
     width: 100%;
   }
   @include response(phone){
     font-size: 4rem;
     text-align: center;
-    width: 100%;
+    width: 90%;
   }
 
 }
