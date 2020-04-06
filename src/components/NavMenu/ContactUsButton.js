@@ -16,7 +16,7 @@ const ContactUsButton = (props) => {
           <FontAwesomeIcon icon="envelope-open-text" className="fa-2x"/>
         </div>
       </Button>}
-      { props.location=="overlay" && <span onClick={()=>setShow(true)}>Contact Team Arizona</span>}
+      { props.location=="overlay" && <span onClick={()=>setShow(true)}>Contact TAZ</span>}
 
       <Modal show={show} centered onHide={()=>setShow(false)} className="contactUsModal">
         <Modal.Header className="bg-taz-blue text-white" closeButton>

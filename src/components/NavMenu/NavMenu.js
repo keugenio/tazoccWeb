@@ -43,11 +43,9 @@ const NavMenu =(props) => {
             <ContactUsButton location="navMenu"/>
           </Nav.Item>
           <Nav.Item as="li" className="d-flex">
-            {!loggedIn && (
               <Link className="nav_link titleHoverMessage loginButton" to="/login" title="Login to see your stats">
                   Login <FontAwesomeIcon icon="sign-in-alt"/>
               </Link>
-            )}
           <div className="logoOrImage">
             {loggedIn && ((paddlerImageURL) ? 
                 (<img src={paddlerImageURL} className="userProfileIcon" />) :

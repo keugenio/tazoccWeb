@@ -44,51 +44,51 @@ const  NavigationOverlay = (props) => {
         <ol className="navigation__list">
           <li className="navigation__item">
             <Link className="navigation__link" to="/" onClick={closeNavOverlay}>
-              <span>01</span>Home
+              Home
             </Link> 
           </li>
           <li className="navigation__item"> 
             <Link className="navigation__link" to="/practices" onClick={closeNavOverlay}>
-              <span>02</span>Practices
+              Practices
             </Link> 
           </li>
           <li className="navigation__item">  
             <Link className="navigation__link" to="/calendar" onClick={closeNavOverlay}>
-              <span>03</span>Calendar
+              Calendar
             </Link> 
           </li>
           <li className="navigation__item">   
             <Link className="navigation__link" to="/aboutUs" onClick={closeNavOverlay}>
-              <span>04</span>About TAZ
+              About TAZ
             </Link> 
           </li>
           <li className="navigation__item">  
             <Link className="navigation__link" to="/tradition" onClick={closeNavOverlay}>
-              <span>05</span>Tradition          
+              Tradition          
             </Link> 
-          </li>
+          </li>          
           <li className="navigation__item">   
             <Link className="navigation__link" to="/shopTAZ" onClick={closeNavOverlay}>
-              <span>06</span>Shop TAZ
+              Shop TAZ
             </Link> 
-          </li>
+          </li>          
           <li className="navigation__item">   
             <Link className="navigation__link" to="/scoraRaces" onClick={closeNavOverlay}>
-              <span>07</span>SCORA Race Results
+              SCORA Race Results
             </Link> 
           </li>
 
           {loggedIn && (
             <li className="navigation__item">  
             <Link className="navigation__link" to="/dashboard" onClick={closeNavOverlay}>
-              <span>08</span>Dashboard
+              Dashboard
             </Link>
           </li>
           )}
           {loggedIn && (role == "admin" || role == "superAdmin") &&  (
             <li className="navigation__item">  
               <Link className="navigation__link" to="/admin" onClick={closeNavOverlay}>
-                <span>09</span>Admin
+                Admin
               </Link>
             </li>
           )}
@@ -97,22 +97,26 @@ const  NavigationOverlay = (props) => {
               <ContactUsButton location="overlay"/>
             </Link> 
           </li>
-          <li className="navigation__item">
-            <Link className="navigation__link d-flex justify-content-center align-items-center" to="" onClick={closeNavOverlay}>
-                <EditProfile location="overlay"/>
-            </Link>           
-          </li>
           {loggedIn && 
+            <li className="navigation__item">
+              <Link className="navigation__link d-flex justify-content-center align-items-center" to="" onClick={closeNavOverlay}>
+                  <EditProfile location="overlay"/>
+              </Link>           
+            </li> 
+          }
+          
+          {/*loggedIn && 
             <li className="navigation_item">
               <Link className="navigation__link d-flex justify-content-center align-items-center" to="" onClick={()=>logOutUser()}>
                 <span> logout </span>
               </Link>          
-            </li>}
+            </li>
+          }
           {!loggedIn && (
             <Link className="nav_link titleHoverMessage loginButton" to="/login" title="Login to see your stats">
                 Login <FontAwesomeIcon icon="sign-in-alt"/>
             </Link>
-          )}                          
+          )*/}                          
         </ol>
       </nav>
     </div>
