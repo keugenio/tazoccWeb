@@ -1,10 +1,11 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import bgImage from '../bgImages/bg_home_1.jpg';
-import {Button} from 'react-bootstrap';
 import JoinUs from './JoinUs';
 import moment from 'moment';
 import "babel-polyfill";
+import { Modal, Button, Row } from 'react-bootstrap';
+import waiting_img from '../images/canoe_3.jpg';
 
 const thisYear = (new Date()).getFullYear();    
 const start = new Date("1/1/" + thisYear);
@@ -15,7 +16,7 @@ class Home extends React.Component {
   constructor(){
     super();
     this.state = {
-      show:false,
+      show:true,
       showSpinner: true
     }
   }
@@ -73,6 +74,22 @@ class Home extends React.Component {
         </div>
       </div>
       <div><JoinUs/></div>
+      <Modal show={this.state.show} onHide={this.handleClose} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
+        <Modal.Header closeButton>
+        </Modal.Header>
+        <Modal.Body className="d-flex justify-content-center align-items-center">
+
+        <div className="card" style={{width: "50vw"}}>
+          <img className="card-img-top" src={bgImage}/>
+          <div className="card-body" style={{background:"#FF8800"}}>
+            <h5 className="card-title">Covid-19</h5>
+            <p className="card-text">Unfortunately, Team Arizona is affected by this as well as all the other teams at Tempe Town Lake.  As sad as it makes us, we are not accepting any new memberships right now just so we can control the sizes of our practices.  We appreciate your interest in joining us so please just leave us a note and as soon as we can start running full crews, we'll contact you right away. ‘Mālama pono’ and take care of you your Ohana!</p>
+            <p className="card-text"><small className="text-muted">Last updated September 2020</small></p>
+          </div>
+        </div>  
+
+        </Modal.Body>
+      </Modal>
       </React.Fragment>
     )
   }
