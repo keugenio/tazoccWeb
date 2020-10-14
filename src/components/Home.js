@@ -6,6 +6,7 @@ import moment from 'moment';
 import "babel-polyfill";
 import { Modal, Button, Row } from 'react-bootstrap';
 import waiting_img from '../images/canoe_3.jpg';
+import flyer from '../images/taz2020flyer.png';
 
 const thisYear = (new Date()).getFullYear();    
 const start = new Date("1/1/" + thisYear);
@@ -53,7 +54,7 @@ class Home extends React.Component {
     //   })
   }
 
-  handleClose = () => {this.setState({show: false})};
+  handleClose = () => {this.setState({show: false}); };
   handleShow = () => {this.setState({show: true})};
   
   render(){
@@ -73,7 +74,8 @@ class Home extends React.Component {
           <Button className="join" href="#joinUs">join us</Button>
         </div>
       </div>
-      <div><JoinUs/></div>
+      <div><JoinUs/></div> 
+
       <Modal show={this.state.show} onHide={this.handleClose} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
         <Modal.Header closeButton>
         </Modal.Header>

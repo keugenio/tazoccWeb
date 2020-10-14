@@ -18,13 +18,10 @@ const ShopTAZ = () => {
         <div><p className="text-center text-white pageTitle">ShopTAZ</p></div>      
 
         <div className="storeContainer">
-          <Row className="justify-content-md-center p-5">
-            <Button variant="primary" size="large" onClick={handleShow}>Family and Friend's Code</Button>
-          </Row>
           <Iframe url="store.html" className="store"/>
         </div>
       </div> 
-      <Modal show={show} onHide={handleClose} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
+      <Modal show={false} onHide={handleClose} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
         <Modal.Header closeButton>
         </Modal.Header>
         <Modal.Body className="d-flex justify-content-center align-items-center"><img alt="flyer 2020" src={flyer} style={{height:'75vh'}}></img></Modal.Body>
