@@ -1,5 +1,19 @@
 export default [
   {
+    date:'September 2-6, 2021',
+    race: 'Queen Liliuokalani Race',
+    location:	'Kailua-Kona, HI',
+    host:	'Kai Opua'
+  },
+  {
+    date:'November 6, 2021',
+    race: 'Another Dam Race',
+    location:	'Parker, AZ',
+    host:	'Another Dam Race'
+  }]
+
+var old_2020_example = [
+  {
     date:'May 9, 2020',
     race: 'Crystal Pier',
     location:	'San Diego, CA',

@@ -20,13 +20,10 @@ const Practices = () => {
                 <Card.Body>                    
                     <ul className="practiceTimes">
                       <li>
-                        Tuesday Evenings 6:00pm  (Open Practice)
+                        Thursday Evenings 6:00pm (Open OC6 Practice for 100% vaccinated paddlers, OC1 for non-vaccinated paddlers)
                       </li>
                       <li>
-                        Thursday Evenings 6:00pm (Open Practice)
-                      </li>
-                      <li>
-                        Saturday Mornings 7:00am (Open Practice)
+                        Saturday Mornings 7:00am (Open OC6 Practice for 100% vaccinated paddlers, OC1 for non-vaccinated paddlers)
                       </li>                        
                     </ul>               
                 </Card.Body>

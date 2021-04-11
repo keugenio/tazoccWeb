@@ -85,8 +85,8 @@ class Home extends React.Component {
           <img className="card-img-top" src={bgImage}/>
           <div className="card-body" style={{background:"#FF8800"}}>
             <h5 className="card-title">Covid-19</h5>
-            <p className="card-text">Unfortunately, Team Arizona is affected by this as well as all the other teams at Tempe Town Lake.  As sad as it makes us, we are not accepting any new memberships right now just so we can control the sizes of our practices.  We appreciate your interest in joining us so please just leave us a note and as soon as we can start running full crews, we'll contact you right away. ‘Mālama pono’ and take care of you your Ohana!</p>
-            <p className="card-text"><small className="text-muted">Last updated September 2020</small></p>
+            <p className="card-text">We are now accepting new memberships!  We are offering OC6 practices for fully vaccinated paddlers and OC1 practices for non-vaccinated paddlers. All paddlers will continue with masks mandates any time not on the water as they are required by the city of Tempe.  Contact TAZ for more information.</p>
+            <p className="card-text"><small className="text-muted">Last updated April 2021</small></p>
           </div>
         </div>  
 

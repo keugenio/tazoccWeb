@@ -57,7 +57,7 @@ class TAZCalendar extends React.Component{
             <Col xl={6} xs={12} className="moreEventInfo">
               <div className="eventInfo">
                 <Tabs defaultActiveKey="events" id="practiceTabInfo">
-                  <Tab eventKey="scora" title="SCORA Races">
+                  <Tab eventKey="scora" title="2021 Races">
                     <Alert variant="success">
                       <hr></hr>
                       <div className="table-responsive scoraEvents">
