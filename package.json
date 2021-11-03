@@ -65,7 +65,7 @@
     "style-loader": "^1.0.0",
     "sweetalert2": "^9.3.11",
     "uuid": "^3.3.3",
-    "validator": "8.0.0",
+    "validator": "13.7.0",
     "webpack": "^4.41.2",
     "webpack-dev-server": "^3.9.0"
   },
